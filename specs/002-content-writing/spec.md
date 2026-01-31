@@ -78,17 +78,17 @@ A researcher writes 5 chapters on real-world applications, ethics, emerging tech
 
 ### User Story 5 - Technical Reviewer Validates Module Accuracy (Priority: P1)
 
-A domain expert (roboticist or software engineer) reviews each completed module for technical accuracy. They cross-check facts against official documentation, verify code examples run correctly, and ensure claims are properly sourced. Reviews happen module-by-module.
+A domain expert (roboticist or software engineer) from a flexible pool of 2-3 reviewers reviews each completed module for technical accuracy. They cross-check facts against official documentation, verify code examples run correctly, and ensure claims are properly sourced. Reviews happen module-by-module on a staggered schedule. If a primary reviewer is unavailable, a structured peer-review checklist (completed by another writer) serves as fallback.
 
-**Why this priority**: Accuracy is non-negotiable. Must happen before content is indexed into RAG (which users will trust for critical technical information). Must be built into the delivery workflow.
+**Why this priority**: Accuracy is non-negotiable. Must happen before content is indexed into RAG (which users will trust for critical technical information). Flexible pool approach and fallback mechanism mitigate reviewer availability risk.
 
-**Independent Test**: Each module review can be completed independently as modules finish. A module passes review when all flagged issues are resolved and accuracy audit shows 95%+ match to references.
+**Independent Test**: Each module review can be completed independently as modules finish. A module passes review (expert or peer checklist) when all flagged issues are resolved and accuracy audit shows 95%+ match to references.
 
 **Acceptance Scenarios**:
 
-1. **Given** a module is submitted for review, **When** reviewer audits facts against references, **Then** all technical claims are traceable to official docs with version info captured
+1. **Given** a module is submitted for review, **When** reviewer (expert or peer-checklist) audits facts against references, **Then** all technical claims are traceable to official docs with version info captured
 2. **Given** code examples are reviewed, **When** tested on specified hardware/software, **Then** they execute without errors and produce expected outputs
-3. **Given** module review is complete, **When** flagged issues are resolved, **Then** module is marked "approved for indexing" and can be added to RAG knowledge base
+3. **Given** module review is complete (by expert or fallback checklist), **When** flagged issues are resolved, **Then** module is marked "approved for indexing" and can be added to RAG knowledge base
 
 ---
 
@@ -392,6 +392,7 @@ Spec is **DONE** when ALL of the following are checked:
 
 - **Accuracy Floor**: Must maintain 95%+ accuracy; factual errors are blockers to RAG indexing
 - **Code Compatibility**: All examples must be ROS 2 Humble compatible; version mismatches noted explicitly
+- **Code Testing**: All 66 code examples must be tested on Ubuntu 22.04 + ROS 2 Humble LTS using local VM (development) + CI/CD pipeline (verification before indexing); 100% execution success rate required
 - **Knowledge Base Deadline**: All content must be indexed into RAG by end of Week 4; indexing delay blocks chatbot validation
 - **Testability**: All code examples must be executable; theoretical examples must include runnable simulations
 
@@ -427,14 +428,25 @@ Once textbook is indexed into RAG knowledge base, success is measured by:
 
 ---
 
+## Clarifications
+
+### Session 2026-01-31
+
+- Q1: Expert reviewer availability → A: Flexible pool of 2-3 domain experts available with staggered review timing; fallback structured peer-review checklist if expert unavailable for specific module
+- Q2: Code testing infrastructure → A: Local VM (Ubuntu 22.04 + ROS 2 Humble LTS + Gazebo 11) for development iteration; CI/CD pipeline for automated verification before RAG indexing
+- Q3: RAG indexing pipeline readiness → A: Module 1 serves as pilot; once 5 chapters complete (Week 1), index into RAG to verify pipeline works end-to-end; Modules 2-4 roll out with confidence after pilot validation
+- Q4: Writing team structure → A: Solo effort (primary writer); 2,000-2,500 words/day feasible for Modules 1-3 (Week 1-3); Module 4 deferred post-hackathon if timeline slips; expert review and code testing run parallel to writing
+
+---
+
 ## Assumptions
 
 - **Audience Level**: Assumes readers have completed undergraduate physics/linear algebra; no prerequisite detailed tutorials required
 - **Framework Versions**: ROS 2 Humble LTS and Gazebo 11 are stable; examples use documented APIs
-- **Expert Availability**: One domain expert available per module for technical review
+- **Expert Availability**: Flexible pool of 2-3 domain experts available (roboticist/software engineer); reviews staggered to avoid bottlenecks; fallback structured checklist-based peer review if expert unavailable
 - **RAG Infrastructure**: RAG chatbot and indexing pipeline from Spec 001 are production-ready and available
-- **Writing Pace**: Experienced technical writers can produce 2,000-2,500 words per day including code examples
-- **Code Testing**: All examples can be tested on local/CI environment; no exotic hardware required for verification
+- **Writing Pace**: Solo primary writer can produce 2,000-2,500 words per day including code examples; focus on Modules 1-3 (base 100 points); Module 4 deferrable to post-hackathon if needed
+- **Code Testing Infrastructure**: Local VM (Ubuntu 22.04 + ROS 2 Humble LTS + Gazebo 11) available for development; CI/CD pipeline configured for automated testing before RAG indexing; no exotic hardware required
 
 ---
 
@@ -454,6 +466,7 @@ Once textbook is indexed into RAG knowledge base, success is measured by:
 ### Dependencies on Spec 001
 
 - This spec DEPENDS ON Spec 001 (RAG Chatbot) being production-ready
-- RAG indexing pipeline must be tested with sample content before Week 1
+- RAG indexing pipeline verified via pilot: Module 1 chapters (12,000 words, 5 chapters) indexed at end of Week 1; if successful, Modules 2-4 proceed; if issues detected, remediate before Module 2 indexing
 - Textbook content is **useless without a working RAG chatbot** to serve it
+- Module 1 pilot approach validates pipeline without blocking Week 1 writing start
 
