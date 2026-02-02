@@ -23,7 +23,7 @@
 
 **Timeline**: Day 0 (before Week 1 writing begins)
 
-- [ ] T001 Create textbook directory structure in `textbook/` with subdirectories: `chapters/`, `code-examples/`, `metadata/`, `contracts/`
+- [x] T001 Create textbook directory structure in `textbook/` with subdirectories: `chapters/`, `code-examples/`, `metadata/`, `contracts/`
 
 - [ ] T002 Create chapter template file at `textbook/chapters/_chapter-template.md` with learning objectives, sections, code examples, references structure (from plan.md §Phase 1)
 

@@ -101,22 +101,22 @@ class QdrantService:
             )
 
         try:
-            results = self.client.search(
+            # Use query_points method for semantic search in Qdrant
+            results = self.client.query_points(
                 collection_name=self.collection_name,
-                query_vector=query_vector,
+                query=query_vector,
                 limit=top_k,
                 score_threshold=score_threshold
             )
 
             # Transform results to dict format
-            passages = [
-                {
+            passages = []
+            for result in results.points:
+                passages.append({
                     "id": str(result.id),
                     "score": result.score,
-                    "payload": result.payload if result.payload else {}
-                }
-                for result in results
-            ]
+                    "payload": dict(result.payload) if result.payload else {}
+                })
 
             logger.debug(f"Retrieved {len(passages)} passages for query")
             return passages
