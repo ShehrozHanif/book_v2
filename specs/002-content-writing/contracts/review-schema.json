@@ -1,0 +1,162 @@
+{
+  "title": "Review Entity Schema",
+  "description": "JSON schema for expert/peer review submissions with scoring and issue tracking",
+  "type": "object",
+  "required": [
+    "id",
+    "chapter_id",
+    "reviewer_id",
+    "review_type",
+    "submitted_date",
+    "accuracy_score",
+    "clarity_score",
+    "completeness_score",
+    "status"
+  ],
+  "properties": {
+    "id": {
+      "type": "string",
+      "pattern": "^review_[0-9]{3,4}$",
+      "description": "Unique review identifier"
+    },
+    "chapter_id": {
+      "type": "string",
+      "pattern": "^chapter_([0-2][0-9])$",
+      "description": "Chapter being reviewed"
+    },
+    "reviewer_id": {
+      "type": "string",
+      "minLength": 3,
+      "maxLength": 50,
+      "description": "Reviewer identifier or name"
+    },
+    "review_type": {
+      "type": "string",
+      "enum": ["expert", "peer"],
+      "description": "Type of review (expert domain expert or peer reviewer)"
+    },
+    "submitted_date": {
+      "type": "string",
+      "format": "date-time",
+      "description": "ISO 8601 review submission timestamp"
+    },
+    "completed_date": {
+      "type": ["string", "null"],
+      "format": "date-time",
+      "description": "ISO 8601 review completion timestamp (null if in progress)"
+    },
+    "accuracy_score": {
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 100,
+      "description": "Factual accuracy score 0-100"
+    },
+    "clarity_score": {
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 100,
+      "description": "Writing clarity and organization score 0-100"
+    },
+    "completeness_score": {
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 100,
+      "description": "Content completeness and coverage score 0-100"
+    },
+    "overall_score": {
+      "type": "number",
+      "minimum": 0,
+      "maximum": 100,
+      "description": "Calculated average of three scores"
+    },
+    "status": {
+      "type": "string",
+      "enum": ["approved", "needs_revision", "flagged"],
+      "description": "Review outcome"
+    },
+    "flagged_issues": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["id", "severity", "category", "description"],
+        "properties": {
+          "id": {
+            "type": "string",
+            "pattern": "^issue_[0-9]{3}$",
+            "description": "Unique issue identifier within review"
+          },
+          "line": {
+            "type": ["integer", "null"],
+            "minimum": 1,
+            "description": "Line number in source file (if applicable)"
+          },
+          "severity": {
+            "type": "string",
+            "enum": ["critical", "high", "medium", "low"],
+            "description": "Issue severity level"
+          },
+          "category": {
+            "type": "string",
+            "enum": ["typo", "clarity", "accuracy", "code_example", "reference", "other"],
+            "description": "Issue category"
+          },
+          "description": {
+            "type": "string",
+            "minLength": 10,
+            "maxLength": 1000,
+            "description": "Detailed issue description"
+          },
+          "suggested_fix": {
+            "type": ["string", "null"],
+            "maxLength": 1000,
+            "description": "Proposed resolution (optional)"
+          }
+        }
+      },
+      "description": "Array of identified issues"
+    },
+    "comment": {
+      "type": "string",
+      "maxLength": 5000,
+      "description": "Free-form reviewer feedback and notes"
+    }
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "review_type": { "const": "expert" }
+        }
+      },
+      "then": {
+        "properties": {
+          "accuracy_score": {
+            "minimum": 90
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "flagged_issues": {
+            "contains": {
+              "properties": {
+                "severity": {
+                  "enum": ["critical", "high"]
+                }
+              }
+            }
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "status": {
+            "enum": ["flagged", "needs_revision"]
+          }
+        }
+      }
+    }
+  ]
+}

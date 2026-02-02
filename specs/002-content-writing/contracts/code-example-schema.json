@@ -1,0 +1,132 @@
+{
+  "title": "Code Example Entity Schema",
+  "description": "JSON schema for a code example entity with test and verification metadata",
+  "type": "object",
+  "required": [
+    "id",
+    "chapter_id",
+    "number",
+    "title",
+    "language",
+    "file_path",
+    "lines_of_code",
+    "status",
+    "dependencies"
+  ],
+  "properties": {
+    "id": {
+      "type": "string",
+      "pattern": "^chapter_([0-2][0-9])_example_([0-9]{2})$",
+      "description": "Unique example identifier (chapter_XX_example_YY)"
+    },
+    "chapter_id": {
+      "type": "string",
+      "pattern": "^chapter_([0-2][0-9])$",
+      "description": "Parent chapter ID"
+    },
+    "number": {
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 4,
+      "description": "Sequential example number within chapter (1-4)"
+    },
+    "title": {
+      "type": "string",
+      "minLength": 5,
+      "maxLength": 100,
+      "description": "Short descriptive title"
+    },
+    "description": {
+      "type": "string",
+      "minLength": 20,
+      "maxLength": 500,
+      "description": "Explanation of what the example demonstrates"
+    },
+    "language": {
+      "type": "string",
+      "enum": ["python", "cpp", "urdf", "yaml", "bash", "latex"],
+      "description": "Programming language or format"
+    },
+    "file_path": {
+      "type": "string",
+      "pattern": "^textbook/code-examples/chapter_[0-2][0-9]_example_[0-9]{2}\\.(py|cpp|urdf|yaml|sh|tex)$",
+      "description": "File location relative to repo root"
+    },
+    "content_hash": {
+      "type": ["string", "null"],
+      "pattern": "^[a-f0-9]{64}$",
+      "description": "SHA256 hash of file content"
+    },
+    "lines_of_code": {
+      "type": "integer",
+      "minimum": 5,
+      "maximum": 500,
+      "description": "Number of lines (excluding comments/blanks)"
+    },
+    "execution_time_sec": {
+      "type": "number",
+      "minimum": 0,
+      "maximum": 60,
+      "description": "Expected execution time in seconds (0 for non-executable)"
+    },
+    "status": {
+      "type": "string",
+      "enum": ["draft", "written", "tested", "verified"],
+      "description": "Writing/testing workflow status"
+    },
+    "test_status": {
+      "type": "string",
+      "enum": ["untested", "passed", "failed"],
+      "description": "Result of most recent test"
+    },
+    "test_environment": {
+      "type": "string",
+      "enum": ["ubuntu_22.04_ros2_humble"],
+      "description": "Test environment specification"
+    },
+    "test_result": {
+      "type": ["object", "null"],
+      "properties": {
+        "passed": {
+          "type": "boolean"
+        },
+        "execution_time_sec": {
+          "type": "number"
+        },
+        "stdout": {
+          "type": "string"
+        },
+        "stderr": {
+          "type": "string"
+        },
+        "exit_code": {
+          "type": "integer"
+        }
+      },
+      "description": "Detailed test execution result"
+    },
+    "dependencies": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "string"
+      },
+      "description": "Runtime dependencies (language, libraries, tools)"
+    },
+    "version_notes": {
+      "type": "string",
+      "maxLength": 500,
+      "description": "Version constraints and compatibility information"
+    },
+    "created_date": {
+      "type": "string",
+      "format": "date-time",
+      "description": "ISO 8601 creation timestamp"
+    },
+    "tested_date": {
+      "type": ["string", "null"],
+      "format": "date-time",
+      "description": "ISO 8601 last test timestamp"
+    }
+  }
+}
