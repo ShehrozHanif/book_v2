@@ -1,0 +1,122 @@
+<!-- 2-link robotic arm with revolute joints -->
+<!-- Visualize with: ros2 launch urdf_tutorial display.launch.py model:=chapter_07_example_01.urdf -->
+
+<?xml version="1.0"?>
+<robot name="two_link_arm">
+
+  <!-- Base link (fixed to world) -->
+  <link name="base_link">
+    <visual>
+      <geometry>
+        <cylinder radius="0.05" length="0.1"/>
+      </geometry>
+      <origin xyz="0 0 0.05" rpy="0 0 0"/>
+      <material name="gray">
+        <color rgba="0.5 0.5 0.5 1.0"/>
+      </material>
+    </visual>
+    <collision>
+      <geometry>
+        <cylinder radius="0.05" length="0.1"/>
+      </geometry>
+      <origin xyz="0 0 0.05" rpy="0 0 0"/>
+    </collision>
+    <inertial>
+      <mass value="0.5"/>
+      <origin xyz="0 0 0.05" rpy="0 0 0"/>
+      <inertia ixx="0.001" ixy="0.0" ixz="0.0"
+               iyy="0.001" iyz="0.0" izz="0.001"/>
+    </inertial>
+  </link>
+
+  <!-- Link 1 (first arm segment) -->
+  <link name="link_1">
+    <visual>
+      <geometry>
+        <cylinder radius="0.03" length="0.5"/>
+      </geometry>
+      <origin xyz="0 0 0.25" rpy="0 0 0"/>
+      <material name="blue">
+        <color rgba="0.2 0.2 0.8 1.0"/>
+      </material>
+    </visual>
+    <collision>
+      <geometry>
+        <cylinder radius="0.03" length="0.5"/>
+      </geometry>
+      <origin xyz="0 0 0.25" rpy="0 0 0"/>
+    </collision>
+    <inertial>
+      <mass value="1.0"/>
+      <origin xyz="0 0 0.25" rpy="0 0 0"/>
+      <!-- Inertia for solid cylinder: Ixx = Iyy = m(3r^2 + h^2)/12, Izz = mr^2/2 -->
+      <inertia ixx="0.021" ixy="0.0" ixz="0.0"
+               iyy="0.021" iyz="0.0" izz="0.00045"/>
+    </inertial>
+  </link>
+
+  <!-- Joint 1 (shoulder joint connecting base to link_1) -->
+  <joint name="joint_1" type="revolute">
+    <parent link="base_link"/>
+    <child link="link_1"/>
+    <origin xyz="0 0 0.1" rpy="0 0 0"/>
+    <axis xyz="0 1 0"/>  <!-- Rotation about Y-axis -->
+    <limit lower="-1.57" upper="1.57" effort="10.0" velocity="1.0"/>
+    <dynamics damping="0.5" friction="0.1"/>
+  </joint>
+
+  <!-- Link 2 (second arm segment) -->
+  <link name="link_2">
+    <visual>
+      <geometry>
+        <cylinder radius="0.025" length="0.4"/>
+      </geometry>
+      <origin xyz="0 0 0.2" rpy="0 0 0"/>
+      <material name="red">
+        <color rgba="0.8 0.2 0.2 1.0"/>
+      </material>
+    </visual>
+    <collision>
+      <geometry>
+        <cylinder radius="0.025" length="0.4"/>
+      </geometry>
+      <origin xyz="0 0 0.2" rpy="0 0 0"/>
+    </collision>
+    <inertial>
+      <mass value="0.8"/>
+      <origin xyz="0 0 0.2" rpy="0 0 0"/>
+      <inertia ixx="0.011" ixy="0.0" ixz="0.0"
+               iyy="0.011" iyz="0.0" izz="0.00025"/>
+    </inertial>
+  </link>
+
+  <!-- Joint 2 (elbow joint connecting link_1 to link_2) -->
+  <joint name="joint_2" type="revolute">
+    <parent link="link_1"/>
+    <child link="link_2"/>
+    <origin xyz="0 0 0.5" rpy="0 0 0"/>
+    <axis xyz="0 1 0"/>  <!-- Rotation about Y-axis -->
+    <limit lower="-2.0" upper="2.0" effort="8.0" velocity="1.0"/>
+    <dynamics damping="0.3" friction="0.08"/>
+  </joint>
+
+  <!-- End-effector link (for reference point) -->
+  <link name="end_effector">
+    <visual>
+      <geometry>
+        <sphere radius="0.03"/>
+      </geometry>
+      <material name="green">
+        <color rgba="0.2 0.8 0.2 1.0"/>
+      </material>
+    </visual>
+  </link>
+
+  <!-- Fixed joint to end-effector -->
+  <joint name="joint_ee" type="fixed">
+    <parent link="link_2"/>
+    <child link="end_effector"/>
+    <origin xyz="0 0 0.4" rpy="0 0 0"/>
+  </joint>
+
+</robot>
