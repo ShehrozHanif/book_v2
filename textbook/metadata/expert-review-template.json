@@ -1,0 +1,171 @@
+{
+  "metadata": {
+    "template_version": "1.0",
+    "created_date": "2026-02-03",
+    "description": "Expert Review Template for Humanoid Robotics Textbook Chapters",
+    "schema_version": "1.0",
+    "entity_type": "ExpertReview"
+  },
+  "review_template": {
+    "review_id": "review_XXXXX",
+    "chapter_id": 1,
+    "chapter_title": "What is a Humanoid Robot?",
+    "chapter_file": "01-what-is-humanoid-robotics.md",
+    "review_metadata": {
+      "reviewer_name": "[Expert Full Name]",
+      "reviewer_affiliation": "[Institution/Organization]",
+      "reviewer_expertise": "[Robotics Specialization: Humanoids / Kinematics / Controls / etc.]",
+      "review_date": "2026-02-03",
+      "review_status": "pending",
+      "review_duration_minutes": 0,
+      "review_method": "detailed",
+      "notes": "Initial submission for expert review"
+    },
+    "accuracy_review": {
+      "accuracy_score": 0,
+      "accuracy_score_range": [0, 100],
+      "accuracy_threshold": 95,
+      "issues_count": 0,
+      "critical_errors": [],
+      "major_errors": [],
+      "minor_errors": [],
+      "factual_claims_verified": 0,
+      "factual_claims_total": 0,
+      "verification_notes": "Pending review"
+    },
+    "clarity_review": {
+      "clarity_score": 0,
+      "clarity_score_range": [0, 100],
+      "target_clarity_score": 85,
+      "readability_grade": 0,
+      "readability_grade_target": "10-12",
+      "organization_quality": "not_assessed",
+      "terminology_consistency": "not_assessed",
+      "example_clarity": "not_assessed",
+      "clarity_notes": "Pending review"
+    },
+    "completeness_review": {
+      "completeness_score": 0,
+      "completeness_score_range": [0, 100],
+      "target_completeness_score": 90,
+      "learning_objectives_met": false,
+      "learning_objectives_count": 0,
+      "content_depth_assessment": "not_assessed",
+      "code_examples_count": 0,
+      "code_examples_quality": "not_assessed",
+      "references_complete": false,
+      "references_count": 0,
+      "completeness_notes": "Pending review"
+    },
+    "code_quality_review": {
+      "code_quality_score": 0,
+      "code_quality_score_range": [0, 100],
+      "target_code_quality_score": 90,
+      "examples_tested": false,
+      "test_environment": "Ubuntu 22.04 + ROS 2 Humble LTS + Gazebo 11",
+      "examples_passing": 0,
+      "examples_total": 0,
+      "code_style_compliance": "not_assessed",
+      "documentation_quality": "not_assessed",
+      "code_issues": [],
+      "code_quality_notes": "Pending review"
+    },
+    "flagged_issues": {
+      "total_issues": 0,
+      "critical_count": 0,
+      "major_count": 0,
+      "minor_count": 0,
+      "issues": [
+        {
+          "issue_id": "issue_001",
+          "issue_title": "[Example Issue Title]",
+          "category": "factual_error",
+          "severity": "critical",
+          "location": "[Chapter section reference]",
+          "description": "[Detailed description of the issue]",
+          "suggested_fix": "[Recommended correction]",
+          "status": "open",
+          "resolution_notes": ""
+        }
+      ]
+    },
+    "recommendations": {
+      "approval_status": "pending",
+      "approval_options": ["approved", "approved_with_minor_fixes", "revision_required", "rejected"],
+      "selected_approval": "pending",
+      "ready_for_indexing": false,
+      "indexing_blockers": [],
+      "priority_fixes": [],
+      "summary_assessment": "Awaiting expert review",
+      "reviewer_comments": "",
+      "strengths": [],
+      "areas_for_improvement": [],
+      "suggestion_for_next_module": ""
+    },
+    "metadata_tags": {
+      "module": "Module 1",
+      "chapter_number": 1,
+      "content_type": "foundational",
+      "complexity_level": "beginner",
+      "focus_areas": ["humanoid-robotics", "definitions", "history"],
+      "code_languages": ["python", "urdf"],
+      "dependencies": []
+    },
+    "sign_off": {
+      "reviewer_signature": "[To be filled by reviewer]",
+      "review_approval_date": null,
+      "second_reviewer_signature": "[Optional: Second reviewer approval]",
+      "second_review_date": null,
+      "qa_sign_off": "[QA team approval]",
+      "qa_date": null
+    },
+    "follow_up": {
+      "requires_follow_up": false,
+      "follow_up_type": "none",
+      "follow_up_reviewer": "auto_assign",
+      "scheduled_follow_up_date": null,
+      "follow_up_notes": ""
+    }
+  },
+  "score_interpretation": {
+    "accuracy_score": {
+      "90-100": "Excellent - Ready for publication",
+      "80-89": "Good - Minor corrections needed",
+      "70-79": "Fair - Significant revisions required",
+      "below_70": "Poor - Major rewrite needed"
+    },
+    "clarity_score": {
+      "85-100": "Excellent clarity for target audience",
+      "75-84": "Good clarity with minor improvements",
+      "65-74": "Fair clarity requiring revision",
+      "below_65": "Poor clarity requiring significant rewrite"
+    },
+    "completeness_score": {
+      "90-100": "Complete - All learning objectives addressed",
+      "80-89": "Mostly complete - Minor gaps",
+      "70-79": "Incomplete - Missing key topics",
+      "below_70": "Significantly incomplete"
+    },
+    "code_quality_score": {
+      "95-100": "Production-ready code",
+      "85-94": "Good quality, minor improvements",
+      "75-84": "Acceptable but needs work",
+      "below_75": "Requires significant refactoring"
+    }
+  },
+  "quality_gates": {
+    "minimum_accuracy_for_indexing": 95,
+    "minimum_clarity_for_indexing": 80,
+    "minimum_completeness_for_indexing": 90,
+    "minimum_code_quality_for_indexing": 85,
+    "all_gates_must_pass": true
+  },
+  "indexing_decision": {
+    "can_index": false,
+    "blocking_factors": [],
+    "index_approval_date": null,
+    "indexed_date": null,
+    "qdrant_collection": "humanoid_robotics_textbook",
+    "qdrant_status": "pending"
+  }
+}
