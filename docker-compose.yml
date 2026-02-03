@@ -1,0 +1,116 @@
+version: '3.8'
+
+services:
+  # Backend API service
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: rag-chatbot-backend
+    ports:
+      - "8000:8000"
+    environment:
+      - DATABASE_URL=postgresql+asyncpg://chatbot_user:chatbot_password@postgres:5432/chatbot_db
+      - OPENAI_API_KEY=${OPENAI_API_KEY}
+      - QDRANT_URL=http://qdrant:6333
+      - QDRANT_API_KEY=${QDRANT_API_KEY:-}
+      - LOG_LEVEL=INFO
+    depends_on:
+      postgres:
+        condition: service_healthy
+      qdrant:
+        condition: service_started
+    volumes:
+      - ./backend/src:/app/src  # Hot-reload for development
+      - ./backend/logs:/app/logs  # Persist logs
+    networks:
+      - rag-network
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "python", "-c", "import requests; requests.get('http://localhost:8000/health')"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 10s
+
+  # PostgreSQL database
+  postgres:
+    image: postgres:15-alpine
+    container_name: rag-chatbot-postgres
+    environment:
+      - POSTGRES_USER=chatbot_user
+      - POSTGRES_PASSWORD=chatbot_password
+      - POSTGRES_DB=chatbot_db
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./backend/src/database/schema.sql:/docker-entrypoint-initdb.d/01-schema.sql
+    networks:
+      - rag-network
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U chatbot_user -d chatbot_db"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # Qdrant vector database
+  qdrant:
+    image: qdrant/qdrant:latest
+    container_name: rag-chatbot-qdrant
+    ports:
+      - "6333:6333"
+      - "6334:6334"  # gRPC port
+    volumes:
+      - qdrant_data:/qdrant/storage
+    networks:
+      - rag-network
+    restart: unless-stopped
+    environment:
+      - QDRANT__SERVICE__GRPC_PORT=6334
+
+  # Frontend (React app)
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: rag-chatbot-frontend
+    ports:
+      - "3000:80"
+    environment:
+      - REACT_APP_API_URL=http://localhost:8000
+    depends_on:
+      - backend
+    networks:
+      - rag-network
+    restart: unless-stopped
+
+  # Nginx reverse proxy (optional, for production)
+  nginx:
+    image: nginx:alpine
+    container_name: rag-chatbot-nginx
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+      - ./nginx/ssl:/etc/nginx/ssl:ro
+    depends_on:
+      - backend
+      - frontend
+    networks:
+      - rag-network
+    restart: unless-stopped
+    profiles:
+      - production  # Only start with --profile production
+
+volumes:
+  postgres_data:
+    driver: local
+  qdrant_data:
+    driver: local
+
+networks:
+  rag-network:
+    driver: bridge

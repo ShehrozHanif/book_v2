@@ -1,197 +1,180 @@
-# Peer Review Checklist Template
+# Peer Review Checklist
 
-**Chapter**: [Chapter Title]
-**Chapter File**: [e.g., 01-what-is-humanoid-robotics.md]
-**Reviewer**: [Reviewer Name]
-**Review Date**: [YYYY-MM-DD]
-**Status**: [PENDING / IN_PROGRESS / APPROVED / NEEDS_REVISION]
-
----
-
-## Section 1: Fact Accuracy
-
-**Purpose**: Verify all factual claims, definitions, and examples are technically correct.
-
-### Subsection 1.1: Technical Definitions
-- [ ] All technical terms are accurately defined
-- [ ] Definitions align with standard robotics nomenclature
-- [ ] No conflicting definitions within the chapter or across modules
-- **Issues Found**:
-  - [ ] None
-  - [ ] Issue Log (see Section 4)
-
-### Subsection 1.2: Mathematical Correctness
-- [ ] All equations and formulas are correct
-- [ ] Worked examples produce expected results
-- [ ] Notation is consistent and clearly defined
-- **Issues Found**:
-  - [ ] None
-  - [ ] Issue Log (see Section 4)
-
-### Subsection 1.3: Historical & Reference Accuracy
-- [ ] Historical facts and timelines are accurate
-- [ ] Citations are properly attributed
-- [ ] Referenced authors and dates are correct
-- **Issues Found**:
-  - [ ] None
-  - [ ] Issue Log (see Section 4)
-
-### Subsection 1.4: Code Example Correctness
-- [ ] All code examples execute without errors
-- [ ] Code produces expected output
-- [ ] Code follows ROS 2 / robotics best practices
-- [ ] Dependencies are correctly listed
-- **Issues Found**:
-  - [ ] None
-  - [ ] Issue Log (see Section 4)
+**Module**: [Module number]
+**Chapter(s) Under Review**: [List chapters]
+**Reviewer Name**: [Name]
+**Review Date**: [Date]
+**Status**: [ ] In Progress  [ ] Complete
 
 ---
 
-## Section 2: Clarity
+## Fact Accuracy Verification
 
-**Purpose**: Ensure the chapter is understandable for the target audience (undergraduate to early professional).
+### Documentation Cross-Reference
+- [ ] All ROS 2 concepts match official ROS 2 documentation (version: Humble)
+- [ ] Gazebo/Isaac Sim descriptions match official simulator documentation
+- [ ] Mathematical formulas (kinematics, dynamics, control) verified against:
+  - [ ] Siciliano et al. "Robotics: Modelling, Planning and Control"
+  - [ ] Official textbooks cited in chapter references
+  - [ ] Peer-reviewed robotics publications
+- [ ] Hardware specifications match actual platform documentation
+- [ ] Sensor descriptions accurate for mentioned sensor types
+- [ ] Motion planning algorithms accurately described
+- [ ] Control theory concepts correctly explained
 
-### Subsection 2.1: Writing Quality
+### Code Example Accuracy
+- [ ] All code examples run without errors on target platform (Ubuntu 22.04 + ROS 2 Humble)
+- [ ] Code output matches expected output documented in chapter
+- [ ] Code comments are clear and accurately describe functionality
+- [ ] API usage matches current ROS 2 Humble documentation (not deprecated)
+- [ ] Python syntax is PEP 8 compliant
+- [ ] C++ code follows ROS 2 coding standards
+
+### References Verification
+- [ ] All cited references exist in references.json
+- [ ] Reference formatting consistent (APA format)
+- [ ] URLs in references are valid and return 200 OK
+- [ ] No broken links or missing citations
+- [ ] Citation keys are correctly cited in text
+
+---
+
+## Clarity Review
+
+### Writing Quality
 - [ ] Sentences are clear and concise
-- [ ] Paragraph transitions are logical
-- [ ] Technical concepts are explained before use
-- [ ] Active voice is predominant (>75% of sentences)
-- **Flesch-Kincaid Grade Level**: [Target: 10-12]
-- **Issues Found**:
-  - [ ] None
-  - [ ] Issue Log (see Section 4)
+- [ ] Paragraph structure is logical and easy to follow
+- [ ] Technical terminology is defined on first use
+- [ ] Active voice used >75% of the time
+- [ ] No grammatical or spelling errors
+- [ ] Tone is consistent with textbook style
 
-### Subsection 2.2: Terminology Consistency
-- [ ] Terms are used consistently throughout
-- [ ] Acronyms are defined on first use
-- [ ] Abbreviations are standardized
-- **Issues Found**:
-  - [ ] None
-  - [ ] Issue Log (see Section 4)
+### Organization
+- [ ] Chapter structure follows template: objectives → introduction → sections → summary
+- [ ] Learning objectives are clear and measurable
+- [ ] Section headings are descriptive
+- [ ] Transitions between sections are smooth
+- [ ] Summary accurately recaps chapter content
 
-### Subsection 2.3: Example Clarity
-- [ ] Code examples are well-commented
-- [ ] Diagrams (if present) have clear captions
-- [ ] Worked examples step through logic clearly
-- [ ] Context is provided before introducing examples
-- **Issues Found**:
-  - [ ] None
-  - [ ] Issue Log (see Section 4)
+### Diagrams & Figures
+- [ ] Descriptions of diagrams (if referenced) are accurate
+- [ ] Figure references in text match actual figure labels
+- [ ] Diagrams aid understanding (not redundant or confusing)
+- [ ] All visual elements have captions and explanations
 
-### Subsection 2.4: Organization & Flow
-- [ ] Learning objectives are clear at chapter start
-- [ ] Sections follow a logical progression
-- [ ] Chapter conclusion summarizes key takeaways
-- [ ] Links to other chapters are helpful (not disruptive)
-- **Issues Found**:
-  - [ ] None
-  - [ ] Issue Log (see Section 4)
+### Code Readability
+- [ ] Code snippets are properly formatted
+- [ ] Code comments explain "why", not just "what"
+- [ ] Variable/function names are descriptive
+- [ ] Code examples are not too complex for target audience
+- [ ] Example complexity increases appropriately through chapter
 
 ---
 
-## Section 3: Completeness
+## Completeness Verification
 
-**Purpose**: Verify the chapter meets all content requirements and learning objectives.
+### Content Coverage
+- [ ] All learning objectives are addressed in chapter content
+- [ ] Chapter covers promised topics (check against chapter outline)
+- [ ] Code examples support learning objectives
+- [ ] Section count aligns with expected depth (not too shallow, not overwhelming)
+- [ ] Common pitfalls/troubleshooting section is helpful
 
-### Subsection 3.1: Required Content
-- [ ] Learning objectives are stated
-- [ ] All learning objectives are addressed in content
-- [ ] Key concepts are explained (not just mentioned)
-- [ ] At least 2 worked examples are provided
-- [ ] Practical applications are discussed
-- **Issues Found**:
-  - [ ] None
-  - [ ] Issue Log (see Section 4)
+### Code Examples
+- [ ] Expected number of code examples present (2-3 per chapter typical)
+- [ ] Each example has: description, prerequisites, code, output, key takeaway
+- [ ] Examples demonstrate key concepts from chapter
+- [ ] Examples build in complexity (simple → intermediate → advanced)
+- [ ] Examples are runnable independently (not dependent on earlier examples)
 
-### Subsection 3.2: Code Examples
-- [ ] Correct number of code examples for chapter (per spec: 2-3 for Module 1)
-- [ ] Code examples cover learning objectives
-- [ ] Each example has clear docstring explaining purpose
-- [ ] Setup/teardown instructions are provided
-- **Issues Found**:
-  - [ ] None
-  - [ ] Issue Log (see Section 4)
-
-### Subsection 3.3: References & Sourcing
-- [ ] All factual claims have sources (or are established knowledge)
-- [ ] All cited references exist in `textbook/metadata/references.json`
-- [ ] Reference format is consistent (APA 7th Edition)
-- [ ] Quotes are properly attributed and page-numbered
-- **Issues Found**:
-  - [ ] None
-  - [ ] Issue Log (see Section 4)
-
-### Subsection 3.4: Depth vs. Breadth
-- [ ] Content is appropriately detailed for target audience
-- [ ] Advanced topics include pointers to further resources
-- [ ] Chapter length matches spec requirement (Module 1: ~2,300-2,400 words)
-- **Actual Word Count**: [Count]
-- **Issues Found**:
-  - [ ] None
-  - [ ] Issue Log (see Section 4)
+### References & Resources
+- [ ] References section includes all cited sources
+- [ ] "Further Reading" section provides additional resources
+- [ ] Further Reading links are relevant and current
+- [ ] References support claims made in chapter
 
 ---
 
-## Section 4: Issues Log
-
-**Purpose**: Document all issues found during review for author remediation.
+## Issues Log
 
 ### Critical Issues (Block Approval)
-1. **[Issue ID]**: [Title]
-   - **Category**: [Fact Error / Code Error / Missing Content / Clarity Issue]
-   - **Severity**: [Critical]
-   - **Description**: [Detailed description]
-   - **Location**: [Chapter section or line number]
-   - **Suggested Fix**: [Recommendation]
-   - **Status**: [OPEN / RESOLVED / WONTFIX]
+**Definition**: Factual errors, broken code, or missing required content
 
-### Major Issues (Request Revision)
-1. **[Issue ID]**: [Title]
-   - **Category**: [Fact Error / Clarity / Completeness]
-   - **Severity**: [Major]
-   - **Description**: [Detailed description]
-   - **Location**: [Chapter section]
-   - **Suggested Fix**: [Recommendation]
-   - **Status**: [OPEN / RESOLVED]
+| Issue ID | Location | Description | Severity | Suggested Fix | Status |
+|----------|----------|-------------|----------|---------------|--------|
+| [ISSUE_001] | [Section] | [Description] | CRITICAL | [Fix suggestion] | [ ] Open  [ ] Resolved |
+| [ISSUE_002] | [Section] | [Description] | CRITICAL | [Fix suggestion] | [ ] Open  [ ] Resolved |
 
-### Minor Issues (Note for Author)
-1. **[Issue ID]**: [Title]
-   - **Category**: [Typo / Formatting / Grammar]
-   - **Severity**: [Minor]
-   - **Description**: [Detailed description]
-   - **Location**: [Chapter section]
-   - **Suggested Fix**: [Recommendation]
-   - **Status**: [OPEN / RESOLVED]
+### High Priority Issues (Should Fix)
+**Definition**: Accuracy concerns, unclear explanations, incomplete sections
+
+| Issue ID | Location | Description | Severity | Suggested Fix | Status |
+|----------|----------|-------------|----------|---------------|--------|
+| [ISSUE_003] | [Section] | [Description] | HIGH | [Fix suggestion] | [ ] Open  [ ] Resolved |
+| [ISSUE_004] | [Section] | [Description] | HIGH | [Fix suggestion] | [ ] Open  [ ] Resolved |
+
+### Medium Priority Issues (Nice to Fix)
+**Definition**: Minor improvements to clarity, wording, or organization
+
+| Issue ID | Location | Description | Severity | Suggested Fix | Status |
+|----------|----------|-------------|----------|---------------|--------|
+| [ISSUE_005] | [Section] | [Description] | MEDIUM | [Fix suggestion] | [ ] Open  [ ] Resolved |
+
+### Low Priority Issues (Optional)
+**Definition**: Cosmetic or discretionary improvements
+
+| Issue ID | Location | Description | Severity | Suggested Fix | Status |
+|----------|----------|-------------|----------|---------------|--------|
+| [ISSUE_006] | [Section] | [Description] | LOW | [Fix suggestion] | [ ] Open  [ ] Resolved |
 
 ---
 
-## Overall Assessment
+## Reviewer Recommendations
 
-### Recommendation
-- [ ] **APPROVED**: No blocking issues; ready for indexing
-- [ ] **APPROVED WITH MINOR FIXES**: Minor issues noted; can be indexed after quick fixes
-- [ ] **REVISION REQUIRED**: Major issues found; resubmit after revision
-- [ ] **REJECT**: Critical errors; do not index
+### Strengths
+- [List 2-3 things the chapter does well]
+- Example: "Clear explanation of forward kinematics with worked examples"
 
-### Summary Comments
-[Reviewer's overall assessment, highlights, and encouragement]
+### Areas for Improvement
+- [List 2-3 areas that could be enhanced]
+- Example: "Code example for inverse kinematics could include error handling"
+
+### Additional Comments
+[Any other feedback or context]
 
 ---
 
 ## Sign-Off
 
-**Reviewer Name**: ________________________
-**Reviewer Affiliation**: ________________________
-**Review Date**: ________________________
-**Signature**: ________________________
+**Reviewer**: ________________  **Date**: ________________
+
+**Overall Assessment**:
+- [ ] Approved for indexing (all critical issues resolved, ≥95% accuracy)
+- [ ] Approved with minor revisions (non-critical issues; re-review not needed)
+- [ ] Request revisions (critical issues; requires re-review after fixes)
+- [ ] Reject (major rework needed)
+
+**Summary**: [1-2 sentences summarizing review outcome and next steps]
 
 ---
 
-## Appendix: Quick Reference
+## Post-Review (Author)
 
-- **Target Audience**: Undergraduates and early-career roboticists
-- **Flesch-Kincaid Target**: Grade 10-12
-- **Approximate Word Count**: Module 1: 2,300-2,400 words per chapter
-- **Code Examples per Chapter**: 2-3 for Module 1
-- **Reference Format**: APA 7th Edition
-- **Platform Requirements**: Ubuntu 22.04 + ROS 2 Humble LTS
+**Author Response to Review**:
+[Author comments on reviewer feedback, fixes applied, questions, etc.]
+
+**Issues Resolved**: [List issue IDs marked as resolved]
+
+**Author Signature**: ________________  **Date**: ________________
+
+---
+
+## Final Approval (Review Manager)
+
+After author responds to review, final approval by review manager:
+
+- [ ] All critical issues resolved
+- [ ] Chapter approved for RAG indexing
+- [ ] Module ready to proceed to next stage
+
+**Review Manager**: ________________  **Date**: ________________

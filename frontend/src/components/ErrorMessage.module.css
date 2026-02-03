@@ -1,0 +1,246 @@
+/* Error Message Component Styles */
+
+.error-message {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 16px;
+  margin: 12px 0;
+  border-radius: 8px;
+  background: #fee;
+  border: 1px solid #fcc;
+  animation: slideIn 0.3s ease-out;
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.error-content {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+}
+
+.error-icon {
+  font-size: 20px;
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+.error-text {
+  margin: 0;
+  font-size: 14px;
+  line-height: 1.5;
+  color: #991b1b;
+  flex: 1;
+}
+
+.error-actions {
+  display: flex;
+  gap: 8px;
+  justify-content: flex-end;
+  flex-wrap: wrap;
+}
+
+.error-btn {
+  padding: 6px 16px;
+  border: none;
+  border-radius: 6px;
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.retry-btn {
+  background: #dc2626;
+  color: white;
+}
+
+.retry-btn:hover {
+  background: #b91c1c;
+}
+
+.retry-btn:active {
+  transform: scale(0.98);
+}
+
+.dismiss-btn {
+  background: transparent;
+  color: #991b1b;
+  border: 1px solid #fca5a5;
+}
+
+.dismiss-btn:hover {
+  background: #fca5a5;
+  color: white;
+}
+
+.dismiss-btn:active {
+  transform: scale(0.98);
+}
+
+.error-btn:focus {
+  outline: 2px solid #dc2626;
+  outline-offset: 2px;
+}
+
+/* Error type specific styles */
+.error-type-user {
+  background: #fef3c7;
+  border-color: #fde047;
+}
+
+.error-type-user .error-text {
+  color: #92400e;
+}
+
+.error-type-user .retry-btn {
+  background: #f59e0b;
+}
+
+.error-type-user .retry-btn:hover {
+  background: #d97706;
+}
+
+.error-type-user .dismiss-btn {
+  color: #92400e;
+  border-color: #fde047;
+}
+
+.error-type-user .dismiss-btn:hover {
+  background: #fde047;
+}
+
+.error-type-timeout {
+  background: #dbeafe;
+  border-color: #93c5fd;
+}
+
+.error-type-timeout .error-text {
+  color: #1e3a8a;
+}
+
+.error-type-timeout .retry-btn {
+  background: #3b82f6;
+}
+
+.error-type-timeout .retry-btn:hover {
+  background: #2563eb;
+}
+
+.error-type-timeout .dismiss-btn {
+  color: #1e3a8a;
+  border-color: #93c5fd;
+}
+
+.error-type-timeout .dismiss-btn:hover {
+  background: #93c5fd;
+}
+
+.error-type-network {
+  background: #f3e8ff;
+  border-color: #d8b4fe;
+}
+
+.error-type-network .error-text {
+  color: #5b21b6;
+}
+
+.error-type-network .retry-btn {
+  background: #9333ea;
+}
+
+.error-type-network .retry-btn:hover {
+  background: #7e22ce;
+}
+
+.error-type-network .dismiss-btn {
+  color: #5b21b6;
+  border-color: #d8b4fe;
+}
+
+.error-type-network .dismiss-btn:hover {
+  background: #d8b4fe;
+}
+
+/* Mobile Responsive */
+@media (max-width: 768px) {
+  .error-message {
+    padding: 12px;
+    margin: 8px 0;
+  }
+
+  .error-text {
+    font-size: 13px;
+  }
+
+  .error-btn {
+    padding: 5px 12px;
+    font-size: 12px;
+  }
+
+  .error-actions {
+    width: 100%;
+  }
+
+  .error-btn {
+    flex: 1;
+  }
+}
+
+/* Dark mode support */
+@media (prefers-color-scheme: dark) {
+  .error-message {
+    background: #3f1f1f;
+    border-color: #7f1d1d;
+  }
+
+  .error-text {
+    color: #fca5a5;
+  }
+
+  .dismiss-btn {
+    color: #fca5a5;
+    border-color: #7f1d1d;
+  }
+
+  .dismiss-btn:hover {
+    background: #7f1d1d;
+  }
+
+  .error-type-user {
+    background: #3f2f1f;
+    border-color: #92400e;
+  }
+
+  .error-type-user .error-text {
+    color: #fde047;
+  }
+
+  .error-type-timeout {
+    background: #1e3a5f;
+    border-color: #1e40af;
+  }
+
+  .error-type-timeout .error-text {
+    color: #93c5fd;
+  }
+
+  .error-type-network {
+    background: #3f1f5f;
+    border-color: #6b21a8;
+  }
+
+  .error-type-network .error-text {
+    color: #d8b4fe;
+  }
+}

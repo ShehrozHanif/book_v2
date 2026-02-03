@@ -25,23 +25,23 @@
 
 - [x] T001 Create textbook directory structure in `textbook/` with subdirectories: `chapters/`, `code-examples/`, `metadata/`, `contracts/`
 
-- [ ] T002 Create chapter template file at `textbook/chapters/_chapter-template.md` with learning objectives, sections, code examples, references structure (from plan.md §Phase 1)
+- [x] T002 Create chapter template file at `textbook/chapters/_chapter-template.md` with learning objectives, sections, code examples, references structure (from plan.md §Phase 1)
 
-- [ ] T003 [P] Create code examples README at `textbook/code-examples/README.md` with setup instructions, dependencies, how to run, expected output, troubleshooting
+- [x] T003 [P] Create code examples README at `textbook/code-examples/README.md` with setup instructions, dependencies, how to run, expected output, troubleshooting
 
-- [ ] T004 [P] Create centralized references database at `textbook/metadata/references.json` with empty structure for 50-100 APA-formatted references (from data-model.md)
+- [x] T004 [P] Create centralized references database at `textbook/metadata/references.json` with empty structure for 50-100 APA-formatted references (from data-model.md)
 
-- [ ] T005 [P] Create module metadata index at `textbook/metadata/module-index.json` with 4 module definitions (Module 1-4) including chapter counts, word count targets, status fields
+- [x] T005 [P] Create module metadata index at `textbook/metadata/module-index.json` with 4 module definitions (Module 1-4) including chapter counts, word count targets, status fields
 
-- [ ] T006 Create code examples manifest at `textbook/metadata/code-examples-manifest.json` with mapping of 66 code examples to chapters (from spec.md §Code Examples Strategy)
+- [x] T006 Create code examples manifest at `textbook/metadata/code-examples-manifest.json` with mapping of 66 code examples to chapters (from spec.md §Code Examples Strategy)
 
-- [ ] T007 Setup local development VM (Ubuntu 22.04 + ROS 2 Humble LTS + Gazebo 11) per quickstart.md §Prerequisites or document access to shared lab VM; create setup verification script
+- [x] T007 Setup local development VM (Ubuntu 22.04 + ROS 2 Humble LTS + Gazebo 11) per quickstart.md §Prerequisites or document access to shared lab VM; create setup verification script
 
-- [ ] T008 [P] Create CI/CD pipeline configuration for code example verification (GitHub Actions or equivalent) that tests all code examples against Ubuntu 22.04 + ROS 2 Humble environment
+- [x] T008 [P] Create CI/CD pipeline configuration for code example verification (GitHub Actions or equivalent) that tests all code examples against Ubuntu 22.04 + ROS 2 Humble environment
 
-- [ ] T009 [P] Create peer-review checklist template at `textbook/metadata/peer-review-checklist.md` with sections: Fact Accuracy, Clarity, Completeness, Issues Log (from plan.md §Research Task 3)
+- [x] T009 [P] Create peer-review checklist template at `textbook/metadata/peer-review-checklist.md` with sections: Fact Accuracy, Clarity, Completeness, Issues Log (from plan.md §Research Task 3)
 
-- [ ] T010 [P] Create expert review template at `textbook/metadata/expert-review-template.json` schema matching Review entity from data-model.md (accuracy_score, clarity_score, completeness_score, flagged_issues)
+- [x] T010 [P] Create expert review template at `textbook/metadata/expert-review-template.json` schema matching Review entity from data-model.md (accuracy_score, clarity_score, completeness_score, flagged_issues)
 
 **Checkpoint**: Textbook infrastructure ready; writer environment prepared; no write tasks blocked
 

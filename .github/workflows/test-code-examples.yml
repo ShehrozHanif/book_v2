@@ -1,0 +1,112 @@
+name: Test Code Examples
+
+on:
+  push:
+    branches: [ main, 002-content-writing ]
+    paths:
+      - 'textbook/code-examples/**'
+      - '.github/workflows/test-code-examples.yml'
+  pull_request:
+    branches: [ main, 002-content-writing ]
+    paths:
+      - 'textbook/code-examples/**'
+
+jobs:
+  test-python:
+    runs-on: ubuntu-22.04
+    
+    steps:
+    - uses: actions/checkout@v3
+    
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.10'
+    
+    - name: Install ROS 2 Humble
+      run: |
+        sudo apt update
+        sudo apt install -y ros-humble-desktop
+    
+    - name: Install Python dependencies
+      run: |
+        python3 -m pip install --upgrade pip
+        pip install pytest numpy pyyaml
+    
+    - name: Run Python code examples
+      run: |
+        source /opt/ros/humble/setup.bash
+        cd textbook/code-examples
+        python3 -m pytest chapter_*_example_*.py -v --tb=short
+      continue-on-error: true
+
+  test-cpp:
+    runs-on: ubuntu-22.04
+    
+    steps:
+    - uses: actions/checkout@v3
+    
+    - name: Install build dependencies
+      run: |
+        sudo apt update
+        sudo apt install -y cmake build-essential ros-humble-desktop
+    
+    - name: Build C++ examples
+      run: |
+        source /opt/ros/humble/setup.bash
+        cd textbook/code-examples
+        for cpp_file in chapter_*_example_*.cpp; do
+          if [ -f "$cpp_file" ]; then
+            echo "Compiling $cpp_file..."
+            g++ -o "${cpp_file%.cpp}" "$cpp_file" -std=c++17
+          fi
+        done
+      continue-on-error: true
+
+  validate-urdf-yaml:
+    runs-on: ubuntu-22.04
+    
+    steps:
+    - uses: actions/checkout@v3
+    
+    - name: Install validation tools
+      run: |
+        sudo apt update
+        sudo apt install -y ros-humble-urdfdom python3-yaml
+    
+    - name: Validate URDF files
+      run: |
+        source /opt/ros/humble/setup.bash
+        cd textbook/code-examples
+        for urdf_file in chapter_*_example_*.urdf; do
+          if [ -f "$urdf_file" ]; then
+            echo "Validating $urdf_file..."
+            check_urdf "$urdf_file"
+          fi
+        done
+      continue-on-error: true
+    
+    - name: Validate YAML files
+      run: |
+        python3 -c "
+        import yaml
+        import glob
+        for yaml_file in glob.glob('textbook/code-examples/chapter_*_example_*.yaml'):
+            print(f'Validating {yaml_file}...')
+            with open(yaml_file) as f:
+                yaml.safe_load(f)
+        "
+      continue-on-error: true
+
+  summary:
+    needs: [test-python, test-cpp, validate-urdf-yaml]
+    runs-on: ubuntu-22.04
+    if: always()
+    
+    steps:
+    - name: Test Summary
+      run: |
+        echo "=== Code Example Test Summary ==="
+        echo "Python tests: ${{ needs.test-python.result }}"
+        echo "C++ compilation: ${{ needs.test-cpp.result }}"
+        echo "URDF/YAML validation: ${{ needs.validate-urdf-yaml.result }}"

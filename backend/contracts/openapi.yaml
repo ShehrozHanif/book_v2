@@ -1,0 +1,375 @@
+openapi: 3.0.0
+info:
+  title: RAG Chatbot API
+  version: 1.0.0
+  description: |
+    Humanoid Robotics Textbook RAG Chatbot API
+
+    This API provides intelligent Q&A capabilities for the Physical AI & Humanoid Robotics textbook using Retrieval-Augmented Generation (RAG).
+  contact:
+    name: RAG Chatbot Team
+    email: support@roboticsbook.ai
+
+servers:
+  - url: http://localhost:8000/api/v1
+    description: Local development
+  - url: https://api.roboticsbook.ai/api/v1
+    description: Production
+
+tags:
+  - name: Chat
+    description: Chat and question-answering endpoints
+  - name: Admin
+    description: Administrative endpoints for content management
+  - name: Health
+    description: Service health and monitoring
+
+paths:
+  /chat:
+    post:
+      summary: Ask a question about textbook content
+      description: |
+        Send a natural language question about the textbook and receive an AI-generated answer with citations.
+        Supports multi-turn conversations via conversation_id.
+      tags: [Chat]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ChatRequest'
+            examples:
+              simple_query:
+                summary: Simple question
+                value:
+                  query: "What is ROS 2?"
+              with_selection:
+                summary: Question with text selection
+                value:
+                  query: "Can you explain this in more detail?"
+                  selected_text: "ROS 2 is a flexible middleware framework..."
+              multi_turn:
+                summary: Follow-up question
+                value:
+                  query: "How does that compare to ROS 1?"
+                  conversation_id: "550e8400-e29b-41d4-a716-446655440000"
+      responses:
+        '200':
+          description: Successful response with answer and citations
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ChatResponse'
+              examples:
+                success:
+                  summary: Successful response
+                  value:
+                    response: "ROS 2 is a flexible, open-source middleware framework for robotics development. It provides tools and libraries for building distributed robot applications. [Chapter 1: 1.1 Introduction to ROS 2]"
+                    conversation_id: "550e8400-e29b-41d4-a716-446655440000"
+                    retrieved_passages:
+                      - "ROS 2 is a flexible middleware framework designed for robotics..."
+                      - "It provides communication infrastructure between processes..."
+                      - "Key improvements over ROS 1 include better real-time support..."
+                    relevance_scores: [0.95, 0.87, 0.86]
+                    processing_time_ms: 1234
+        '400':
+          description: Bad request (validation error)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              examples:
+                empty_query:
+                  summary: Empty query error
+                  value:
+                    error: "validation_error"
+                    details: "Query cannot be empty. Please ask a question about the textbook."
+                    status_code: 400
+                query_too_long:
+                  summary: Query too long
+                  value:
+                    error: "validation_error"
+                    details: "Query exceeds maximum length of 5000 characters."
+                    status_code: 400
+        '429':
+          description: Rate limit exceeded
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              examples:
+                rate_limit:
+                  summary: Rate limit error
+                  value:
+                    error: "rate_limit_exceeded"
+                    details: "Too many requests. Please wait before trying again."
+                    status_code: 429
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              examples:
+                server_error:
+                  summary: Server error
+                  value:
+                    error: "internal_error"
+                    details: "An unexpected error occurred. Please try again later."
+                    status_code: 500
+
+  /chat/embed:
+    post:
+      summary: Embed textbook content into vector database
+      description: |
+        Administrative endpoint to embed textbook passages into the Qdrant vector database.
+        Requires authentication.
+      tags: [Admin]
+      security:
+        - ApiKeyAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/EmbedRequest'
+            examples:
+              single_chunk:
+                summary: Embed single passage
+                value:
+                  chunks:
+                    - content: "ROS 2 is a flexible middleware framework for building robot applications. It provides communication infrastructure, hardware abstraction, and device drivers."
+                      module: "Module 1: Introduction"
+                      chapter: "Chapter 1: ROS Basics"
+                      section: "1.1 What is ROS 2?"
+              multiple_chunks:
+                summary: Embed multiple passages
+                value:
+                  chunks:
+                    - content: "ROS 2 provides a publish-subscribe messaging system..."
+                      module: "Module 1: Introduction"
+                      chapter: "Chapter 1: ROS Basics"
+                      section: "1.2 Core Concepts"
+                    - content: "Nodes are the fundamental building blocks in ROS 2..."
+                      module: "Module 1: Introduction"
+                      chapter: "Chapter 1: ROS Basics"
+                      section: "1.3 Nodes and Topics"
+      responses:
+        '200':
+          description: Content successfully embedded
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: "success"
+                  chunks_embedded:
+                    type: integer
+                    example: 42
+                  message:
+                    type: string
+                    example: "Successfully embedded 42 textbook passages"
+        '401':
+          description: Unauthorized (admin only)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '400':
+          description: Bad request (invalid chunks)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /health:
+    get:
+      summary: Health check endpoint
+      description: Check if the service is running and healthy
+      tags: [Health]
+      responses:
+        '200':
+          description: Service is healthy
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: "ok"
+                  timestamp:
+                    type: string
+                    format: date-time
+                    example: "2024-01-30T12:34:56Z"
+                  version:
+                    type: string
+                    example: "1.0.0"
+        '503':
+          description: Service is unhealthy
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: "degraded"
+                  details:
+                    type: string
+                    example: "Database connection failed"
+
+components:
+  securitySchemes:
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: X-API-Key
+
+  schemas:
+    ChatRequest:
+      type: object
+      required:
+        - query
+      properties:
+        query:
+          type: string
+          minLength: 1
+          maxLength: 5000
+          description: User question about textbook content
+          example: "What is ROS 2 and how does it work?"
+        selected_text:
+          type: string
+          maxLength: 2000
+          description: Optional text selected by user in textbook for context
+          example: "ROS 2 is a middleware framework designed for building robot applications..."
+        conversation_id:
+          type: string
+          format: uuid
+          description: Optional conversation ID for multi-turn conversations
+          example: "550e8400-e29b-41d4-a716-446655440000"
+        user_id:
+          type: string
+          format: uuid
+          description: Optional user ID for authenticated users
+          example: "7c9e6679-7425-40de-944b-e07fc1f90ae7"
+
+    ChatResponse:
+      type: object
+      required:
+        - response
+        - conversation_id
+        - retrieved_passages
+        - relevance_scores
+        - processing_time_ms
+      properties:
+        response:
+          type: string
+          description: AI-generated answer with inline citations
+          example: "ROS 2 is a flexible, open-source middleware framework for robotics development. [Chapter 1: 1.1]"
+        conversation_id:
+          type: string
+          format: uuid
+          description: Conversation ID for follow-up questions
+          example: "550e8400-e29b-41d4-a716-446655440000"
+        retrieved_passages:
+          type: array
+          items:
+            type: string
+          description: Relevant passages retrieved from textbook
+          minItems: 0
+          maxItems: 5
+          example:
+            - "ROS 2 is a flexible middleware framework designed for robotics..."
+            - "It provides communication infrastructure between distributed processes..."
+            - "Key improvements include better real-time support and security..."
+        relevance_scores:
+          type: array
+          items:
+            type: number
+            format: float
+            minimum: 0
+            maximum: 1
+          description: Cosine similarity scores for retrieved passages (0-1)
+          example: [0.95, 0.87, 0.86]
+        processing_time_ms:
+          type: number
+          format: float
+          description: Total processing time in milliseconds
+          example: 1234.56
+
+    EmbedRequest:
+      type: object
+      required:
+        - chunks
+      properties:
+        chunks:
+          type: array
+          items:
+            $ref: '#/components/schemas/TextbookChunk'
+          minItems: 1
+          maxItems: 100
+          description: Array of textbook passages to embed
+
+    TextbookChunk:
+      type: object
+      required:
+        - content
+        - module
+        - chapter
+        - section
+      properties:
+        content:
+          type: string
+          minLength: 50
+          maxLength: 2000
+          description: Textbook passage content (200-500 words recommended)
+          example: "ROS 2 is a flexible middleware framework for building robot applications..."
+        module:
+          type: string
+          maxLength: 100
+          description: Module identifier
+          example: "Module 1: Introduction to Robotics"
+        chapter:
+          type: string
+          maxLength: 100
+          description: Chapter identifier
+          example: "Chapter 1: ROS 2 Basics"
+        section:
+          type: string
+          maxLength: 100
+          description: Section identifier
+          example: "1.1 What is ROS 2?"
+
+    ErrorResponse:
+      type: object
+      required:
+        - error
+        - details
+        - status_code
+      properties:
+        error:
+          type: string
+          description: Error type/category
+          enum:
+            - validation_error
+            - rate_limit_exceeded
+            - authentication_error
+            - internal_error
+            - not_found
+          example: "validation_error"
+        details:
+          type: string
+          description: Human-friendly error message
+          example: "Query cannot be empty. Please ask a question about the textbook."
+        status_code:
+          type: integer
+          description: HTTP status code
+          example: 400
+        timestamp:
+          type: string
+          format: date-time
+          description: Error timestamp
+          example: "2024-01-30T12:34:56Z"
