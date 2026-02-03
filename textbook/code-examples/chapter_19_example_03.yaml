@@ -1,0 +1,213 @@
+# Chapter 19, Example 3: Safety Configuration File
+# ISO 13482:2014 Compliant Safety Parameters for Humanoid Robot
+#
+# This configuration file defines safety constraints for a humanoid robot
+# operating in human-centered environments. All parameters follow ISO 13482
+# safety requirements for personal care robots.
+#
+# Usage:
+#   - Load this file in robot controller initialization
+#   - Enforce limits in real-time safety monitoring system
+#   - Update parameters only after risk assessment
+#
+# Author: Physical AI & Humanoid Robotics Textbook
+# Standard: ISO 13482:2014, ISO 10218-1:2011
+
+---
+# Robot identification
+robot:
+  name: "Humanoid-Safety-01"
+  model: "HR-1000"
+  serial_number: "HR1000-2024-001"
+  iso_standard: "ISO 13482:2014"
+  risk_category: "Category 2 - Physical Assistant Robot"
+
+# Joint safety limits
+# All angles in radians, velocities in rad/s, torques in Nm, forces in N
+joints:
+  # SHOULDER JOINTS
+  left_shoulder_pitch:
+    position_limits:
+      min: -1.57                    # -90 degrees (forward)
+      max: 1.57                     # +90 degrees (backward)
+      soft_margin: 0.17             # 10 degree safety margin
+    velocity_limits:
+      max: 2.0                      # rad/s
+      warning_threshold: 1.6        # 80% of max
+    torque_limits:
+      max: 50.0                     # Nm
+      continuous: 25.0              # Continuous operation limit
+    force_limits:
+      contact_threshold: 15.0       # N - trigger collision detection
+      emergency_stop: 50.0          # N - immediate stop
+
+  right_shoulder_pitch:
+    position_limits:
+      min: -1.57
+      max: 1.57
+      soft_margin: 0.17
+    velocity_limits:
+      max: 2.0
+      warning_threshold: 1.6
+    torque_limits:
+      max: 50.0
+      continuous: 25.0
+    force_limits:
+      contact_threshold: 15.0
+      emergency_stop: 50.0
+
+  # ELBOW JOINTS
+  left_elbow_pitch:
+    position_limits:
+      min: -2.09                    # -120 degrees (bent)
+      max: 0.0                      # Fully extended
+      soft_margin: 0.17
+    velocity_limits:
+      max: 2.5
+      warning_threshold: 2.0
+    torque_limits:
+      max: 30.0
+      continuous: 15.0
+    force_limits:
+      contact_threshold: 12.0
+      emergency_stop: 40.0
+
+  right_elbow_pitch:
+    position_limits:
+      min: -2.09
+      max: 0.0
+      soft_margin: 0.17
+    velocity_limits:
+      max: 2.5
+      warning_threshold: 2.0
+    torque_limits:
+      max: 30.0
+      continuous: 15.0
+    force_limits:
+      contact_threshold: 12.0
+      emergency_stop: 40.0
+
+  # HIP JOINTS
+  left_hip_pitch:
+    position_limits:
+      min: -1.57
+      max: 1.57
+      soft_margin: 0.17
+    velocity_limits:
+      max: 2.0
+      warning_threshold: 1.6
+    torque_limits:
+      max: 100.0
+      continuous: 50.0
+    force_limits:
+      contact_threshold: 25.0
+      emergency_stop: 100.0
+
+  right_hip_pitch:
+    position_limits:
+      min: -1.57
+      max: 1.57
+      soft_margin: 0.17
+    velocity_limits:
+      max: 2.0
+      warning_threshold: 1.6
+    torque_limits:
+      max: 100.0
+      continuous: 50.0
+    force_limits:
+      contact_threshold: 25.0
+      emergency_stop: 100.0
+
+  # KNEE JOINTS
+  left_knee_pitch:
+    position_limits:
+      min: -2.09                    # -120 degrees (bent)
+      max: 0.0                      # Fully extended
+      soft_margin: 0.17
+    velocity_limits:
+      max: 2.0
+      warning_threshold: 1.6
+    torque_limits:
+      max: 80.0
+      continuous: 40.0
+    force_limits:
+      contact_threshold: 20.0
+      emergency_stop: 80.0
+
+  right_knee_pitch:
+    position_limits:
+      min: -2.09
+      max: 0.0
+      soft_margin: 0.17
+    velocity_limits:
+      max: 2.0
+      warning_threshold: 1.6
+    torque_limits:
+      max: 80.0
+      continuous: 40.0
+    force_limits:
+      contact_threshold: 20.0
+      emergency_stop: 80.0
+
+# Collision detection parameters
+collision_detection:
+  enabled: true
+  method: "torque_residual"        # Options: torque_residual, force_sensor, hybrid
+  sensitivity: 1.5                 # Multiplier for thresholds
+  reaction_time_ms: 10             # Maximum response time (milliseconds)
+  recovery_strategy: "retract"     # Options: stop, retract, compliant
+
+# Emergency stop configuration
+emergency_stop:
+  hardware_estop_enabled: true
+  software_watchdog_enabled: true
+  watchdog_timeout_ms: 100         # Software watchdog timeout
+
+  # Multiple e-stop triggers
+  triggers:
+    - type: "hardware_button"
+      location: "torso_front"
+      priority: 1
+    - type: "wireless_remote"
+      max_distance_m: 10.0
+      priority: 2
+    - type: "force_threshold"
+      priority: 3
+
+# Safety zones (restricted areas)
+safety_zones:
+  # Human proximity zones following Hall's proxemics
+  intimate_zone:
+    radius_m: 0.45                 # 0-45cm: intimate space
+    max_velocity_ms: 0.05          # Very slow motion
+    max_force_n: 5.0               # Minimal force
+
+  personal_zone:
+    radius_m: 1.2                  # 45-120cm: personal space
+    max_velocity_ms: 0.2           # Slow motion
+    max_force_n: 15.0              # Reduced force
+
+  social_zone:
+    radius_m: 3.6                  # 1.2-3.6m: social space
+    max_velocity_ms: 0.5           # Moderate motion
+    max_force_n: 30.0              # Normal operation
+
+# Compliance with safety standards
+compliance:
+  standards:
+    - name: "ISO 13482:2014"
+      title: "Robots and robotic devices - Safety requirements for personal care robots"
+      compliance_level: "Full"
+      last_audit: "2024-01-15"
+      next_audit: "2025-01-15"
+
+    - name: "IEC 61508"
+      title: "Functional safety systems"
+      compliance_level: "SIL 2"
+      last_audit: "2024-02-01"
+      next_audit: "2025-02-01"
+
+# Configuration version
+config_version: "1.0.0"
+last_updated: "2024-02-04"
+author: "Physical AI & Humanoid Robotics Textbook"

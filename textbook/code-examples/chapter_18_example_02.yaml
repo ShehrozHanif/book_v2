@@ -1,0 +1,512 @@
+# Chapter 18 Example 2: Industry Standards Configuration Template
+#
+# This configuration file provides standardized parameters for humanoid robot
+# deployment across different industrial applications. It incorporates best
+# practices from ISO 13482, ISO/TS 15066, ANSI/RIA R15.08, and industry leaders.
+#
+# Usage:
+#   Load this YAML file into your robot control system to enforce industry-
+#   standard safety limits, performance targets, and operational parameters.
+#
+# Author: Physical AI & Humanoid Robotics Textbook
+# License: MIT
+# Version: 1.0.0
+
+---
+# =============================================================================
+# MANUFACTURING ROBOTICS - Automotive Assembly
+# =============================================================================
+manufacturing:
+  automotive_assembly:
+    # Application Metadata
+    application:
+      name: "Automotive Assembly Line"
+      industry: "Manufacturing - Automotive"
+      standards:
+        - "ISO 10218-1:2011"  # Industrial robots - Safety requirements
+        - "ISO 10218-2:2011"  # Robot systems and integration
+        - "ISO/TS 15066:2016" # Collaborative robots
+      use_cases:
+        - "Parts handling and placement"
+        - "Bolt fastening and torquing"
+        - "Quality inspection"
+        - "Material transport"
+
+    # Safety Parameters (ISO/TS 15066 Compliant)
+    safety:
+      collaborative_mode: true
+      max_speed_collaborative: 0.25  # m/s - Speed when humans present
+      max_speed_autonomous: 1.5      # m/s - Speed in restricted zones
+      max_force_static: 140.0        # N - Maximum allowable static force
+      max_force_transient: 220.0     # N - Brief transient force limit
+      max_pressure: 280.0            # N/cm² - Contact pressure limit
+
+      # Safety zones (meters from robot base)
+      safety_zones:
+        - name: "collaborative_zone"
+          radius: 1.5
+          max_speed: 0.25
+          requires_human_detection: true
+        - name: "restricted_zone"
+          radius: 3.0
+          max_speed: 1.5
+          requires_human_detection: false
+        - name: "safety_zone"
+          radius: 5.0
+          requires_monitoring: true
+
+      emergency_stop:
+        response_time_ms: 50          # Time to stop all motion
+        detection_latency_ms: 20      # Sensor detection delay
+        braking_distance_m: 0.05      # Maximum stopping distance
+
+      # Force/torque limits per body region (ISO/TS 15066)
+      body_region_limits:
+        skull_forehead:
+          max_force_N: 130
+          max_pressure_N_cm2: 110
+        face:
+          max_force_N: 65
+          max_pressure_N_cm2: 75
+        neck:
+          max_force_N: 150
+          max_pressure_N_cm2: 140
+        back_shoulders:
+          max_force_N: 210
+          max_pressure_N_cm2: 160
+        chest:
+          max_force_N: 140
+          max_pressure_N_cm2: 110
+        abdomen_pelvis:
+          max_force_N: 110
+          max_pressure_N_cm2: 140
+        upper_arms:
+          max_force_N: 150
+          max_pressure_N_cm2: 190
+        lower_arms:
+          max_force_N: 160
+          max_pressure_N_cm2: 190
+        hands_fingers:
+          max_force_N: 140
+          max_pressure_N_cm2: 300
+        thighs:
+          max_force_N: 220
+          max_pressure_N_cm2: 250
+
+    # Performance Requirements
+    performance:
+      cycle_time_target_s: 45        # Target time per assembly cycle
+      cycle_time_tolerance_s: 5      # Acceptable variance
+      uptime_target_pct: 95.0        # Minimum uptime percentage
+      mean_time_between_failures_h: 2000  # MTBF target
+      mean_time_to_repair_h: 2       # MTTR target
+
+      accuracy:
+        position_tolerance_mm: 0.5   # Positioning accuracy
+        repeatability_mm: 0.1        # Position repeatability
+        torque_accuracy_pct: 5.0     # Bolt torquing accuracy
+
+      throughput:
+        parts_per_hour: 80           # Expected throughput
+        defect_rate_ppm: 100         # Parts per million defects
+        rework_rate_pct: 0.5         # Percentage requiring rework
+
+    # Joint Limits and Capabilities
+    kinematics:
+      degrees_of_freedom: 34         # Total DOF for humanoid
+
+      # Joint velocity limits (rad/s) for collaborative mode
+      joint_velocity_limits:
+        torso_pitch: 0.5
+        torso_roll: 0.5
+        torso_yaw: 0.5
+        shoulder_pitch: 1.0
+        shoulder_roll: 1.0
+        shoulder_yaw: 1.0
+        elbow_pitch: 1.5
+        elbow_yaw: 1.5
+        wrist_pitch: 2.0
+        wrist_roll: 2.0
+        wrist_yaw: 2.0
+
+      # Payload capacity
+      payload:
+        max_weight_kg: 10.0          # Maximum end-effector payload
+        max_reach_m: 0.85            # Maximum reach distance
+        recommended_weight_kg: 7.0   # Recommended continuous payload
+
+    # Environmental Requirements
+    environment:
+      operating_temperature_celsius:
+        min: 10
+        max: 40
+      humidity_percent:
+        min: 20
+        max: 80
+      dust_rating: "IP54"            # Ingress protection rating
+      noise_level_db: 65             # Maximum operational noise
+
+# =============================================================================
+# SERVICE ROBOTICS - Healthcare/Eldercare
+# =============================================================================
+service_robotics:
+  healthcare_eldercare:
+    # Application Metadata
+    application:
+      name: "Healthcare Assistant Robot"
+      industry: "Service - Healthcare"
+      standards:
+        - "ISO 13482:2014"  # Safety requirements for personal care robots
+        - "IEC 60601-1"     # Medical electrical equipment safety
+        - "HIPAA"           # Health data privacy (US)
+        - "GDPR"            # Data protection (EU)
+      use_cases:
+        - "Patient mobility assistance"
+        - "Medication delivery"
+        - "Vital signs monitoring"
+        - "Companionship and interaction"
+
+    # Safety Parameters (ISO 13482 Compliant)
+    safety:
+      robot_type: "physical_assistant"  # ISO 13482 category
+      risk_assessment_level: "high"     # Requires comprehensive safety
+
+      max_speed:
+        normal_operation: 0.3          # m/s
+        emergency_response: 0.8        # m/s
+
+      max_force:
+        intentional_contact: 50.0      # N - Designed contact (e.g., lifting)
+        unintentional_contact: 20.0    # N - Accidental collision
+
+      patient_safety:
+        fall_detection: true
+        obstacle_avoidance_distance_m: 0.5
+        backup_speed_limit: 0.1        # m/s - Maximum reverse speed
+        cliff_detection_enabled: true
+        minimum_ground_clearance_m: 0.02
+
+      # Medical device integration safety
+      medical_integration:
+        fail_safe_defaults: true
+        redundant_sensors: true
+        battery_backup_minutes: 60
+        alert_system_enabled: true
+
+    # Performance Requirements
+    performance:
+      navigation:
+        localization_accuracy_cm: 5    # Position accuracy
+        path_planning_update_hz: 10    # Replanning frequency
+        obstacle_detection_range_m: 3.0
+        minimum_doorway_width_m: 0.8
+
+      manipulation:
+        grasp_success_rate_pct: 98     # Object grasping reliability
+        object_weight_limit_kg: 5.0    # Safe lifting limit
+        handoff_success_rate_pct: 99   # Human handoff reliability
+
+      interaction:
+        speech_recognition_accuracy_pct: 95
+        response_latency_ms: 500       # Time to respond to command
+        emotion_detection_accuracy_pct: 80
+        languages_supported: ["en", "es", "zh", "ja", "de"]
+
+      reliability:
+        uptime_target_pct: 99.0
+        battery_life_hours: 12         # Continuous operation
+        charging_time_hours: 2
+        mean_time_between_failures_h: 5000
+
+    # Privacy and Data Protection
+    privacy:
+      data_collection:
+        video_recording: "opt_in"      # Requires patient consent
+        audio_recording: "opt_in"
+        health_data_collection: "explicit_consent"
+        anonymization_enabled: true
+        data_retention_days: 30
+
+      data_security:
+        encryption: "AES-256"
+        secure_boot: true
+        authentication_required: true
+        audit_logging: true
+        gdpr_compliant: true
+        hipaa_compliant: true
+
+      data_access:
+        role_based_access: true
+        multi_factor_authentication: true
+        session_timeout_minutes: 15
+
+    # Interaction Guidelines
+    interaction:
+      communication_style: "empathetic"
+      volume_adaptation: true          # Adjust to ambient noise
+      personal_space_m: 1.2            # Maintain comfortable distance
+      eye_contact_simulation: true
+      touch_interaction: "gentle"      # Force profile for physical contact
+
+      behavioral_constraints:
+        - "Always announce presence before approaching"
+        - "Maintain patient dignity and privacy"
+        - "Respect patient preferences and autonomy"
+        - "Escalate to human staff when uncertain"
+        - "Never override patient refusal"
+
+# =============================================================================
+# LOGISTICS AND WAREHOUSING
+# =============================================================================
+logistics:
+  warehouse_operations:
+    # Application Metadata
+    application:
+      name: "Warehouse Material Handling"
+      industry: "Logistics - Warehousing"
+      standards:
+        - "ANSI/ITSDF B56.5"  # Guided industrial vehicles
+        - "ISO 3691-4"        # Industrial trucks safety
+      use_cases:
+        - "Order picking and packing"
+        - "Inventory management"
+        - "Pallet handling"
+        - "Sortation"
+
+    # Safety Parameters
+    safety:
+      max_speed:
+        open_areas: 2.0              # m/s
+        congested_areas: 0.5         # m/s
+        near_humans: 0.25            # m/s
+
+      detection_zones:
+        warning_zone_m: 3.0          # Slow down
+        protective_zone_m: 1.5       # Stop if obstacle detected
+        emergency_stop_zone_m: 0.5   # Immediate stop
+
+      load_safety:
+        max_payload_kg: 50.0
+        max_lift_height_m: 2.5
+        stability_margin: 1.3        # Safety factor for tipping
+
+      environmental_monitoring:
+        floor_condition_check: true
+        lighting_minimum_lux: 100
+        temperature_monitoring: true
+
+    # Performance Requirements
+    performance:
+      throughput:
+        picks_per_hour: 120
+        pick_accuracy_pct: 99.9
+        travel_speed_loaded: 1.5     # m/s
+        travel_speed_unloaded: 2.0   # m/s
+
+      efficiency:
+        battery_life_hours: 8
+        charge_time_hours: 1.5
+        opportunity_charging: true   # Charge during idle
+        energy_per_pick_wh: 5.0
+
+      navigation:
+        path_planning_algorithm: "A*_with_dynamic_obstacles"
+        fleet_coordination: true     # Multi-robot coordination
+        deadlock_resolution: "priority_based"
+        map_update_frequency_hz: 1
+
+# =============================================================================
+# RESEARCH AND EDUCATION
+# =============================================================================
+research:
+  academic_platform:
+    # Application Metadata
+    application:
+      name: "Research and Education Platform"
+      industry: "Academia - Research"
+      standards:
+        - "ROS 2 Humble"
+        - "IEEE RAS"              # Robotics and Automation Society
+      use_cases:
+        - "Algorithm development"
+        - "Student training"
+        - "Human-robot interaction research"
+        - "Benchmarking"
+
+    # Development Configuration
+    development:
+      ros_version: "humble"
+      middleware: "DDS"
+      programming_languages: ["Python", "C++", "MATLAB"]
+      simulation_platforms: ["Gazebo", "Isaac Sim", "MuJoCo"]
+
+      api_access:
+        low_level_control: true      # Direct motor control
+        sensor_raw_data: true         # Unprocessed sensor streams
+        custom_controllers: true      # User-defined control
+        real_time_constraints: false  # Relaxed for research
+
+    # Safety (Relaxed for Controlled Environment)
+    safety:
+      mode: "supervised"             # Human supervisor required
+      emergency_stop: "accessible"   # E-stop always within reach
+      workspace_restricted: true     # Physical barriers
+      max_speed: 0.5                 # m/s - Conservative for safety
+      max_torque_pct: 50             # Limit to 50% of max torque
+
+    # Sensor Suite Configuration
+    sensors:
+      cameras:
+        rgb:
+          resolution: "1920x1080"
+          framerate: 30
+          fov_degrees: 90
+        depth:
+          resolution: "640x480"
+          framerate: 30
+          range_m: 10.0
+
+      lidar:
+        type: "3D"
+        points_per_second: 300000
+        range_m: 30
+        accuracy_cm: 2
+
+      imu:
+        update_rate_hz: 400
+        gyro_range_dps: 2000
+        accel_range_g: 16
+
+      force_torque:
+        per_limb: true
+        range_N: 500
+        sampling_rate_hz: 1000
+
+    # Data Logging and Analysis
+    data_logging:
+      default_topics:
+        - "/joint_states"
+        - "/camera/image_raw"
+        - "/camera/depth"
+        - "/imu/data"
+        - "/odom"
+        - "/scan"
+      storage_format: "rosbag2"
+      compression: true
+      max_storage_gb: 100
+      auto_cleanup: false            # Keep all data for analysis
+
+# =============================================================================
+# QUALITY ASSURANCE AND TESTING PARAMETERS
+# =============================================================================
+quality_assurance:
+  testing_protocols:
+    # Acceptance Testing
+    acceptance_tests:
+      - name: "Safety System Verification"
+        frequency: "before_each_deployment"
+        pass_criteria: "100% of safety checks pass"
+
+      - name: "Performance Benchmarking"
+        frequency: "weekly"
+        pass_criteria: "Meets 95% of performance targets"
+
+      - name: "Stress Testing"
+        frequency: "monthly"
+        duration_hours: 24
+        pass_criteria: "No critical failures"
+
+    # Calibration Requirements
+    calibration:
+      joint_encoders:
+        frequency_days: 30
+        accuracy_requirement_deg: 0.1
+
+      force_torque_sensors:
+        frequency_days: 7
+        accuracy_requirement_pct: 2.0
+
+      cameras:
+        frequency_days: 14
+        intrinsic_calibration: true
+        extrinsic_calibration: true
+
+      imu:
+        frequency_days: 30
+        bias_estimation: true
+
+    # Compliance Documentation
+    documentation:
+      required_documents:
+        - "Risk Assessment (ISO 12100)"
+        - "Safety Manual"
+        - "Maintenance Log"
+        - "Training Records"
+        - "Incident Reports"
+        - "Compliance Certificates"
+
+      audit_frequency: "quarterly"
+      certification_renewal_years: 1
+
+# =============================================================================
+# MAINTENANCE AND LIFECYCLE MANAGEMENT
+# =============================================================================
+maintenance:
+  scheduled_maintenance:
+    daily:
+      - "Visual inspection"
+      - "Battery check"
+      - "Emergency stop test"
+
+    weekly:
+      - "Joint lubrication check"
+      - "Sensor cleaning"
+      - "Software log review"
+
+    monthly:
+      - "Comprehensive safety test"
+      - "Calibration verification"
+      - "Wear component inspection"
+
+    quarterly:
+      - "Deep cleaning"
+      - "Component replacement (scheduled)"
+      - "Software updates"
+      - "Performance benchmarking"
+
+    annual:
+      - "Complete system overhaul"
+      - "Certification renewal"
+      - "Safety system upgrade"
+
+  consumables:
+    - name: "Joint grease"
+      replacement_interval_hours: 500
+    - name: "Gripper pads"
+      replacement_interval_cycles: 10000
+    - name: "Battery pack"
+      replacement_interval_cycles: 1000
+    - name: "Sensor filters"
+      replacement_interval_days: 90
+
+# =============================================================================
+# METADATA AND VERSION CONTROL
+# =============================================================================
+metadata:
+  document_version: "1.0.0"
+  last_updated: "2026-02-04"
+  maintained_by: "Physical AI & Humanoid Robotics Textbook"
+  standards_revision_date: "2025-01-01"
+  next_review_date: "2026-08-04"
+
+  changelog:
+    - version: "1.0.0"
+      date: "2026-02-04"
+      changes: "Initial release with ISO 13482, ISO/TS 15066, ANSI/RIA R15.08 compliance"
+
+  references:
+    - "ISO 13482:2014 - Robots and robotic devices - Safety requirements for personal care robots"
+    - "ISO/TS 15066:2016 - Robots and robotic devices - Collaborative robots"
+    - "ISO 10218-1:2011 - Robots and robotic devices - Safety requirements for industrial robots"
+    - "ANSI/RIA R15.08-2020 - Industrial Mobile Robots - Safety Requirements"
+    - "IEC 60601-1:2012 - Medical electrical equipment - General safety requirements"

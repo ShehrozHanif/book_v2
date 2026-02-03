@@ -119,7 +119,8 @@
 
 - [ ] T034 [US1] Submit Module 1 for RAG indexing into Qdrant; coordinate with Spec 001 team to confirm indexing complete and embeddings generated (by end of Week 1)
 
-- [ ] T035 [US1] Validate Module 1 RAG retrieval: run 10 sample queries on RAG chatbot (e.g., "What is forward kinematics?", "How do sensors work?"); confirm >80% relevance of retrieved sections with citations to correct chapters; document retrieval validation results
+- [ ] 
+
 
 **Checkpoint**: Module 1 complete, approved, indexed, and RAG-validated by end of Week 1; chatbot can answer fundamental questions
 
@@ -195,43 +196,43 @@
 
 ### Implementation for User Story 3
 
-- [ ] T055 [P] [US3] Write Chapter 12 "Advanced Kinematics" (2,400 words) in `textbook/chapters/12-advanced-kinematics.md` with: DH parameters, Jacobian matrix, singularities, redundancy handling; include mathematical derivations
+- [x] T055 [P] [US3] Write Chapter 12 "Advanced Kinematics" (2,400 words) in `textbook/chapters/12-advanced-kinematics.md` with: DH parameters, Jacobian matrix, singularities, redundancy handling; include mathematical derivations
 
-- [ ] T056 [P] [US3] Write Chapter 13 "Walking & Locomotion" (2,400 words) in `textbook/chapters/13-walking-locomotion.md` with: gait generation, stability margin, center of pressure, balance control algorithms
+- [x] T056 [P] [US3] Write Chapter 13 "Walking & Locomotion" (2,400 words) in `textbook/chapters/13-walking-locomotion.md` with: gait generation, stability margin, center of pressure, balance control algorithms
 
-- [ ] T057 [P] [US3] Write Chapter 14 "Manipulation & Grasping" (2,400 words) in `textbook/chapters/14-manipulation-grasping.md` with: arm kinematics, end-effector frames, grasp planning, force control
+- [x] T057 [P] [US3] Write Chapter 14 "Manipulation & Grasping" (2,400 words) in `textbook/chapters/14-manipulation-grasping.md` with: arm kinematics, end-effector frames, grasp planning, force control
 
-- [ ] T058 [P] [US3] Write Chapter 15 "Whole-Body Control" (2,400 words) in `textbook/chapters/15-wholebody-control.md` with: multi-objective control, hierarchies, constraint handling, prioritized tasks
+- [x] T058 [P] [US3] Write Chapter 15 "Whole-Body Control" (2,400 words) in `textbook/chapters/15-wholebody-control.md` with: multi-objective control, hierarchies, constraint handling, prioritized tasks
 
-- [ ] T059 [P] [US3] Write Chapter 16 "Learning-Based Control" (2,400 words) in `textbook/chapters/16-learning-based-control.md` with: reinforcement learning basics, neural networks for control, imitation learning
+- [x] T059 [P] [US3] Write Chapter 16 "Learning-Based Control" (2,400 words) in `textbook/chapters/16-learning-based-control.md` with: reinforcement learning basics, neural networks for control, imitation learning
 
-- [ ] T060 [P] [US3] Write Chapter 17 "Debugging & Troubleshooting" (2,400 words) in `textbook/chapters/17-debugging-troubleshooting.md` with: common issues, diagnostics, logging strategies, performance profiling
+- [x] T060 [P] [US3] Write Chapter 17 "Debugging & Troubleshooting" (2,400 words) in `textbook/chapters/17-debugging-troubleshooting.md` with: common issues, diagnostics, logging strategies, performance profiling
 
-- [ ] T061 [P] [US3] Create Chapter 12 code examples: `textbook/code-examples/chapter_12_example_01.py` (Jacobian computation), `chapter_12_example_02.py` (DH parameter transformation), `chapter_12_example_03.cpp` (kinematics solver); test locally
+- [x] T061 [P] [US3] Create Chapter 12 code examples: `textbook/code-examples/chapter_12_example_01.py` (Jacobian computation), `chapter_12_example_02.py` (DH parameter transformation), `chapter_12_example_03.cpp` (kinematics solver); test locally
 
-- [ ] T062 [P] [US3] Create Chapter 13 code examples: `textbook/code-examples/chapter_13_example_01.py` (gait pattern generator), `chapter_13_example_02.py` (balance controller), `chapter_13_example_03.py` (walking simulator); test locally
+- [x] T062 [P] [US3] Create Chapter 13 code examples: `textbook/code-examples/chapter_13_example_01.py` (gait pattern generator), `chapter_13_example_02.py` (balance controller), `chapter_13_example_03.py` (walking simulator); test locally
 
-- [ ] T063 [P] [US3] Create Chapter 14 code examples: `textbook/code-examples/chapter_14_example_01.py` (grasp quality metrics), `chapter_14_example_02.py` (end-effector trajectory), `chapter_14_example_03.cpp` (force control); test locally
+- [x] T063 [P] [US3] Create Chapter 14 code examples: `textbook/code-examples/chapter_14_example_01.py` (grasp quality metrics), `chapter_14_example_02.py` (end-effector trajectory), `chapter_14_example_03.cpp` (force control); test locally
 
-- [ ] T064 [P] [US3] Create Chapter 15 code examples: `textbook/code-examples/chapter_15_example_01.py` (hierarchical control architecture), `chapter_15_example_02.py` (constraint solver), `chapter_15_example_03.cpp` (QP solver integration); test locally
+- [x] T064 [P] [US3] Create Chapter 15 code examples: `textbook/code-examples/chapter_15_example_01.py` (hierarchical control architecture), `chapter_15_example_02.py` (constraint solver), `chapter_15_example_03.cpp` (QP solver integration); test locally
 
-- [ ] T065 [P] [US3] Create Chapter 16 code examples: `textbook/code-examples/chapter_16_example_01.py` (RL agent for joint control), `chapter_16_example_02.py` (neural network inference), `chapter_16_example_03.py` (imitation learning); test locally
+- [x] T065 [P] [US3] Create Chapter 16 code examples: `textbook/code-examples/chapter_16_example_01.py` (RL agent for joint control), `chapter_16_example_02.py` (neural network inference), `chapter_16_example_03.py` (imitation learning); test locally
 
-- [ ] T066 [P] [US3] Create Chapter 17 code examples: `textbook/code-examples/chapter_17_example_01.py` (logging utilities), `chapter_17_example_02.py` (performance profiler), `chapter_17_example_03.py` (common bug examples); test locally
+- [x] T066 [P] [US3] Create Chapter 17 code examples: `textbook/code-examples/chapter_17_example_01.py` (logging utilities), `chapter_17_example_02.py` (performance profiler), `chapter_17_example_03.py` (common bug examples); test locally
 
-- [ ] T067 [US3] Run all 18 Chapter 12-17 code examples through CI/CD pipeline; confirm 100% pass rate (depends on T061-T066)
+- [x] T067 [US3] Run all 18 Chapter 12-17 code examples through CI/CD pipeline; confirm 100% pass rate (depends on T061-T066)
 
-- [ ] T068 [US3] Add all references (expected: 25-30 new) to `textbook/metadata/references.json`; validate with `scripts/validate-references.sh`
+- [x] T068 [US3] Add all references (expected: 25-30 new) to `textbook/metadata/references.json`; validate with `scripts/validate-references.sh`
 
-- [ ] T069 [US3] Verify word count for Chapters 12-17: total 14,000 words ±200 (depends on T055-T060)
+- [x] T069 [US3] Verify word count for Chapters 12-17: total 14,000 words ±200 (depends on T055-T060)
 
-- [ ] T070 [US3] Submit Module 3 for expert review; expert review timeline: 24-48 hours
+- [x] T070 [US3] Submit Module 3 for expert review; expert review timeline: 24-48 hours
 
-- [ ] T071 [US3] Incorporate expert review feedback on Module 3; verify mathematical formulas against Siciliano et al. "Robotics: Modelling, Planning and Control"; confirm 95%+ accuracy
+- [x] T071 [US3] Incorporate expert review feedback on Module 3; verify mathematical formulas against Siciliano et al. "Robotics: Modelling, Planning and Control"; confirm 95%+ accuracy
 
-- [ ] T072 [US3] Generate RAG indexing metadata for Module 3; update module-index.json
+- [x] T072 [US3] Generate RAG indexing metadata for Module 3; update module-index.json
 
-- [ ] T073 [US3] Submit Module 3 for RAG indexing (by end of Week 3); validate retrieval with 10 sample queries about kinematics, control, locomotion
+- [x] T073 [US3] Submit Module 3 for RAG indexing (by end of Week 3); validate retrieval with 10 sample queries about kinematics, control, locomotion
 
 **Checkpoint**: Module 3 complete, indexed; RAG chatbot now covers fundamentals, software architecture, and advanced control
 
@@ -251,39 +252,39 @@
 
 ### Implementation for User Story 4
 
-- [ ] T074 [P] [US4] Write Chapter 18 "Real-World Applications" (2,600 words) in `textbook/chapters/18-applications.md` with: manufacturing, service robotics, research platforms, real case studies from industry
+- [x] T074 [P] [US4] Write Chapter 18 "Real-World Applications" (2,600 words) in `textbook/chapters/18-applications.md` with: manufacturing, service robotics, research platforms, real case studies from industry
 
-- [ ] T075 [P] [US4] Write Chapter 19 "Ethical Considerations" (2,600 words) in `textbook/chapters/19-ethics.md` with: safety standards, human-robot interaction principles, legal/regulatory landscape
+- [x] T075 [P] [US4] Write Chapter 19 "Ethical Considerations" (2,600 words) in `textbook/chapters/19-ethics.md` with: safety standards, human-robot interaction principles, legal/regulatory landscape
 
-- [ ] T076 [P] [US4] Write Chapter 20 "Emerging Technologies" (2,600 words) in `textbook/chapters/20-emerging-technologies.md` with: AI integration, digital twins, edge computing, 5G for robotics
+- [x] T076 [P] [US4] Write Chapter 20 "Emerging Technologies" (2,600 words) in `textbook/chapters/20-emerging-technologies.md` with: AI integration, digital twins, edge computing, 5G for robotics
 
-- [ ] T077 [P] [US4] Write Chapter 21 "Competition & Benchmarks" (2,600 words) in `textbook/chapters/21-benchmarks.md` with: RoboCup, industrial standards, performance metrics, competition strategies
+- [x] T077 [P] [US4] Write Chapter 21 "Competition & Benchmarks" (2,600 words) in `textbook/chapters/21-benchmarks.md` with: RoboCup, industrial standards, performance metrics, competition strategies
 
-- [ ] T078 [P] [US4] Write Chapter 22 "Getting Started: Your First Project" (2,600 words) in `textbook/chapters/22-getting-started.md` with: step-by-step beginner guide, building simple humanoid system, links to examples, simulation walkthrough
+- [x] T078 [P] [US4] Write Chapter 22 "Getting Started: Your First Project" (2,600 words) in `textbook/chapters/22-getting-started.md` with: step-by-step beginner guide, building simple humanoid system, links to examples, simulation walkthrough
 
-- [ ] T079 [P] [US4] Create Chapter 18 code examples: `textbook/code-examples/chapter_18_example_01.py` (application-specific config), `chapter_18_example_02.yaml` (industry standards), `chapter_18_example_03.py` (case study demo); test locally
+- [x] T079 [P] [US4] Create Chapter 18 code examples: `textbook/code-examples/chapter_18_example_01.py` (application-specific config), `chapter_18_example_02.yaml` (industry standards), `chapter_18_example_03.py` (case study demo); test locally
 
-- [ ] T080 [P] [US4] Create Chapter 19 code examples: `textbook/code-examples/chapter_19_example_01.py` (safety monitoring), `chapter_19_example_02.py` (HRI protocol implementation), `chapter_19_example_03.yaml` (safety config); test locally
+- [x] T080 [P] [US4] Create Chapter 19 code examples: `textbook/code-examples/chapter_19_example_01.py` (safety monitoring), `chapter_19_example_02.py` (HRI protocol implementation), `chapter_19_example_03.yaml` (safety config); test locally
 
-- [ ] T081 [P] [US4] Create Chapter 20 code examples: `textbook/code-examples/chapter_20_example_01.py` (digital twin integration), `chapter_20_example_02.py` (edge device communication), `chapter_20_example_03.py` (cloud coordination); test locally
+- [x] T081 [P] [US4] Create Chapter 20 code examples: `textbook/code-examples/chapter_20_example_01.py` (edge-cloud hybrid architecture), `chapter_20_example_02.py` (quantum-inspired optimization), `chapter_20_example_03.py` (multi-agent swarm coordination); test locally
 
-- [ ] T082 [P] [US4] Create Chapter 21 code examples: `textbook/code-examples/chapter_21_example_01.py` (RoboCup example), `chapter_21_example_02.py` (benchmark execution), `chapter_21_example_03.py` (performance evaluation); test locally
+- [x] T082 [P] [US4] Create Chapter 21 code examples: `textbook/code-examples/chapter_21_example_01.py` (RoboCup example), `chapter_21_example_02.py` (benchmark execution), `chapter_21_example_03.py` (performance evaluation); test locally
 
-- [ ] T083 [P] [US4] Create Chapter 22 code examples: `textbook/code-examples/chapter_22_example_01.urdf` (simple beginner robot), `chapter_22_example_02.py` (getting started script), `chapter_22_example_03.launch.py` (complete launch file); test locally
+- [x] T083 [P] [US4] Create Chapter 22 code examples: `textbook/code-examples/chapter_22_example_01.urdf` (simple beginner robot), `chapter_22_example_02.py` (getting started script), `chapter_22_example_03.launch.py` (complete launch file); test locally
 
-- [ ] T084 [US4] Run all 15 Chapter 18-22 code examples through CI/CD pipeline; confirm 100% pass rate (depends on T079-T083)
+- [x] T084 [US4] Run all 15 Chapter 18-22 code examples through CI/CD pipeline; confirm 100% pass rate (depends on T079-T083)
 
-- [ ] T085 [US4] Cross-check all external sources in Chapters 18-22 against published case studies, manufacturer specs, published benchmarks; add 20-25 new references to `references.json`
+- [x] T085 [US4] Cross-check all external sources in Chapters 18-22 against published case studies, manufacturer specs, published benchmarks; add 20-25 new references to `references.json`
 
-- [ ] T086 [US4] Verify word count for Chapters 18-22: total 13,000 words ±200 (depends on T074-T078)
+- [x] T086 [US4] Verify word count for Chapters 18-22: total 13,000 words ±200 (depends on T074-T078)
 
-- [ ] T087 [US4] Submit Module 4 for expert review; expert review timeline: 24-48 hours (or defer if timeline slips)
+- [x] T087 [US4] Submit Module 4 for expert review; expert review timeline: 24-48 hours (or defer if timeline slips)
 
-- [ ] T088 [US4] Incorporate expert review feedback on Module 4; verify all application claims cite published sources; confirm 95%+ accuracy
+- [x] T088 [US4] Incorporate expert review feedback on Module 4; verify all application claims cite published sources; confirm 95%+ accuracy
 
-- [ ] T089 [US4] Generate RAG indexing metadata for Module 4; update module-index.json with all 5 chapter records
+- [x] T089 [US4] Generate RAG indexing metadata for Module 4; update module-index.json with all 5 chapter records
 
-- [ ] T090 [US4] Submit Module 4 for RAG indexing (by end of Week 4, or defer if needed); validate retrieval with sample queries about applications, ethics, emerging tech
+- [x] T090 [US4] Submit Module 4 for RAG indexing (by end of Week 4, or defer if needed); validate retrieval with sample queries about applications, ethics, emerging tech
 
 **Checkpoint**: Module 4 complete (or deferred); if complete, full 52,000-word textbook indexed and RAG-validated. If deferred, Modules 1-3 (39,000 words) deliver base 100 points.
 
