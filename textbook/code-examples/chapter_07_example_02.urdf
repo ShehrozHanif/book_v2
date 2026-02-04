@@ -108,6 +108,9 @@
     <inertial>
       <mass value="1.2"/>
       <origin xyz="0 0 -0.15" rpy="0 0 0"/>
+      <!-- Inertia tensor for cylinder: m=1.2kg, r=0.03m, h=0.30m -->
+      <!-- Ixx = Iyy = m(3*r^2 + h^2)/12 = 1.2*(3*0.0009 + 0.09)/12 = 0.009 -->
+      <!-- Izz = m*r^2/2 = 1.2*0.0009/2 = 0.00054 ≈ 0.0005 -->
       <inertia ixx="0.009" ixy="0.0" ixz="0.0"
                iyy="0.009" iyz="0.0" izz="0.0005"/>
     </inertial>

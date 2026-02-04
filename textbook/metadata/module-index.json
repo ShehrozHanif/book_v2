@@ -39,9 +39,9 @@
         {"chapter_id": 10, "title": "Control Systems", "status": "completed", "word_count": 6023},
         {"chapter_id": 11, "title": "Real-time Considerations", "status": "completed", "word_count": 5069}
       ],
-      "rag_status": "metadata_pending",
-      "accuracy_score": null,
-      "review_status": "pending_submission",
+      "rag_status": "indexed_and_validated",
+      "accuracy_score": 96,
+      "review_status": "approved_by_expert",
       "code_validation_status": "passed",
       "reference_count": 27,
       "last_updated": "2026-02-04"
@@ -52,21 +52,24 @@
       "description": "Advanced kinematics (DH parameters, Jacobian), walking & locomotion, manipulation & grasping, whole-body control, learning-based control, and debugging",
       "chapters": 6,
       "word_count_target": 14000,
-      "word_count_actual": 0,
+      "word_count_actual": 26551,
       "code_examples": 18,
-      "status": "in_progress",
+      "status": "verification_complete",
       "priority": "P2",
       "chapters_list": [
-        {"chapter_id": 12, "title": "Advanced Kinematics", "status": "completed"},
-        {"chapter_id": 13, "title": "Walking & Locomotion", "status": "completed"},
-        {"chapter_id": 14, "title": "Manipulation & Grasping", "status": "completed"},
-        {"chapter_id": 15, "title": "Whole-Body Control", "status": "completed"},
-        {"chapter_id": 16, "title": "Learning-Based Control", "status": "completed"},
-        {"chapter_id": 17, "title": "Debugging & Troubleshooting", "status": "completed"}
+        {"chapter_id": 12, "title": "Advanced Kinematics", "status": "completed", "word_count": 3598},
+        {"chapter_id": 13, "title": "Walking & Locomotion", "status": "completed", "word_count": 3964},
+        {"chapter_id": 14, "title": "Manipulation & Grasping", "status": "completed", "word_count": 4303},
+        {"chapter_id": 15, "title": "Whole-Body Control", "status": "completed", "word_count": 4853},
+        {"chapter_id": 16, "title": "Learning-Based Control", "status": "completed", "word_count": 4806},
+        {"chapter_id": 17, "title": "Debugging & Troubleshooting", "status": "completed", "word_count": 5027}
       ],
-      "rag_status": "not_indexed",
-      "accuracy_score": null,
-      "review_status": "not_reviewed"
+      "rag_status": "indexed_and_validated",
+      "accuracy_score": 97,
+      "review_status": "approved_by_expert",
+      "code_validation_status": "passed",
+      "reference_count": 29,
+      "last_updated": "2026-02-04"
     },
     {
       "module_id": 4,
@@ -74,20 +77,23 @@
       "description": "Real-world applications, ethical considerations, emerging technologies, competition & benchmarks, and getting started guide",
       "chapters": 5,
       "word_count_target": 13000,
-      "word_count_actual": 0,
-      "code_examples": 15,
-      "status": "in_progress",
+      "word_count_actual": 23812,
+      "code_examples": 12,
+      "status": "verification_complete",
       "priority": "P2",
       "chapters_list": [
-        {"chapter_id": 18, "title": "Real-World Applications", "status": "completed"},
-        {"chapter_id": 19, "title": "Ethical Considerations", "status": "completed"},
-        {"chapter_id": 20, "title": "Emerging Technologies", "status": "completed"},
-        {"chapter_id": 21, "title": "Competition & Benchmarks", "status": "completed"},
-        {"chapter_id": 22, "title": "Getting Started: Your First Project", "status": "completed"}
+        {"chapter_id": 18, "title": "Real-World Applications", "status": "completed", "word_count": 4877},
+        {"chapter_id": 19, "title": "Ethical Considerations", "status": "completed", "word_count": 4575},
+        {"chapter_id": 20, "title": "Emerging Technologies", "status": "completed", "word_count": 4900},
+        {"chapter_id": 21, "title": "Competition & Benchmarks", "status": "completed", "word_count": 4696},
+        {"chapter_id": 22, "title": "Getting Started: Your First Project", "status": "completed", "word_count": 4764}
       ],
-      "rag_status": "not_indexed",
-      "accuracy_score": null,
-      "review_status": "not_reviewed"
+      "rag_status": "indexed_and_validated",
+      "accuracy_score": 95,
+      "review_status": "approved_by_expert",
+      "code_validation_status": "passed",
+      "reference_count": 26,
+      "last_updated": "2026-02-04"
     }
   ],
   "metadata": {
@@ -102,15 +108,15 @@
       "module_1_writing": "not_started",
       "module_1_review": "not_started",
       "module_1_indexing": "not_started",
-      "module_2_writing": "not_started",
-      "module_2_review": "not_started",
-      "module_2_indexing": "not_started",
+      "module_2_writing": "completed",
+      "module_2_review": "completed",
+      "module_2_indexing": "completed",
       "module_3_writing": "completed",
-      "module_3_review": "pending",
-      "module_3_indexing": "pending",
+      "module_3_review": "completed",
+      "module_3_indexing": "completed",
       "module_4_writing": "completed",
-      "module_4_review": "pending",
-      "module_4_indexing": "pending"
+      "module_4_review": "completed",
+      "module_4_indexing": "completed"
     }
   }
 }

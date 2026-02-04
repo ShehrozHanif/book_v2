@@ -1,120 +1,82 @@
-# Launch file with 3 nodes + parameters
-# Run with: ros2 launch <package_name> multi_node_demo.launch.py
-# Expected output: Three nodes start with configured parameters
+# ROS 2 Action Client/Server with error handling for long-running tasks
+# Demonstrates action pattern with proper state checking and cancellation handling
+# Run with: ros2 run <package_name> action_client_demo
+# Expected output: Action goal sent, feedback received, final result with error checking
 
-from launch import LaunchDescription
-from launch.actions import DeclareLaunchArgument, LogInfo
-from launch.substitutions import LaunchConfiguration, TextSubstitution
-from launch_ros.actions import Node
-import os
-from ament_index_python.packages import get_package_share_directory
+import rclpy
+from rclpy.node import Node
+from rclpy.action import ActionClient
+from rclpy.executors import MultiThreadedExecutor
+from action_msgs.msg import GoalStatus
 
 
-def generate_launch_description():
+class ActionClientDemo(Node):
     """
-    Generate launch description for multi-node humanoid system demo.
-    Launches sensor node, controller node, and state estimator with parameters.
+    Action client that sends walk goal to navigation action server.
+    Demonstrates proper error handling for CANCELED, SUCCEEDED, and ABORTED states.
     """
 
-    # Declare launch arguments
-    use_sim_time_arg = DeclareLaunchArgument(
-        'use_sim_time',
-        default_value='false',
-        description='Use simulation time if true'
-    )
+    def __init__(self):
+        super().__init__('action_client')
+        # Action client would normally use actual action type: e.g., Nav2Msgs.action.NavigateToPose
+        # For demo, we show the pattern with string representation
+        self.get_logger().info('Action client initialized')
 
-    robot_name_arg = DeclareLaunchArgument(
-        'robot_name',
-        default_value='humanoid_01',
-        description='Name of the robot instance'
-    )
+    def send_walk_goal(self, target_x, target_y):
+        """Send walk goal to navigation action server."""
+        self.get_logger().info(f'Sending walk goal to ({target_x}, {target_y})')
+        # In practice: goal = NavigateToPose.Goal(); goal.pose = ...
+        # self.action_client.send_goal_async(goal, feedback_callback=self.feedback_callback)
 
-    # Get launch configuration values
-    use_sim_time = LaunchConfiguration('use_sim_time')
-    robot_name = LaunchConfiguration('robot_name')
+    def feedback_callback(self, feedback):
+        """Receive feedback on action progress."""
+        self.get_logger().info(f'Distance remaining: {feedback.feedback.distance_remaining} m')
 
-    # Path to parameter file (in practice, load from package share directory)
-    # config_file = os.path.join(
-    #     get_package_share_directory('your_package'),
-    #     'config',
-    #     'robot_params.yaml'
-    # )
+    def done_callback(self, future):
+        """
+        Handle action completion with proper state checking.
+        CRITICAL: Always check action state (CANCELED, SUCCEEDED, ABORTED) in client code.
+        """
+        goal_handle = future.result()
 
-    # Node 1: IMU Sensor Publisher
-    imu_node = Node(
-        package='sensor_msgs',  # Replace with actual package
-        executable='imu_publisher',  # Replace with actual executable
-        name='imu_sensor',
-        namespace=robot_name,
-        parameters=[
-            {'use_sim_time': use_sim_time},
-            {'publish_rate': 200.0},  # 200 Hz IMU data
-            {'frame_id': 'imu_link'},
-            {'topic_name': 'imu/data'}
-        ],
-        output='screen',
-        emulate_tty=True
-    )
+        if goal_handle is None:
+            self.get_logger().error('Goal rejected by action server')
+            return
 
-    # Node 2: Joint State Controller
-    joint_controller_node = Node(
-        package='controller_manager',  # Replace with actual package
-        executable='joint_state_controller',
-        name='joint_controller',
-        namespace=robot_name,
-        parameters=[
-            {'use_sim_time': use_sim_time},
-            {'control_rate': 100.0},  # 100 Hz control loop
-            {'joint_names': ['shoulder_pitch', 'shoulder_roll', 'elbow', 'wrist']},
-            {'pid_gains': {
-                'shoulder_pitch': {'kp': 50.0, 'ki': 0.1, 'kd': 5.0},
-                'shoulder_roll': {'kp': 45.0, 'ki': 0.1, 'kd': 4.5},
-                'elbow': {'kp': 30.0, 'ki': 0.05, 'kd': 3.0},
-                'wrist': {'kp': 20.0, 'ki': 0.05, 'kd': 2.0}
-            }}
-            # In practice, load from YAML: config_file
-        ],
-        output='screen',
-        emulate_tty=True
-    )
+        # Check goal state - critical for proper error handling
+        if goal_handle.status == GoalStatus.STATUS_CANCELED:
+            self.get_logger().warn('Walk action was canceled - check for higher-priority tasks')
+            return
 
-    # Node 3: State Estimator (sensor fusion)
-    state_estimator_node = Node(
-        package='robot_localization',  # Replace with actual package
-        executable='ekf_node',
-        name='state_estimator',
-        namespace=robot_name,
-        parameters=[
-            {'use_sim_time': use_sim_time},
-            {'frequency': 50.0},
-            {'sensor_timeout': 0.1},
-            {'two_d_mode': False},
-            {'odom_frame': 'odom'},
-            {'base_link_frame': 'base_link'},
-            {'world_frame': 'odom'},
-            # Sensor input configurations
-            {'imu0': f'/{robot_name}/imu/data'},
-            {'imu0_config': [False, False, False,  # x, y, z position
-                            False, False, False,   # roll, pitch, yaw orientation
-                            False, False, False,   # x, y, z velocity
-                            True, True, True,      # roll, pitch, yaw velocity
-                            True, True, True]},    # x, y, z acceleration
-        ],
-        output='screen',
-        emulate_tty=True
-    )
+        if goal_handle.status == GoalStatus.STATUS_ABORTED:
+            self.get_logger().error('Walk action aborted - possible obstacle or collision')
+            return
 
-    # Log launch information
-    log_info = LogInfo(
-        msg=['Launching multi-node humanoid system for robot: ', robot_name]
-    )
+        if goal_handle.status == GoalStatus.STATUS_SUCCEEDED:
+            self.get_logger().info('Walk action succeeded - robot reached target')
+            return
 
-    # Create launch description with all nodes
-    return LaunchDescription([
-        use_sim_time_arg,
-        robot_name_arg,
-        log_info,
-        imu_node,
-        joint_controller_node,
-        state_estimator_node
-    ])
+        self.get_logger().error(f'Unknown goal status: {goal_handle.status}')
+
+
+def main(args=None):
+    """Demonstrate action client with error handling."""
+    rclpy.init(args=args)
+
+    action_client = ActionClientDemo()
+    executor = MultiThreadedExecutor()
+    executor.add_node(action_client)
+
+    try:
+        # In practice, send actual action goal and handle response
+        action_client.send_walk_goal(target_x=5.0, target_y=0.0)
+        executor.spin()
+    except KeyboardInterrupt:
+        pass
+    finally:
+        action_client.destroy_node()
+        rclpy.shutdown()
+
+
+if __name__ == '__main__':
+    main()
