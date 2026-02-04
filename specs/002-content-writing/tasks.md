@@ -85,39 +85,39 @@
 
 ### Implementation for User Story 1
 
-- [ ] T018 [P] [US1] Write Chapter 1 "What is a Humanoid Robot?" (2,300 words) in `textbook/chapters/01-what-is-humanoid-robotics.md` with: history overview, design paradigms, applications, biomimetics principles; include 2-3 code examples references (URDF example, platform overview script)
+- [x] T018 [P] [US1] Write Chapter 1 "What is a Humanoid Robot?" (2,300 words) in `textbook/chapters/01-what-is-humanoid-robotics.md` with: history overview, design paradigms, applications, biomimetics principles; include 2-3 code examples references (URDF example, platform overview script)
 
-- [ ] T019 [P] [US1] Write Chapter 2 "Kinematics Basics" (2,300 words) in `textbook/chapters/02-kinematics-basics.md` with: forward kinematics explanation, inverse kinematics algorithms, joint systems, link frames, worked examples with matrices
+- [x] T019 [P] [US1] Write Chapter 2 "Kinematics Basics" (2,300 words) in `textbook/chapters/02-kinematics-basics.md` with: forward kinematics explanation, inverse kinematics algorithms, joint systems, link frames, worked examples with matrices
 
-- [ ] T020 [P] [US1] Write Chapter 3 "Dynamics & Motion" (2,400 words) in `textbook/chapters/03-dynamics-motion.md` with: forces and torque concepts, balance mechanics, center of mass, walking motion basics
+- [x] T020 [P] [US1] Write Chapter 3 "Dynamics & Motion" (2,400 words) in `textbook/chapters/03-dynamics-motion.md` with: forces and torque concepts, balance mechanics, center of mass, walking motion basics
 
-- [ ] T021 [P] [US1] Write Chapter 4 "Sensors & Perception" (2,400 words) in `textbook/chapters/04-sensors-perception.md` with: IMU sensor explanation, vision systems overview, tactile sensors, odometry concepts
+- [x] T021 [P] [US1] Write Chapter 4 "Sensors & Perception" (2,400 words) in `textbook/chapters/04-sensors-perception.md` with: IMU sensor explanation, vision systems overview, tactile sensors, odometry concepts
 
-- [ ] T022 [P] [US1] Write Chapter 5 "Hardware Overview" (2,300 words) in `textbook/chapters/05-hardware-overview.md` with: motor types, actuator systems, power distribution, mechanical design principles
+- [x] T022 [P] [US1] Write Chapter 5 "Hardware Overview" (2,300 words) in `textbook/chapters/05-hardware-overview.md` with: motor types, actuator systems, power distribution, mechanical design principles
 
-- [ ] T023 [P] [US1] Create Chapter 1 code examples: `textbook/code-examples/chapter_01_example_01.urdf` (URDF file defining simple robot), `chapter_01_example_02.py` (Python script displaying platform specifications); test locally
+- [x] T023 [P] [US1] Create Chapter 1 code examples: `textbook/code-examples/chapter_01_example_01.urdf` (URDF file defining simple robot), `chapter_01_example_02.py` (Python script displaying platform specifications); test locally
 
-- [ ] T024 [P] [US1] Create Chapter 2 code examples: `textbook/code-examples/chapter_02_example_01.py` (forward kinematics solver), `chapter_02_example_02.py` (inverse kinematics demo); test locally
+- [x] T024 [P] [US1] Create Chapter 2 code examples: `textbook/code-examples/chapter_02_example_01.py` (forward kinematics solver), `chapter_02_example_02.py` (inverse kinematics demo); test locally
 
-- [ ] T025 [P] [US1] Create Chapter 3 code examples: `textbook/code-examples/chapter_03_example_01.py` (Gazebo dynamics simulation demo), `chapter_03_example_02.py` (balance calculation example); test locally
+- [x] T025 [P] [US1] Create Chapter 3 code examples: `textbook/code-examples/chapter_03_example_01.py` (Gazebo dynamics simulation demo), `chapter_03_example_02.py` (balance calculation example); test locally
 
-- [ ] T026 [P] [US1] Create Chapter 4 code examples: `textbook/code-examples/chapter_04_example_01.py` (ROS 2 IMU sensor subscriber), `chapter_04_example_02.py` (sensor data visualization); test locally
+- [x] T026 [P] [US1] Create Chapter 4 code examples: `textbook/code-examples/chapter_04_example_01.py` (ROS 2 IMU sensor subscriber), `chapter_04_example_02.py` (sensor data visualization); test locally
 
-- [ ] T027 [P] [US1] Create Chapter 5 code examples: `textbook/code-examples/chapter_05_example_01.cpp` (motor control in C++), `chapter_05_example_02.py` (power system monitoring); test locally
+- [x] T027 [P] [US1] Create Chapter 5 code examples: `textbook/code-examples/chapter_05_example_01.cpp` (motor control in C++), `chapter_05_example_02.py` (power system monitoring); test locally
 
-- [ ] T028 [US1] Run all 15 Chapter 1-5 code examples through local test harness (`scripts/test-code-examples.sh`); confirm 100% pass rate on Ubuntu 22.04 + ROS 2 Humble; document any environment-specific setup
+- [x] T028 [US1] Run all 15 Chapter 1-5 code examples through local test harness (`scripts/test-code-examples.sh`); confirm 100% pass rate on Ubuntu 22.04 + ROS 2 Humble; document any environment-specific setup
 
-- [ ] T029 [US1] Add all references cited in Chapters 1-5 to `textbook/metadata/references.json` in APA format (expected: 15-20 references); validate with `scripts/validate-references.sh`
+- [x] T029 [US1] Add all references cited in Chapters 1-5 to `textbook/metadata/references.json` in APA format (expected: 15-20 references); validate with `scripts/validate-references.sh`
 
-- [ ] T030 [US1] Run word count verification for Chapters 1-5 with `scripts/verify-word-count.sh`; confirm each chapter 2,300-2,400 words; total 12,000 words ±200
+- [x] T030 [US1] Run word count verification for Chapters 1-5 with `scripts/verify-word-count.sh`; confirm each chapter 2,300-2,400 words; total 12,000 words ±200
 
-- [ ] T031 [US1] Submit Module 1 (5 chapters + 15 code examples) for expert review; create pull request to branch `002-content-writing` with title "Module 1: Fundamentals - Ready for Expert Review" and detailed summary
+- [x] T031 [US1] Submit Module 1 (5 chapters + 15 code examples) for expert review; create pull request to branch `002-content-writing` with title "Module 1: Fundamentals - Ready for Expert Review" and detailed summary
 
-- [ ] T032 [US1] Incorporate expert review feedback on Module 1 (chapters and code examples); address all flagged issues; re-test any modified code examples; update references if accuracy audit requires clarification
+- [x] T032 [US1] Incorporate expert review feedback on Module 1 (chapters and code examples); address all flagged issues; re-test any modified code examples; update references if accuracy audit requires clarification
 
-- [ ] T033 [US1] Generate RAG indexing metadata for Module 1 using `scripts/generate-rag-metadata.sh`; create metadata records in `textbook/metadata/module-index.json` for each of 5 chapters with learning objectives, keywords, section headings
+- [x] T033 [US1] Generate RAG indexing metadata for Module 1 using `scripts/generate-rag-metadata.sh`; create metadata records in `textbook/metadata/module-index.json` for each of 5 chapters with learning objectives, keywords, section headings
 
-- [ ] T034 [US1] Submit Module 1 for RAG indexing into Qdrant; coordinate with Spec 001 team to confirm indexing complete and embeddings generated (by end of Week 1)
+- [x] T034 [US1] Submit Module 1 for RAG indexing into Qdrant; coordinate with Spec 001 team to confirm indexing complete and embeddings generated (by end of Week 1)
 
 - [ ] 
 

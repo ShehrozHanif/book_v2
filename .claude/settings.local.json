@@ -61,7 +61,8 @@
       "Bash(for f in chapter_{12,13,14,15,16,17}_example_{01,02,03}.{py,cpp})",
       "Bash(do [ -f \"$f\" ])",
       "Bash(cd:*)",
-      "Bash(venv/Scripts/python.exe -m pip install:*)"
+      "Bash(venv/Scripts/python.exe -m pip install:*)",
+      "Bash(tee:*)"
     ]
   }
 }

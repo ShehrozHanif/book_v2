@@ -1,0 +1,7 @@
+Checking chapters for reference citations...
+✗ Chapter 06: Citation [0] referenced but not found in References section
+✗ Chapter 07: Citation [0] referenced but not found in References section
+✗ Chapter 09: Citation [0] referenced but not found in References section
+✗ Chapter 10: Citation [0] referenced but not found in References section
+✗ Chapter 11: Citation [0] referenced but not found in References section
+✗ Chapter 17: Citation [0] referenced but not found in References section
