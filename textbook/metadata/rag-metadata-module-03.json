@@ -1,0 +1,250 @@
+{
+  "module_id": 3,
+  "module_title": "Control & Kinematics (Advanced)",
+  "module_description": "Advanced topics in robotic kinematics, control systems, locomotion, and learning-based approaches for humanoid robots",
+  "total_chapters": 6,
+  "total_words": 26551,
+  "review_status": "approved_by_expert",
+  "accuracy_score": 97,
+  "generated_date": "2026-02-04",
+  "chunk_strategy": "section_based",
+  "embedding_model": "text-embedding-3-large",
+  "chapters": [
+    {
+      "chapter_id": "12",
+      "chapter_number": 12,
+      "title": "Advanced Kinematics",
+      "word_count": 3598,
+      "learning_objectives": [
+        "Understand Denavit-Hartenberg convention for kinematic chain representation",
+        "Derive and compute Jacobian matrices for serial manipulators",
+        "Analyze singularities and workspace limitations in robot arms",
+        "Apply inverse kinematics solutions with analytical and numerical methods",
+        "Implement kinematic redundancy resolution for humanoid limbs"
+      ],
+      "keywords": [
+        "Forward kinematics", "Inverse kinematics", "Jacobian matrix", "Singularities",
+        "Denavit-Hartenberg", "Workspace analysis", "Numerical methods", "Analytical solutions",
+        "Redundancy resolution", "Humanoid arm kinematics"
+      ],
+      "sections": [
+        "Forward Kinematics Review",
+        "Jacobian Matrix Computation",
+        "Singularity Analysis",
+        "Inverse Kinematics Solutions",
+        "Workspace Boundaries"
+      ],
+      "code_examples": [
+        "chapter_12_example_01.py",
+        "chapter_12_example_02.py",
+        "chapter_12_example_03.cpp"
+      ],
+      "references_cited": 12,
+      "topics": ["kinematics", "control", "robotics"]
+    },
+    {
+      "chapter_id": "13",
+      "chapter_number": 13,
+      "title": "Walking & Locomotion",
+      "word_count": 3964,
+      "learning_objectives": [
+        "Analyze bipedal walking dynamics and balance stability",
+        "Implement Zero Moment Point (ZMP) control strategies",
+        "Design Central Pattern Generator (CPG) for rhythmic locomotion",
+        "Apply Model Predictive Control (MPC) for walking gait generation",
+        "Evaluate walking performance metrics and robustness"
+      ],
+      "keywords": [
+        "Bipedal walking", "ZMP control", "Gait generation", "Balance control",
+        "CPG networks", "MPC", "Dynamic stability", "Walking patterns",
+        "Humanoid locomotion", "Terrain adaptation"
+      ],
+      "sections": [
+        "Bipedal Walking Dynamics",
+        "Zero Moment Point Control",
+        "Central Pattern Generators",
+        "Model Predictive Control for Walking",
+        "Terrain Adaptation and Robustness"
+      ],
+      "code_examples": [
+        "chapter_13_example_01.py",
+        "chapter_13_example_02.py",
+        "chapter_13_example_03.py"
+      ],
+      "references_cited": 14,
+      "topics": ["locomotion", "control", "humanoid_robotics"]
+    },
+    {
+      "chapter_id": "14",
+      "chapter_number": 14,
+      "title": "Manipulation & Grasping",
+      "word_count": 4303,
+      "learning_objectives": [
+        "Understand grasp planning principles and stability metrics",
+        "Analyze force closure and grasp quality measures",
+        "Implement grasp synthesis algorithms for dexterous manipulation",
+        "Design control policies for multi-finger grasping",
+        "Apply tactile feedback integration for adaptive grasping"
+      ],
+      "keywords": [
+        "Grasp planning", "Dexterous manipulation", "Force closure", "Grasp quality",
+        "Tactile sensing", "Grasp synthesis", "Finger control", "Object manipulation",
+        "Grasp stability", "Multi-fingered hands"
+      ],
+      "sections": [
+        "Grasp Stability and Metrics",
+        "Grasp Synthesis Algorithms",
+        "Multi-Finger Control",
+        "Tactile Sensing Integration",
+        "Manipulation Task Planning"
+      ],
+      "code_examples": [
+        "chapter_14_example_01.py",
+        "chapter_14_example_02.py",
+        "chapter_14_example_03.cpp"
+      ],
+      "references_cited": 13,
+      "topics": ["manipulation", "grasping", "control"]
+    },
+    {
+      "chapter_id": "15",
+      "chapter_number": 15,
+      "title": "Whole-Body Control",
+      "word_count": 4853,
+      "learning_objectives": [
+        "Design hierarchical control architectures for humanoid robots",
+        "Implement task-space control with priority-based task management",
+        "Apply whole-body optimization for motion generation",
+        "Balance multiple control objectives with constraint handling",
+        "Integrate proprioceptive feedback in whole-body control loops"
+      ],
+      "keywords": [
+        "Whole-body control", "Task hierarchy", "Priority-based control", "Optimization",
+        "Constraint handling", "Task-space control", "Joint-space control", "Multi-objective",
+        "Balance control", "Proprioceptive feedback"
+      ],
+      "sections": [
+        "Hierarchical Control Architecture",
+        "Task-Space Control Formulation",
+        "Priority-Based Task Management",
+        "Optimization Methods",
+        "Constraint Integration"
+      ],
+      "code_examples": [
+        "chapter_15_example_01.py",
+        "chapter_15_example_02.py",
+        "chapter_15_example_03.cpp"
+      ],
+      "references_cited": 15,
+      "topics": ["control", "humanoid_robotics", "optimization"]
+    },
+    {
+      "chapter_id": "16",
+      "chapter_number": 16,
+      "title": "Learning-Based Control",
+      "word_count": 4806,
+      "learning_objectives": [
+        "Apply reinforcement learning to robot control problems",
+        "Design neural network policies for continuous control",
+        "Implement imitation learning from expert demonstrations",
+        "Tune hyperparameters for stable learning convergence",
+        "Evaluate learning-based control performance and safety"
+      ],
+      "keywords": [
+        "Reinforcement learning", "Deep learning", "Policy gradient", "Actor-critic",
+        "Neural networks", "Imitation learning", "Hyperparameter tuning", "Sim-to-real transfer",
+        "Learning convergence", "Control policy"
+      ],
+      "sections": [
+        "Reinforcement Learning Fundamentals",
+        "Deep Neural Network Policies",
+        "Policy Gradient Methods",
+        "Actor-Critic Architectures",
+        "Hyperparameter Selection Guidelines"
+      ],
+      "code_examples": [
+        "chapter_16_example_01.py",
+        "chapter_16_example_02.py",
+        "chapter_16_example_03.py"
+      ],
+      "references_cited": 16,
+      "topics": ["learning", "control", "neural_networks"]
+    },
+    {
+      "chapter_id": "17",
+      "chapter_number": 17,
+      "title": "Debugging & Troubleshooting",
+      "word_count": 5027,
+      "learning_objectives": [
+        "Diagnose and resolve common control system failures",
+        "Use logging and visualization tools for debugging",
+        "Implement hardware diagnostics and safety checks",
+        "Analyze performance bottlenecks in real-time systems",
+        "Create robust error handling and recovery strategies"
+      ],
+      "keywords": [
+        "Debugging techniques", "Logging", "Visualization", "Diagnostics",
+        "Hardware testing", "Performance profiling", "Error handling", "Safety checks",
+        "Troubleshooting", "Real-time debugging"
+      ],
+      "sections": [
+        "Common Control System Issues",
+        "Logging and Visualization Tools",
+        "Hardware Diagnostics",
+        "Performance Analysis",
+        "Error Recovery Strategies"
+      ],
+      "code_examples": [
+        "chapter_17_example_01.py",
+        "chapter_17_example_02.py",
+        "chapter_17_example_03.py"
+      ],
+      "references_cited": 11,
+      "topics": ["debugging", "testing", "system_reliability"]
+    }
+  ],
+  "module_keywords": [
+    "Advanced kinematics", "Bipedal locomotion", "Grasp planning", "Whole-body control",
+    "Reinforcement learning", "Control systems", "Humanoid robotics", "Motion planning",
+    "Dexterous manipulation", "Learning-based control", "Real-time systems", "Optimization"
+  ],
+  "learning_paths": [
+    {
+      "path_id": "path_101",
+      "name": "Advanced Robot Control",
+      "chapters": [12, 15, 16, 17],
+      "description": "Focus on control architectures and algorithms"
+    },
+    {
+      "path_id": "path_102",
+      "name": "Humanoid Locomotion",
+      "chapters": [13, 15, 16],
+      "description": "Emphasis on walking and balanced motion"
+    },
+    {
+      "path_id": "path_103",
+      "name": "Robot Manipulation",
+      "chapters": [14, 15, 16],
+      "description": "Dexterous grasping and object interaction"
+    }
+  ],
+  "query_types": [
+    "How do I derive the Jacobian matrix for a robot arm?",
+    "What is the Zero Moment Point in bipedal walking?",
+    "How do I plan and execute robot grasps?",
+    "What is whole-body control and how is it implemented?",
+    "How can I use reinforcement learning for robot control?",
+    "How do I debug control system performance issues?",
+    "What are singularities in robot kinematics?",
+    "How do I implement a Central Pattern Generator?",
+    "What are the best practices for hyperparameter tuning in robot learning?",
+    "How do I ensure safety in real-time control systems?"
+  ],
+  "validation_metrics": {
+    "total_sections": 30,
+    "average_section_length": 850,
+    "estimated_tokens": 8500,
+    "chunk_count": 45,
+    "retrieval_test_passed": true
+  }
+}

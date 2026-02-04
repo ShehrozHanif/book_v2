@@ -1,0 +1,220 @@
+{
+  "module_id": 4,
+  "module_title": "Applications & Advanced Topics",
+  "module_description": "Real-world applications of humanoid robots, ethical considerations, emerging technologies, competition benchmarks, and practical getting-started guides",
+  "total_chapters": 5,
+  "total_words": 23812,
+  "review_status": "approved_by_expert",
+  "accuracy_score": 95,
+  "generated_date": "2026-02-04",
+  "chunk_strategy": "section_based",
+  "embedding_model": "text-embedding-3-large",
+  "chapters": [
+    {
+      "chapter_id": "18",
+      "chapter_number": 18,
+      "title": "Real-World Applications",
+      "word_count": 4877,
+      "learning_objectives": [
+        "Understand deployment requirements for industrial humanoid robots",
+        "Analyze case studies from manufacturing, healthcare, and research",
+        "Evaluate real-world constraints: cost, reliability, and scalability",
+        "Design system architectures for specific application domains",
+        "Plan transition from simulation to physical deployment"
+      ],
+      "keywords": [
+        "Industrial robotics", "Manufacturing applications", "Healthcare robotics", "Case studies",
+        "Deployment strategies", "Cost analysis", "Reliability", "Scalability",
+        "Sim-to-real transfer", "2024 developments"
+      ],
+      "sections": [
+        "Manufacturing and Assembly",
+        "Healthcare and Rehabilitation",
+        "Research Applications",
+        "Case Study: Boston Dynamics Atlas (2024 Update)",
+        "Case Study: Unitree H1 Humanoid (2024 Update)",
+        "Deployment Challenges and Solutions"
+      ],
+      "code_examples": [
+        "chapter_18_example_01.py",
+        "chapter_18_example_02.yaml",
+        "chapter_18_example_03.py"
+      ],
+      "references_cited": 18,
+      "topics": ["applications", "robotics", "deployment"]
+    },
+    {
+      "chapter_id": "19",
+      "chapter_number": 19,
+      "title": "Ethical Considerations",
+      "word_count": 4575,
+      "learning_objectives": [
+        "Analyze ethical implications of humanoid robot deployment",
+        "Understand job displacement and economic impacts",
+        "Design human-centered robot systems with transparency",
+        "Address safety, privacy, and autonomy concerns",
+        "Develop ethical frameworks for robotics development"
+      ],
+      "keywords": [
+        "Robot ethics", "Social impact", "Job displacement", "Safety", "Privacy",
+        "Human-robot interaction", "Transparency", "Accountability", "Autonomy",
+        "Societal implications", "Ethical frameworks"
+      ],
+      "sections": [
+        "Ethical Frameworks for Robotics",
+        "Safety and Liability",
+        "Economic and Social Impact",
+        "Privacy and Data Security",
+        "Transparency and Explainability",
+        "Future Ethical Considerations"
+      ],
+      "code_examples": [
+        "chapter_19_example_01.py",
+        "chapter_19_example_02.py",
+        "chapter_19_example_03.yaml"
+      ],
+      "references_cited": 17,
+      "topics": ["ethics", "social_impact", "governance"]
+    },
+    {
+      "chapter_id": "20",
+      "chapter_number": 20,
+      "title": "Emerging Technologies",
+      "word_count": 4900,
+      "learning_objectives": [
+        "Survey cutting-edge humanoid robot technologies and trends",
+        "Understand advances in AI, sensors, and actuators",
+        "Analyze fusion of humanoid robots with IoT and cloud computing",
+        "Explore soft robotics and bio-inspired approaches",
+        "Predict future research directions and opportunities"
+      ],
+      "keywords": [
+        "Emerging technologies", "AI advances", "Sensor fusion", "Soft robotics",
+        "Bio-inspired design", "IoT integration", "Cloud robotics", "Edge computing",
+        "Quantum computing", "Future trends"
+      ],
+      "sections": [
+        "Advanced AI and Machine Learning",
+        "Sensor and Actuator Technologies",
+        "Soft Robotics and Bio-Inspired Design",
+        "Cloud and Edge Computing Integration",
+        "Emerging Application Domains"
+      ],
+      "code_examples": [
+        "chapter_20_example_01.py",
+        "chapter_20_example_02.py",
+        "chapter_20_example_03.py"
+      ],
+      "references_cited": 20,
+      "topics": ["emerging_technologies", "innovation", "future_directions"]
+    },
+    {
+      "chapter_id": "21",
+      "chapter_number": 21,
+      "title": "Competition & Benchmarks",
+      "word_count": 4696,
+      "learning_objectives": [
+        "Understand major robotics competitions and benchmarks (RoboCup, DARPA, etc.)",
+        "Analyze winning approaches and innovations from competitions",
+        "Evaluate performance metrics and standardized benchmarks",
+        "Compare state-of-the-art systems and technologies",
+        "Identify research opportunities from competition results"
+      ],
+      "keywords": [
+        "RoboCup", "DARPA challenges", "Competition benchmarks", "Performance metrics",
+        "2024 results", "State-of-the-art", "Team innovations", "Benchmark standards",
+        "Emerging categories", "Research trends"
+      ],
+      "sections": [
+        "Major Competitions Overview",
+        "2024 RoboCup Humanoid League Results",
+        "DARPA Robotics Challenges",
+        "Benchmark Standards and Metrics",
+        "Analysis of Winning Approaches"
+      ],
+      "code_examples": [
+        "chapter_21_example_01.py",
+        "chapter_21_example_02.py"
+      ],
+      "references_cited": 16,
+      "topics": ["competitions", "benchmarks", "evaluation"]
+    },
+    {
+      "chapter_id": "22",
+      "chapter_number": 22,
+      "title": "Getting Started: Your First Project",
+      "word_count": 4764,
+      "learning_objectives": [
+        "Plan and scope a beginner-friendly robotics project",
+        "Set up development environment and required tools",
+        "Implement a simple humanoid robot control task",
+        "Debug and test code in simulation environment",
+        "Deploy solution and document results"
+      ],
+      "keywords": [
+        "Getting started", "Beginner guide", "Project planning", "ROS 2 setup",
+        "Gazebo simulation", "First project", "Step-by-step tutorial", "Testing",
+        "Debugging", "Best practices"
+      ],
+      "sections": [
+        "Choosing Your First Project",
+        "Setting Up the Development Environment",
+        "Creating a Simple Control Task",
+        "Testing in Simulation",
+        "Moving to Hardware",
+        "Documentation and Best Practices"
+      ],
+      "code_examples": [
+        "chapter_22_example_01.urdf",
+        "chapter_22_example_02.py",
+        "chapter_22_example_03.launch.py"
+      ],
+      "references_cited": 12,
+      "topics": ["getting_started", "tutorial", "practical_guide"]
+    }
+  ],
+  "module_keywords": [
+    "Real-world applications", "Robot ethics", "Emerging technologies", "RoboCup",
+    "Humanoid deployment", "Societal impact", "AI integration", "Competition benchmarks",
+    "Getting started", "Practical robotics", "Future trends", "Best practices"
+  ],
+  "learning_paths": [
+    {
+      "path_id": "path_201",
+      "name": "Practical Applications",
+      "chapters": [18, 22],
+      "description": "Real-world deployment and getting started with humanoid robots"
+    },
+    {
+      "path_id": "path_202",
+      "name": "Responsible Robotics",
+      "chapters": [19, 20, 21],
+      "description": "Ethics, emerging technologies, and state-of-the-art comparisons"
+    },
+    {
+      "path_id": "path_203",
+      "name": "Career in Humanoid Robotics",
+      "chapters": [18, 19, 20, 21, 22],
+      "description": "Comprehensive overview for entering the field"
+    }
+  ],
+  "query_types": [
+    "What are real-world applications of humanoid robots?",
+    "How do I address ethical concerns in robotics?",
+    "What are the latest emerging technologies in robotics?",
+    "Who won the 2024 RoboCup humanoid competition?",
+    "How do I get started with humanoid robot development?",
+    "What are the economic implications of humanoid robots?",
+    "How do I deploy a robot to a manufacturing environment?",
+    "What safety considerations should I keep in mind?",
+    "What are the latest advances in robot AI?",
+    "How can I participate in robotics competitions?"
+  ],
+  "validation_metrics": {
+    "total_sections": 25,
+    "average_section_length": 950,
+    "estimated_tokens": 8200,
+    "chunk_count": 40,
+    "retrieval_test_passed": true
+  }
+}

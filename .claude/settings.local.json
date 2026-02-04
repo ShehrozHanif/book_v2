@@ -65,7 +65,8 @@
       "Bash(tee:*)",
       "Bash(find:*)",
       "Bash(gh pr list:*)",
-      "Bash(grep:*)"
+      "Bash(grep:*)",
+      "Bash(dir:*)"
     ]
   }
 }
