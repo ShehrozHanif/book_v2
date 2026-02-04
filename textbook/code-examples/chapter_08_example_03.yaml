@@ -1,0 +1,96 @@
+# Gazebo physics configuration for humanoid robot simulation
+# Include in world SDF or set via dynamic reconfiguration
+# Expected output: Stable simulation with minimal energy drift and accurate contact resolution
+
+# ODE Physics Configuration for Humanoid Robots
+physics:
+  type: ode
+
+  # Time step configuration
+  # Smaller time steps improve stability and accuracy but slow simulation
+  max_step_size: 0.001  # 1ms time step (1000 Hz)
+  real_time_factor: 1.0  # Target real-time simulation
+  real_time_update_rate: 1000.0  # Update rate matches time step
+
+  # ODE-specific solver settings
+  ode:
+    solver:
+      type: quick  # Options: world, quick (quick is faster, world is more stable)
+      iters: 50  # Solver iterations (more = more accurate, slower)
+      # Higher iterations improve constraint accuracy (joints, contacts)
+      # For humanoid balance, 50-100 iterations recommended
+
+      sor: 1.3  # Successive Over-Relaxation parameter (1.0-1.3)
+      # Higher SOR accelerates convergence but may reduce stability
+      # 1.3 is aggressive; reduce to 1.1-1.2 if instability observed
+
+    constraints:
+      cfm: 0.00001  # Constraint Force Mixing (regularization)
+      # Lower CFM = stricter constraints, higher CFM = softer constraints
+      # Too low causes jitter, too high causes constraint violation
+      # For humanoid joints: 0.00001 - 0.0001
+
+      erp: 0.2  # Error Reduction Parameter (0.0-1.0)
+      # Controls how quickly constraint errors are corrected
+      # Higher ERP = faster correction but may cause oscillation
+      # For humanoid balance: 0.1-0.3
+
+      contact_max_correcting_vel: 100.0  # Maximum contact correction velocity (m/s)
+      # Limits how fast penetrating objects are separated
+      # Too high causes instability, too low allows deep penetration
+      # For humanoid foot contacts: 10-100 m/s
+
+      contact_surface_layer: 0.001  # Contact surface "softness" (meters)
+      # Allows small penetration for stability
+      # Should be small relative to robot features
+      # For humanoid robots: 0.0001-0.001 m
+
+# Gravity configuration
+gravity:
+  x: 0.0
+  y: 0.0
+  z: -9.81  # Earth standard gravity (m/s²)
+
+# Magnetic field (if relevant for IMU simulation)
+magnetic_field:
+  x: 0.00002  # Northward component (Tesla)
+  y: 0.0
+  z: -0.00005  # Downward component (Tesla)
+
+# Material property defaults
+materials:
+  # Ground contact properties
+  ground:
+    friction:
+      mu: 1.0  # Coulomb friction coefficient
+      mu2: 1.0  # Second friction direction (for anisotropic friction)
+      slip1: 0.0  # Slip compliance in primary direction
+      slip2: 0.0  # Slip compliance in secondary direction
+
+    restitution: 0.0  # Coefficient of restitution (0=inelastic, 1=elastic)
+    # For humanoid foot contact, low restitution (0.0-0.1) is realistic
+
+    bounce_threshold: 0.01  # Minimum impact velocity for bouncing (m/s)
+
+  # Default object contact properties
+  default:
+    friction:
+      mu: 0.5
+      mu2: 0.5
+      slip1: 0.0
+      slip2: 0.0
+    restitution: 0.1
+    bounce_threshold: 0.01
+
+# Performance tuning notes:
+# - Decrease max_step_size for more accuracy (increases CPU load)
+# - Increase solver iterations for better contact/constraint accuracy
+# - Adjust CFM/ERP balance if joints are too stiff or too soft
+# - Tune contact_surface_layer to balance stability vs penetration
+# - Set real_time_factor < 1.0 if simulation cannot maintain real-time
+#
+# Debugging tips:
+# - Enable Gazebo GUI contact visualization to see contact forces
+# - Monitor real-time factor; values << 1.0 indicate simulation slowdown
+# - Log constraint violations to identify problematic contacts or joints
+# - Gradually increase fidelity (iterations, smaller timesteps) until desired accuracy achieved

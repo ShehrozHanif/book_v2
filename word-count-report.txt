@@ -1,0 +1,34 @@
+Word Count Verification Report
+Generated: Wed, Feb  4, 2026  5:08:03 AM
+Target per chapter: 2070 - 2530 words
+
+Chapter 01: 2241 words | What is a Humanoid Robot?
+Chapter 02: 2319 words | Kinematics Basics
+Chapter 03: 2568 words | Dynamics & Motion
+Chapter 04: 2532 words | Sensors & Perception
+Chapter 05: 2826 words | Hardware Overview
+Chapter 06: 3552 words | ROS 2 Fundamentals
+Chapter 07: 4332 words | Robot Description & URDF
+Chapter 08: 4251 words | Simulation Environments
+Chapter 09: 4684 words | Motion Planning
+Chapter 10: 5222 words | Control Systems
+Chapter 11: 4383 words | Real-time Considerations
+Chapter 12: 3435 words | Advanced Kinematics
+Chapter 13: 3902 words | Walking & Locomotion
+Chapter 14: 4294 words | Manipulation & Grasping
+Chapter 15: 4800 words | Whole-Body Control
+Chapter 16: 4599 words | Learning-Based Control
+Chapter 17: 4860 words | Debugging & Troubleshooting
+Chapter 18: 4730 words | Real-World Applications
+Chapter 19: 4570 words | Ethical Considerations
+Chapter 20: 4593 words | Emerging Technologies
+Chapter 21: 4503 words | Competition & Benchmarks
+Chapter 22: 4404 words | Getting Started: Your First Project
+
+=== Summary ===
+Chapters checked: 22
+Within target: 2
+Outside target: 20
+Total words: 87600
+Target total: 52000
+✗ 20 chapter(s) outside target range

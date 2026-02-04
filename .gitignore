@@ -1,0 +1,119 @@
+# Node.js / NPM
+node_modules/
+npm-debug.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+package-lock.json
+yarn.lock
+pnpm-lock.yaml
+dist/
+build/
+.next/
+out/
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+env/
+venv/
+ENV/
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+pip-wheel-metadata/
+share/python-wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+.pytest_cache/
+.coverage
+htmlcov/
+.tox/
+.hypothesis/
+*.log
+
+# Environment variables
+.env
+.env.local
+.env.*.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# IDE / Editor
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+Thumbs.db
+*.sublime-project
+*.sublime-workspace
+
+# Testing
+coverage/
+.nyc_output/
+.jest_cache/
+*.lcov
+
+# Docker
+.docker/
+docker-compose.override.yml
+
+# OS
+.DS_Store
+Thumbs.db
+*.tmp
+
+# Project-specific
+.specify/memory/local/
+*.db
+*.sqlite
+rag_chatbot.db
+backend.log
+tests.log
+debug.log
+
+# Build artifacts
+*.class
+*.jar
+*.exe
+*.o
+*.so
+*.a
+
+# Temporary files
+*.bak
+*.swp
+*.swo
+*~
+.#*
+
+# Backend
+backend/.env.local
+backend/venv/
+backend/__pycache__/
+
+# Frontend
+frontend/node_modules/
+frontend/dist/
+frontend/build/
+frontend/.env.local
+
+# Textbook artifacts (optional - keep if tracking generated content)
+# textbook/.coverage/

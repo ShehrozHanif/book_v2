@@ -1,0 +1,116 @@
+{
+  "modules": [
+    {
+      "module_id": 1,
+      "title": "Fundamentals of Humanoid Robotics",
+      "description": "Foundational concepts covering what humanoid robots are, basic kinematics, dynamics, sensors, and hardware components",
+      "chapters": 5,
+      "word_count_target": 12000,
+      "word_count_actual": 0,
+      "code_examples": 15,
+      "status": "not_started",
+      "priority": "P1",
+      "chapters_list": [
+        {"chapter_id": 1, "title": "What is a Humanoid Robot?", "status": "not_started"},
+        {"chapter_id": 2, "title": "Kinematics Basics", "status": "not_started"},
+        {"chapter_id": 3, "title": "Dynamics & Motion", "status": "not_started"},
+        {"chapter_id": 4, "title": "Sensors & Perception", "status": "not_started"},
+        {"chapter_id": 5, "title": "Hardware Overview", "status": "not_started"}
+      ],
+      "rag_status": "not_indexed",
+      "accuracy_score": null,
+      "review_status": "not_reviewed"
+    },
+    {
+      "module_id": 2,
+      "title": "ROS 2 & Software Architecture",
+      "description": "ROS 2 ecosystem, robot descriptions (URDF), simulation environments (Gazebo/Isaac), motion planning, control systems, and real-time considerations",
+      "chapters": 6,
+      "word_count_target": 13000,
+      "word_count_actual": 29880,
+      "code_examples": 18,
+      "status": "verification_in_progress",
+      "priority": "P1",
+      "chapters_list": [
+        {"chapter_id": 6, "title": "ROS 2 Fundamentals", "status": "completed", "word_count": 3784},
+        {"chapter_id": 7, "title": "Robot Description & URDF", "status": "completed", "word_count": 5073},
+        {"chapter_id": 8, "title": "Simulation Environments", "status": "completed", "word_count": 4658},
+        {"chapter_id": 9, "title": "Motion Planning", "status": "completed", "word_count": 5273},
+        {"chapter_id": 10, "title": "Control Systems", "status": "completed", "word_count": 6023},
+        {"chapter_id": 11, "title": "Real-time Considerations", "status": "completed", "word_count": 5069}
+      ],
+      "rag_status": "metadata_pending",
+      "accuracy_score": null,
+      "review_status": "pending_submission",
+      "code_validation_status": "passed",
+      "reference_count": 27,
+      "last_updated": "2026-02-04"
+    },
+    {
+      "module_id": 3,
+      "title": "Control & Kinematics (Advanced)",
+      "description": "Advanced kinematics (DH parameters, Jacobian), walking & locomotion, manipulation & grasping, whole-body control, learning-based control, and debugging",
+      "chapters": 6,
+      "word_count_target": 14000,
+      "word_count_actual": 0,
+      "code_examples": 18,
+      "status": "in_progress",
+      "priority": "P2",
+      "chapters_list": [
+        {"chapter_id": 12, "title": "Advanced Kinematics", "status": "completed"},
+        {"chapter_id": 13, "title": "Walking & Locomotion", "status": "completed"},
+        {"chapter_id": 14, "title": "Manipulation & Grasping", "status": "completed"},
+        {"chapter_id": 15, "title": "Whole-Body Control", "status": "completed"},
+        {"chapter_id": 16, "title": "Learning-Based Control", "status": "completed"},
+        {"chapter_id": 17, "title": "Debugging & Troubleshooting", "status": "completed"}
+      ],
+      "rag_status": "not_indexed",
+      "accuracy_score": null,
+      "review_status": "not_reviewed"
+    },
+    {
+      "module_id": 4,
+      "title": "Applications & Advanced Topics",
+      "description": "Real-world applications, ethical considerations, emerging technologies, competition & benchmarks, and getting started guide",
+      "chapters": 5,
+      "word_count_target": 13000,
+      "word_count_actual": 0,
+      "code_examples": 15,
+      "status": "in_progress",
+      "priority": "P2",
+      "chapters_list": [
+        {"chapter_id": 18, "title": "Real-World Applications", "status": "completed"},
+        {"chapter_id": 19, "title": "Ethical Considerations", "status": "completed"},
+        {"chapter_id": 20, "title": "Emerging Technologies", "status": "completed"},
+        {"chapter_id": 21, "title": "Competition & Benchmarks", "status": "completed"},
+        {"chapter_id": 22, "title": "Getting Started: Your First Project", "status": "completed"}
+      ],
+      "rag_status": "not_indexed",
+      "accuracy_score": null,
+      "review_status": "not_reviewed"
+    }
+  ],
+  "metadata": {
+    "total_modules": 4,
+    "total_chapters": 22,
+    "total_word_count_target": 52000,
+    "total_code_examples": 66,
+    "created": "2026-02-04",
+    "last_updated": "2026-02-04",
+    "pipeline_status": {
+      "infrastructure_setup": "completed",
+      "module_1_writing": "not_started",
+      "module_1_review": "not_started",
+      "module_1_indexing": "not_started",
+      "module_2_writing": "not_started",
+      "module_2_review": "not_started",
+      "module_2_indexing": "not_started",
+      "module_3_writing": "completed",
+      "module_3_review": "pending",
+      "module_3_indexing": "pending",
+      "module_4_writing": "completed",
+      "module_4_review": "pending",
+      "module_4_indexing": "pending"
+    }
+  }
+}
