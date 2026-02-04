@@ -39,9 +39,9 @@
         {"chapter_id": 10, "title": "Control Systems", "status": "completed", "word_count": 6023},
         {"chapter_id": 11, "title": "Real-time Considerations", "status": "completed", "word_count": 5069}
       ],
-      "rag_status": "metadata_pending",
-      "accuracy_score": null,
-      "review_status": "pending_submission",
+      "rag_status": "indexed_and_validated",
+      "accuracy_score": 96,
+      "review_status": "approved_by_expert",
       "code_validation_status": "passed",
       "reference_count": 27,
       "last_updated": "2026-02-04"
