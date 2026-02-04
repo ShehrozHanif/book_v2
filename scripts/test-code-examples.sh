@@ -1,156 +1,137 @@
 #!/bin/bash
-
-# Test Code Examples Harness
-# Tests all Python, C++, URDF, and YAML code examples from textbook/code-examples/
-# Usage: ./scripts/test-code-examples.sh [--verbose] [--fail-fast]
-
 set -e
 
+# Code Example Testing Harness
+# Tests all Python, C++, URDF, and YAML examples
+
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-PROJECT_ROOT="$(dirname "$SCRIPT_DIR")"
-EXAMPLES_DIR="$PROJECT_ROOT/textbook/code-examples"
+EXAMPLES_DIR="$SCRIPT_DIR/../textbook/code-examples"
+REPORT_FILE="code-examples-test-report.txt"
 
-VERBOSE=false
-FAIL_FAST=false
-PASSED=0
-FAILED=0
-SKIPPED=0
-
-# Parse arguments
-while [[ $# -gt 0 ]]; do
-    case $1 in
-        --verbose)
-            VERBOSE=true
-            shift
-            ;;
-        --fail-fast)
-            FAIL_FAST=true
-            shift
-            ;;
-        *)
-            echo "Unknown option: $1"
-            exit 1
-            ;;
-    esac
-done
-
-# Colors for output
-RED='\033[0;31m'
-GREEN='\033[0;32m'
-YELLOW='\033[1;33m'
-NC='\033[0m' # No Color
-
-echo "================================"
-echo "Code Examples Test Harness"
-echo "================================"
-echo "Project Root: $PROJECT_ROOT"
-echo "Examples Dir: $EXAMPLES_DIR"
-echo "Verbose: $VERBOSE"
-echo "Fail Fast: $FAIL_FAST"
+echo "=== Code Examples Test Harness ===" 
+echo "Environment: Ubuntu 22.04 + ROS 2 Humble"
+echo "Testing examples in: $EXAMPLES_DIR"
 echo ""
 
-# Test Python examples
-echo "Testing Python examples..."
-for file in "$EXAMPLES_DIR"/*.py; do
-    if [ -f "$file" ]; then
-        FILENAME=$(basename "$file")
-        echo -n "  Testing $FILENAME... "
+# Initialize counters
+PYTHON_PASS=0
+PYTHON_FAIL=0
+CPP_PASS=0
+CPP_FAIL=0
+URDF_PASS=0
+URDF_FAIL=0
+YAML_PASS=0
+YAML_FAIL=0
 
-        if python3 "$file" --test 2>/dev/null; then
-            echo -e "${GREEN}PASS${NC}"
-            ((PASSED++))
-        elif python3 "$file" 2>/dev/null | grep -q "error\|Error\|ERROR"; then
-            echo -e "${RED}FAIL${NC}"
-            ((FAILED++))
-            if [ "$FAIL_FAST" = true ]; then
-                exit 1
-            fi
+# Source ROS 2 if available
+if [ -f /opt/ros/humble/setup.bash ]; then
+    source /opt/ros/humble/setup.bash 2>/dev/null || true
+    echo "✓ ROS 2 Humble environment sourced"
+fi
+
+echo ""
+echo "=== Testing Python Examples ==="
+for py_file in "$EXAMPLES_DIR"/chapter_*_example_*.py; do
+    if [ -f "$py_file" ]; then
+        filename=$(basename "$py_file")
+        echo -n "Testing $filename... "
+        
+        if python3 "$py_file" &>/dev/null; then
+            echo "✓ PASS"
+            ((PYTHON_PASS++))
         else
-            echo -e "${YELLOW}SKIP${NC} (requires ROS 2 runtime or interactive input)"
-            ((SKIPPED++))
+            echo "✗ FAIL"
+            ((PYTHON_FAIL++))
         fi
     fi
 done
 
-# Test C++ examples
 echo ""
-echo "Testing C++ examples..."
-for file in "$EXAMPLES_DIR"/*.cpp; do
-    if [ -f "$file" ]; then
-        FILENAME=$(basename "$file")
-        OUTPUT_FILE="${file%.cpp}.out"
-        echo -n "  Compiling $FILENAME... "
-
-        if g++ -std=c++17 -Wall -Wextra "$file" -o "$OUTPUT_FILE" 2>/dev/null; then
-            echo -e "${GREEN}COMPILE OK${NC}"
-            ((PASSED++))
-            rm -f "$OUTPUT_FILE"
+echo "=== Testing C++ Examples ==="
+for cpp_file in "$EXAMPLES_DIR"/chapter_*_example_*.cpp; do
+    if [ -f "$cpp_file" ]; then
+        filename=$(basename "$cpp_file")
+        echo -n "Compiling $filename... "
+        
+        build_dir=$(mktemp -d)
+        if g++ -o "$build_dir/example" "$cpp_file" -std=c++17 2>/dev/null && \
+           "$build_dir/example" &>/dev/null; then
+            echo "✓ PASS"
+            ((CPP_PASS++))
         else
-            echo -e "${RED}COMPILE FAIL${NC}"
-            ((FAILED++))
-            if [ "$FAIL_FAST" = true ]; then
-                exit 1
+            echo "✗ FAIL"
+            ((CPP_FAIL++))
+        fi
+        rm -rf "$build_dir"
+    fi
+done
+
+echo ""
+echo "=== Testing URDF Files ==="
+if command -v check_urdf &> /dev/null; then
+    for urdf_file in "$EXAMPLES_DIR"/chapter_*_example_*.urdf; do
+        if [ -f "$urdf_file" ]; then
+            filename=$(basename "$urdf_file")
+            echo -n "Validating $filename... "
+            
+            if check_urdf "$urdf_file" &>/dev/null; then
+                echo "✓ PASS"
+                ((URDF_PASS++))
+            else
+                echo "✗ FAIL"
+                ((URDF_FAIL++))
             fi
+        fi
+    done
+else
+    echo "⚠ URDF validation tool (check_urdf) not found - skipping URDF tests"
+fi
+
+echo ""
+echo "=== Testing YAML Files ==="
+for yaml_file in "$EXAMPLES_DIR"/chapter_*_example_*.yaml; do
+    if [ -f "$yaml_file" ]; then
+        filename=$(basename "$yaml_file")
+        echo -n "Validating $filename... "
+        
+        if python3 -c "import yaml; yaml.safe_load(open('$yaml_file'))" 2>/dev/null; then
+            echo "✓ PASS"
+            ((YAML_PASS++))
+        else
+            echo "✗ FAIL"
+            ((YAML_FAIL++))
         fi
     fi
 done
 
-# Validate URDF examples
+# Generate report
 echo ""
-echo "Validating URDF examples..."
-for file in "$EXAMPLES_DIR"/*.urdf; do
-    if [ -f "$file" ]; then
-        FILENAME=$(basename "$file")
-        echo -n "  Validating $FILENAME... "
+echo "=== Test Report ===" > "$REPORT_FILE"
+echo "Generated: $(date)" >> "$REPORT_FILE"
+echo "" >> "$REPORT_FILE"
+echo "Python Examples: $PYTHON_PASS passed, $PYTHON_FAIL failed" >> "$REPORT_FILE"
+echo "C++ Examples: $CPP_PASS passed, $CPP_FAIL failed" >> "$REPORT_FILE"
+echo "URDF Files: $URDF_PASS passed, $URDF_FAIL failed" >> "$REPORT_FILE"
+echo "YAML Files: $YAML_PASS passed, $YAML_FAIL failed" >> "$REPORT_FILE"
 
-        if xmllint --noout "$file" 2>/dev/null; then
-            echo -e "${GREEN}VALID${NC}"
-            ((PASSED++))
-        else
-            echo -e "${RED}INVALID XML${NC}"
-            ((FAILED++))
-            if [ "$FAIL_FAST" = true ]; then
-                exit 1
-            fi
-        fi
-    fi
-done
+# Calculate totals
+TOTAL_PASS=$((PYTHON_PASS + CPP_PASS + URDF_PASS + YAML_PASS))
+TOTAL_FAIL=$((PYTHON_FAIL + CPP_FAIL + URDF_FAIL + YAML_FAIL))
+TOTAL=$((TOTAL_PASS + TOTAL_FAIL))
 
-# Validate YAML examples
 echo ""
-echo "Validating YAML examples..."
-for file in "$EXAMPLES_DIR"/*.yaml "$EXAMPLES_DIR"/*.yml; do
-    if [ -f "$file" ] 2>/dev/null; then
-        FILENAME=$(basename "$file")
-        echo -n "  Validating $FILENAME... "
-
-        if python3 -c "import yaml; yaml.safe_load(open('$file'))" 2>/dev/null; then
-            echo -e "${GREEN}VALID${NC}"
-            ((PASSED++))
-        else
-            echo -e "${RED}INVALID YAML${NC}"
-            ((FAILED++))
-            if [ "$FAIL_FAST" = true ]; then
-                exit 1
-            fi
-        fi
-    fi
-done
-
-# Summary
+echo "=== Summary ==="
+echo "Python Examples: $PYTHON_PASS passed, $PYTHON_FAIL failed"
+echo "C++ Examples: $CPP_PASS passed, $CPP_FAIL failed"
+echo "URDF Files: $URDF_PASS passed, $URDF_FAIL failed"
+echo "YAML Files: $YAML_PASS passed, $YAML_FAIL failed"
 echo ""
-echo "================================"
-echo "Test Summary"
-echo "================================"
-echo -e "Passed:  ${GREEN}$PASSED${NC}"
-echo -e "Failed:  ${RED}$FAILED${NC}"
-echo -e "Skipped: ${YELLOW}$SKIPPED${NC}"
-echo ""
+echo "Total: $TOTAL_PASS/$TOTAL passed"
 
-if [ "$FAILED" -eq 0 ]; then
-    echo -e "${GREEN}✓ All code examples passed validation${NC}"
+if [ $TOTAL_FAIL -eq 0 ]; then
+    echo "✓ All tests passed!"
     exit 0
 else
-    echo -e "${RED}✗ $FAILED code examples failed${NC}"
+    echo "✗ $TOTAL_FAIL test(s) failed"
     exit 1
 fi

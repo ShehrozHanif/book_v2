@@ -53,19 +53,19 @@
 
 **⚠️ CRITICAL**: Writer onboarding and workflow automation must be complete before any chapter writing begins
 
-- [ ] T011 Create chapter writing workflow automation script at `scripts/create-chapter.sh` that auto-generates chapter file from template, fills metadata headers (chapter_id, module, title), initializes code examples array
+- [x] T011 Create chapter writing workflow automation script at `scripts/create-chapter.sh` that auto-generates chapter file from template, fills metadata headers (chapter_id, module, title), initializes code examples array
 
-- [ ] T012 [P] Create code example testing harness at `scripts/test-code-examples.sh` that runs all Python examples via pytest, C++ examples via CMake/compiler, validates URDF/YAML syntax, outputs pass/fail per example
+- [x] T012 [P] Create code example testing harness at `scripts/test-code-examples.sh` that runs all Python examples via pytest, C++ examples via CMake/compiler, validates URDF/YAML syntax, outputs pass/fail per example
 
-- [ ] T013 Create chapter word count verification script at `scripts/verify-word-count.sh` that counts words in each chapter markdown file, validates within ±10% of target (2300-2400 words), generates report
+- [x] T013 Create chapter word count verification script at `scripts/verify-word-count.sh` that counts words in each chapter markdown file, validates within ±10% of target (2300-2400 words), generates report
 
-- [ ] T014 [P] Create RAG indexing metadata generator at `scripts/generate-rag-metadata.sh` that reads chapter files, extracts learning objectives, keywords, section headings, generates chapter-level metadata for Qdrant indexing (from plan.md §Phase 1)
+- [x] T014 [P] Create RAG indexing metadata generator at `scripts/generate-rag-metadata.sh` that reads chapter files, extracts learning objectives, keywords, section headings, generates chapter-level metadata for Qdrant indexing (from plan.md §Phase 1)
 
-- [ ] T015 Create expert review submission workflow documentation at `textbook/REVIEW_PROCESS.md` with steps: chapter submitted → expert assigned → review checklist completed → issues logged → approved for indexing (from plan.md §Risk Mitigation)
+- [x] T015 Create expert review submission workflow documentation at `textbook/REVIEW_PROCESS.md` with steps: chapter submitted → expert assigned → review checklist completed → issues logged → approved for indexing (from plan.md §Risk Mitigation)
 
-- [ ] T016 [P] Create reference validation script at `scripts/validate-references.sh` that checks all cited references exist in `references.json`, validates APA format, optionally validates URLs return 200 OK
+- [x] T016 [P] Create reference validation script at `scripts/validate-references.sh` that checks all cited references exist in `references.json`, validates APA format, optionally validates URLs return 200 OK
 
-- [ ] T017 Create writer onboarding checklist at `textbook/WRITER_ONBOARDING.md` based on quickstart.md, confirming: environment setup, ROS 2 installed, local testing successful, chapter template reviewed, workflow understood
+- [x] T017 Create writer onboarding checklist at `textbook/WRITER_ONBOARDING.md` based on quickstart.md, confirming: environment setup, ROS 2 installed, local testing successful, chapter template reviewed, workflow understood
 
 **Checkpoint**: All infrastructure, scripts, and processes ready; writers can now begin content creation
 
