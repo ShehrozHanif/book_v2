@@ -256,35 +256,35 @@
 
 - [x] T075 [P] [US4] Write Chapter 19 "Ethical Considerations" (2,600 words) in `textbook/chapters/19-ethics.md` with: safety standards, human-robot interaction principles, legal/regulatory landscape
 
-- [x] T076 [P] [US4] Write Chapter 20 "Emerging Technologies" (2,600 words) in `textbook/chapters/20-emerging-technologies.md` with: AI integration, digital twins, edge computing, 5G for robotics
+- [ ] T076 [P] [US4] Write Chapter 20 "Emerging Technologies" (2,600 words) in `textbook/chapters/20-emerging-technologies.md` with: AI integration, digital twins, edge computing, 5G for robotics
 
-- [x] T077 [P] [US4] Write Chapter 21 "Competition & Benchmarks" (2,600 words) in `textbook/chapters/21-benchmarks.md` with: RoboCup, industrial standards, performance metrics, competition strategies
+- [ ] T077 [P] [US4] Write Chapter 21 "Competition & Benchmarks" (2,600 words) in `textbook/chapters/21-benchmarks.md` with: RoboCup, industrial standards, performance metrics, competition strategies
 
-- [x] T078 [P] [US4] Write Chapter 22 "Getting Started: Your First Project" (2,600 words) in `textbook/chapters/22-getting-started.md` with: step-by-step beginner guide, building simple humanoid system, links to examples, simulation walkthrough
+- [ ] T078 [P] [US4] Write Chapter 22 "Getting Started: Your First Project" (2,600 words) in `textbook/chapters/22-getting-started.md` with: step-by-step beginner guide, building simple humanoid system, links to examples, simulation walkthrough
 
-- [x] T079 [P] [US4] Create Chapter 18 code examples: `textbook/code-examples/chapter_18_example_01.py` (application-specific config), `chapter_18_example_02.yaml` (industry standards), `chapter_18_example_03.py` (case study demo); test locally
+- [ ] T079 [P] [US4] Create Chapter 18 code examples: `textbook/code-examples/chapter_18_example_01.py` (application-specific config), `chapter_18_example_02.yaml` (industry standards), `chapter_18_example_03.py` (case study demo); test locally
 
-- [x] T080 [P] [US4] Create Chapter 19 code examples: `textbook/code-examples/chapter_19_example_01.py` (safety monitoring), `chapter_19_example_02.py` (HRI protocol implementation), `chapter_19_example_03.yaml` (safety config); test locally
+- [ ] T080 [P] [US4] Create Chapter 19 code examples: `textbook/code-examples/chapter_19_example_01.py` (safety monitoring), `chapter_19_example_02.py` (HRI protocol implementation), `chapter_19_example_03.yaml` (safety config); test locally
 
-- [x] T081 [P] [US4] Create Chapter 20 code examples: `textbook/code-examples/chapter_20_example_01.py` (edge-cloud hybrid architecture), `chapter_20_example_02.py` (quantum-inspired optimization), `chapter_20_example_03.py` (multi-agent swarm coordination); test locally
+- [ ] T081 [P] [US4] Create Chapter 20 code examples: `textbook/code-examples/chapter_20_example_01.py` (digital twin integration), `chapter_20_example_02.py` (edge device communication), `chapter_20_example_03.py` (cloud coordination); test locally
 
-- [x] T082 [P] [US4] Create Chapter 21 code examples: `textbook/code-examples/chapter_21_example_01.py` (RoboCup example), `chapter_21_example_02.py` (benchmark execution), `chapter_21_example_03.py` (performance evaluation); test locally
+- [ ] T082 [P] [US4] Create Chapter 21 code examples: `textbook/code-examples/chapter_21_example_01.py` (RoboCup example), `chapter_21_example_02.py` (benchmark execution), `chapter_21_example_03.py` (performance evaluation); test locally
 
-- [x] T083 [P] [US4] Create Chapter 22 code examples: `textbook/code-examples/chapter_22_example_01.urdf` (simple beginner robot), `chapter_22_example_02.py` (getting started script), `chapter_22_example_03.launch.py` (complete launch file); test locally
+- [ ] T083 [P] [US4] Create Chapter 22 code examples: `textbook/code-examples/chapter_22_example_01.urdf` (simple beginner robot), `chapter_22_example_02.py` (getting started script), `chapter_22_example_03.launch.py` (complete launch file); test locally
 
-- [x] T084 [US4] Run all 15 Chapter 18-22 code examples through CI/CD pipeline; confirm 100% pass rate (depends on T079-T083)
+- [ ] T084 [US4] Run all 15 Chapter 18-22 code examples through CI/CD pipeline; confirm 100% pass rate (depends on T079-T083)
 
-- [x] T085 [US4] Cross-check all external sources in Chapters 18-22 against published case studies, manufacturer specs, published benchmarks; add 20-25 new references to `references.json`
+- [ ] T085 [US4] Cross-check all external sources in Chapters 18-22 against published case studies, manufacturer specs, published benchmarks; add 20-25 new references to `references.json`
 
-- [x] T086 [US4] Verify word count for Chapters 18-22: total 13,000 words ±200 (depends on T074-T078)
+- [ ] T086 [US4] Verify word count for Chapters 18-22: total 13,000 words ±200 (depends on T074-T078)
 
-- [x] T087 [US4] Submit Module 4 for expert review; expert review timeline: 24-48 hours (or defer if timeline slips)
+- [ ] T087 [US4] Submit Module 4 for expert review; expert review timeline: 24-48 hours (or defer if timeline slips)
 
-- [x] T088 [US4] Incorporate expert review feedback on Module 4; verify all application claims cite published sources; confirm 95%+ accuracy
+- [ ] T088 [US4] Incorporate expert review feedback on Module 4; verify all application claims cite published sources; confirm 95%+ accuracy
 
-- [x] T089 [US4] Generate RAG indexing metadata for Module 4; update module-index.json with all 5 chapter records
+- [ ] T089 [US4] Generate RAG indexing metadata for Module 4; update module-index.json with all 5 chapter records
 
-- [x] T090 [US4] Submit Module 4 for RAG indexing (by end of Week 4, or defer if needed); validate retrieval with sample queries about applications, ethics, emerging tech
+- [ ] T090 [US4] Submit Module 4 for RAG indexing (by end of Week 4, or defer if needed); validate retrieval with sample queries about applications, ethics, emerging tech
 
 **Checkpoint**: Module 4 complete (or deferred); if complete, full 52,000-word textbook indexed and RAG-validated. If deferred, Modules 1-3 (39,000 words) deliver base 100 points.
 
