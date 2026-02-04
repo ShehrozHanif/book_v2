@@ -105,5 +105,15 @@ async def root():
 
 # Import and include routers
 from src.api.routes.chat import router as chat_router
+from src.personalization.api.routes import users_router, assessment_router, progress_router
+from src.personalization.api.routes.preferences import router as preferences_router
+from src.personalization.api.routes.gamification import router as gamification_router
+from src.personalization.api.routes.privacy import router as privacy_router
 
 app.include_router(chat_router)
+app.include_router(users_router)
+app.include_router(assessment_router)
+app.include_router(progress_router)
+app.include_router(preferences_router)
+app.include_router(gamification_router)
+app.include_router(privacy_router)

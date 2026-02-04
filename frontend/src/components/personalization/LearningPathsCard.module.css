@@ -1,0 +1,158 @@
+/* Learning Paths Card Styles */
+
+.card {
+  background: white;
+  border-radius: 12px;
+  padding: 20px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.title {
+  margin: 0 0 20px;
+  color: #333;
+  font-size: 18px;
+  font-weight: 600;
+}
+
+.recommendedPath {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 16px;
+  background: #f0f7ff;
+  border-left: 4px solid #2196f3;
+  border-radius: 8px;
+  margin-bottom: 20px;
+}
+
+.emoji {
+  font-size: 32px;
+  flex-shrink: 0;
+}
+
+.pathInfo {
+  flex: 1;
+}
+
+.pathName {
+  margin: 0;
+  color: #2196f3;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.pathDescription {
+  margin: 4px 0 0;
+  color: #666;
+  font-size: 12px;
+  line-height: 1.4;
+}
+
+.pathList {
+  margin-bottom: 20px;
+  padding-bottom: 20px;
+  border-bottom: 1px solid #e0e0e0;
+}
+
+.otherPathsLabel {
+  color: #999;
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin: 0 0 12px;
+}
+
+.pathButton {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  padding: 12px;
+  border: 1px solid #e0e0e0;
+  background: white;
+  border-radius: 6px;
+  cursor: pointer;
+  margin-bottom: 8px;
+  transition: all 0.2s ease;
+  text-align: left;
+}
+
+.pathButton:hover {
+  border-color: #2196f3;
+  background: #f5f9ff;
+  transform: translateX(4px);
+}
+
+.pathEmoji {
+  font-size: 24px;
+  flex-shrink: 0;
+}
+
+.pathButtonInfo {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.pathButtonName {
+  color: #333;
+  font-size: 13px;
+  font-weight: 600;
+  display: block;
+}
+
+.pathButtonDesc {
+  color: #999;
+  font-size: 11px;
+  display: block;
+}
+
+.nextChapter {
+  background: #f0f7ff;
+  padding: 12px;
+  border-radius: 6px;
+}
+
+.nextChapter h4 {
+  margin: 0 0 6px;
+  color: #2196f3;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.nextChapter p {
+  margin: 0;
+  color: #666;
+  font-size: 12px;
+  line-height: 1.4;
+}
+
+@media (max-width: 480px) {
+  .card {
+    padding: 16px;
+  }
+
+  .title {
+    font-size: 16px;
+    margin-bottom: 16px;
+  }
+
+  .recommendedPath {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 12px;
+  }
+
+  .emoji {
+    font-size: 28px;
+  }
+}

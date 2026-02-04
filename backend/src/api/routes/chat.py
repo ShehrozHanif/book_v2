@@ -17,6 +17,8 @@ from src.config import get_settings
 from src.services.chat_service import get_chat_service
 from src.services.embedding_service import get_embedding_service
 from src.services.qdrant_client import get_qdrant_service
+from src.personalization.services.personalization_service import get_personalization_service
+from src.personalization.services.performance_service import get_performance_service
 
 logger = logging.getLogger(__name__)
 router = APIRouter(prefix="/api/v1/chat", tags=["chat"])
@@ -154,20 +156,42 @@ async def chat(
         validated = validate_chat_request(request)
         logger.debug(f"Request validated - IP: {client_ip}")
 
-        # Step 2: Get chat service
+        # Step 2: Get services
         chat_service = await get_chat_service(session)
+        personalization_service = await get_personalization_service(session)
+        performance_service = await get_performance_service(session)
 
-        # Step 3: Process query through RAG pipeline
+        # Step 3: Convert user_id if provided
+        user_uuid = None
+        if validated.user_id:
+            try:
+                from uuid import UUID
+                user_uuid = UUID(validated.user_id)
+            except (ValueError, TypeError):
+                logger.warning(f"Invalid user_id format: {validated.user_id}")
+
+        # Step 4: Process query through RAG pipeline
         response = await chat_service.process_query(
             query=validated.query,
             conversation_id=validated.conversation_id,
             user_id=validated.user_id
         )
 
+        # Step 5: Apply personalization to response if user authenticated
+        if user_uuid:
+            # Track this conversation turn for performance analysis
+            await performance_service.track_conversation_turn(
+                user_id=user_uuid,
+                query=validated.query,
+                response=response.response,
+                conversation_id=None
+            )
+
         logger.info(
             f"Chat response generated in {response.processing_time_ms:.0f}ms - "
             f"conversation_id: {response.conversation_id}, "
             f"passages_retrieved: {len(response.retrieved_passages)}, "
+            f"personalized: {user_uuid is not None}, "
             f"ip: {client_ip}"
         )
 

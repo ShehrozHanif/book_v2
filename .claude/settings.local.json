@@ -69,7 +69,9 @@
       "Bash(dir:*)",
       "Bash(\"venv\\\\Scripts\\\\python.exe\" -m uvicorn:*)",
       "Bash(git --version)",
-      "Bash(cat:*)"
+      "Bash(cat:*)",
+      "Bash(git fetch:*)",
+      "Bash(test:*)"
     ]
   }
 }

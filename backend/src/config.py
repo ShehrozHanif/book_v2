@@ -44,6 +44,14 @@ class Settings(BaseSettings):
     # Session Configuration
     SESSION_TIMEOUT_HOURS: int = 24
 
+    # Authentication & Personalization Configuration
+    JWT_SECRET_KEY: str = "your-secret-key-change-in-production-min-32-chars"
+    JWT_ALGORITHM: str = "HS256"
+    ACCESS_TOKEN_EXPIRE_MINUTES: int = 30
+    REFRESH_TOKEN_EXPIRE_DAYS: int = 7
+    PASSWORD_MIN_LENGTH: int = 8
+    PASSWORD_MAX_LENGTH: int = 100
+
     class Config:
         env_file = ".env"
         env_file_encoding = "utf-8"

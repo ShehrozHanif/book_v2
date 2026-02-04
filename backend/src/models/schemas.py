@@ -52,6 +52,11 @@ class ChatRequest(BaseModel):
         None,
         description="Optional authenticated user ID",
     )
+    difficulty_override: Optional[str] = Field(
+        None,
+        description="Optional difficulty override: 'simplify' or 'advanced'",
+        enum=["simplify", "advanced"],
+    )
 
     class Config:
         json_schema_extra = {

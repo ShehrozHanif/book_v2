@@ -1,0 +1,191 @@
+/* Preferences Form Styles */
+
+.container {
+  background: white;
+  border-radius: 12px;
+  padding: 24px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  max-width: 600px;
+}
+
+.title {
+  margin: 0 0 24px;
+  color: #333;
+  font-size: 24px;
+  font-weight: 600;
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+}
+
+.section {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding-bottom: 24px;
+  border-bottom: 1px solid #e0e0e0;
+}
+
+.section:last-of-type {
+  border-bottom: none;
+  padding-bottom: 0;
+}
+
+.sectionTitle {
+  margin: 0;
+  color: #333;
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.sectionDescription {
+  margin: 0;
+  color: #999;
+  font-size: 13px;
+}
+
+.options {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.radioOption {
+  display: flex;
+  align-items: center;
+  padding: 12px;
+  border: 2px solid #e0e0e0;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.radioOption:hover {
+  border-color: #2196f3;
+  background: #f5f9ff;
+}
+
+.radioInput {
+  width: 20px;
+  height: 20px;
+  margin-right: 12px;
+  cursor: pointer;
+  accent-color: #2196f3;
+}
+
+.optionContent {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex: 1;
+}
+
+.optionIcon {
+  font-size: 24px;
+  flex-shrink: 0;
+}
+
+.optionText {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  flex: 1;
+}
+
+.optionLabel {
+  color: #333;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.optionDescription {
+  color: #999;
+  font-size: 12px;
+}
+
+.message {
+  padding: 12px 16px;
+  border-radius: 6px;
+  font-size: 14px;
+  margin-top: 12px;
+}
+
+.message.success {
+  background: #e8f5e9;
+  color: #2e7d32;
+  border-left: 4px solid #4caf50;
+}
+
+.message.error {
+  background: #ffebee;
+  color: #c62828;
+  border-left: 4px solid #f44336;
+}
+
+.buttonGroup {
+  display: flex;
+  gap: 12px;
+  margin-top: 20px;
+}
+
+.submitButton {
+  padding: 12px 24px;
+  background: #2196f3;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  flex: 1;
+}
+
+.submitButton:hover:not(:disabled) {
+  background: #1976d2;
+  box-shadow: 0 4px 12px rgba(33, 150, 243, 0.3);
+  transform: translateY(-2px);
+}
+
+.submitButton:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.submitButton:active:not(:disabled) {
+  transform: translateY(0);
+}
+
+@media (max-width: 480px) {
+  .container {
+    padding: 16px;
+  }
+
+  .title {
+    font-size: 20px;
+    margin-bottom: 20px;
+  }
+
+  .form {
+    gap: 24px;
+  }
+
+  .radioOption {
+    padding: 10px;
+  }
+
+  .optionIcon {
+    font-size: 20px;
+  }
+
+  .optionLabel {
+    font-size: 13px;
+  }
+
+  .buttonGroup {
+    gap: 8px;
+  }
+}
