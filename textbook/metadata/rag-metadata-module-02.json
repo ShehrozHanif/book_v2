@@ -1,0 +1,283 @@
+{
+  "module_id": 2,
+  "module_title": "ROS 2 & Software Architecture",
+  "total_chapters": 6,
+  "total_words": 29880,
+  "code_examples_count": 18,
+  "references_count": 27,
+  "generated_date": "2026-02-04",
+  "rag_status": "ready_for_indexing",
+  "chunks_strategy": "section_based",
+  "chapters": [
+    {
+      "chapter_id": "06",
+      "title": "ROS 2 Fundamentals",
+      "file": "textbook/chapters/06-ros2-fundamentals.md",
+      "word_count": 3784,
+      "learning_objectives": [
+        "Understand ROS 2 architecture and its core communication patterns",
+        "Implement publisher-subscriber patterns for asynchronous data streams",
+        "Create service clients and servers for synchronous request-response interactions",
+        "Configure parameter servers for runtime robot configuration",
+        "Apply launch files to orchestrate multi-node robotic systems"
+      ],
+      "keywords": [
+        "ROS 2",
+        "nodes",
+        "topics",
+        "services",
+        "actions",
+        "parameters",
+        "launch files",
+        "DDS",
+        "Quality of Service",
+        "computation graph"
+      ],
+      "sections": [
+        "Nodes and the Computation Graph",
+        "Topics and Publisher-Subscriber Pattern",
+        "Services and Actions"
+      ],
+      "code_examples": [
+        "chapter_06_example_01.py",
+        "chapter_06_example_02.py",
+        "chapter_06_example_03.py"
+      ],
+      "references": [
+        "ros2_humble_docs",
+        "dds_specification_2015",
+        "ros2_design_2014",
+        "maruyama2016",
+        "quigley2009"
+      ]
+    },
+    {
+      "chapter_id": "07",
+      "title": "Robot Description & URDF",
+      "file": "textbook/chapters/07-robot-description-urdf.md",
+      "word_count": 5073,
+      "learning_objectives": [
+        "Understand URDF structure and robot description semantics",
+        "Create link and joint definitions for robotic systems",
+        "Model visual and collision geometries with meshes and primitives",
+        "Implement Gazebo plugins for simulation fidelity",
+        "Parse and manipulate URDF programmatically"
+      ],
+      "keywords": [
+        "URDF",
+        "robot description",
+        "links",
+        "joints",
+        "visual geometry",
+        "collision geometry",
+        "Gazebo plugins",
+        "xacro",
+        "kinematic chains",
+        "robot modeling"
+      ],
+      "sections": [
+        "URDF Overview and Structure",
+        "Link Definitions",
+        "Joint Types and Configurations",
+        "Visual and Collision Geometries",
+        "Gazebo Plugins and Simulation"
+      ],
+      "code_examples": [
+        "chapter_07_example_01.urdf",
+        "chapter_07_example_02.urdf",
+        "chapter_07_example_03.py"
+      ],
+      "references": [
+        "urdf_specification",
+        "gazebo_plugins_docs",
+        "kdl_parser",
+        "orocos_kdl",
+        "schoellig2020"
+      ]
+    },
+    {
+      "chapter_id": "08",
+      "title": "Simulation Environments",
+      "file": "textbook/chapters/08-simulation-environments.md",
+      "word_count": 4658,
+      "learning_objectives": [
+        "Set up and configure Gazebo 11 simulation environment",
+        "Understand physics simulation configuration and tuning",
+        "Utilize Isaac Sim for large-scale and digital twin simulations",
+        "Create custom simulation worlds with obstacles and dynamics",
+        "Configure launch files for simulation orchestration"
+      ],
+      "keywords": [
+        "Gazebo",
+        "Isaac Sim",
+        "simulation",
+        "physics engine",
+        "ODE",
+        "SDF",
+        "launch files",
+        "world files",
+        "digital twins",
+        "sensors simulation"
+      ],
+      "sections": [
+        "Gazebo 11: Setup and Configuration",
+        "Physics Simulation in Gazebo",
+        "Isaac Sim: Advanced Simulation Platform",
+        "Launch Files and World Configuration"
+      ],
+      "code_examples": [
+        "chapter_08_example_01.sdf",
+        "chapter_08_example_02.py",
+        "chapter_08_example_03.yaml"
+      ],
+      "references": [
+        "koenig2004",
+        "gazebo11_docs",
+        "ode_docs",
+        "isaacs sim_docs",
+        "collins2021"
+      ]
+    },
+    {
+      "chapter_id": "09",
+      "title": "Motion Planning",
+      "file": "textbook/chapters/09-motion-planning.md",
+      "word_count": 5273,
+      "learning_objectives": [
+        "Understand sampling-based and deterministic motion planning algorithms",
+        "Implement RRT and RRT* path planning algorithms",
+        "Use MoveIt! framework for humanoid motion planning",
+        "Configure collision checking and constraint handling",
+        "Integrate motion planning into robot control systems"
+      ],
+      "keywords": [
+        "motion planning",
+        "path planning",
+        "RRT",
+        "RRT*",
+        "collision checking",
+        "MoveIt!",
+        "configuration space",
+        "trajectory planning",
+        "constraint satisfaction",
+        "planning algorithms"
+      ],
+      "sections": [
+        "Motion Planning Fundamentals",
+        "Sampling-Based Algorithms",
+        "RRT and RRT* Planners",
+        "MoveIt! Framework",
+        "Collision Checking and Constraints"
+      ],
+      "code_examples": [
+        "chapter_09_example_01.py",
+        "chapter_09_example_02.py",
+        "chapter_09_example_03.py"
+      ],
+      "references": [
+        "lavalle2006",
+        "karaman2011",
+        "sucan2012",
+        "chitta2012",
+        "kingston2018"
+      ]
+    },
+    {
+      "chapter_id": "10",
+      "title": "Control Systems",
+      "file": "textbook/chapters/10-control-systems.md",
+      "word_count": 6023,
+      "learning_objectives": [
+        "Understand PID control theory and implementation",
+        "Design feedback control systems for robotic joints",
+        "Implement trajectory generation and following algorithms",
+        "Configure multi-joint control hierarchies",
+        "Tune control parameters for stable operation"
+      ],
+      "keywords": [
+        "PID control",
+        "feedback control",
+        "trajectory generation",
+        "joint control",
+        "motor control",
+        "control loops",
+        "stability analysis",
+        "controller tuning",
+        "state feedback",
+        "command tracking"
+      ],
+      "sections": [
+        "Control Theory Fundamentals",
+        "PID Control Implementation",
+        "Trajectory Generation",
+        "Multi-Joint Control",
+        "ROS 2 Control Framework"
+      ],
+      "code_examples": [
+        "chapter_10_example_01.py",
+        "chapter_10_example_02.py",
+        "chapter_10_example_03.py"
+      ],
+      "references": [
+        "astrom2008",
+        "siciliano2009",
+        "ros2_control_docs",
+        "murray1994",
+        "spong2005"
+      ]
+    },
+    {
+      "chapter_id": "11",
+      "title": "Real-time Considerations",
+      "file": "textbook/chapters/11-realtime-considerations.md",
+      "word_count": 5069,
+      "learning_objectives": [
+        "Understand real-time system requirements and constraints",
+        "Apply deterministic DDS middleware configuration",
+        "Implement real-time control loops with guaranteed latency",
+        "Profile and optimize performance bottlenecks",
+        "Configure PREEMPT-RT Linux for hard real-time performance"
+      ],
+      "keywords": [
+        "real-time systems",
+        "deterministic communication",
+        "DDS QoS",
+        "PREEMPT-RT",
+        "latency",
+        "jitter",
+        "performance profiling",
+        "thread scheduling",
+        "memory management",
+        "hard real-time"
+      ],
+      "sections": [
+        "Real-Time Systems Overview",
+        "Deterministic Communication with DDS",
+        "Real-Time Control Loop Implementation",
+        "Performance Profiling and Analysis",
+        "PREEMPT-RT Linux Configuration"
+      ],
+      "code_examples": [
+        "chapter_11_example_01.py",
+        "chapter_11_example_02.py",
+        "chapter_11_example_03.py"
+      ],
+      "references": [
+        "preempt_rt_docs",
+        "ros2_realtime_docs",
+        "dds_qos_spec",
+        "liu2000",
+        "buttazzo2011"
+      ]
+    }
+  ],
+  "indexing_readiness": {
+    "all_chapters_complete": true,
+    "all_code_examples_validated": true,
+    "all_references_added": true,
+    "word_counts_verified": true,
+    "metadata_generated": true,
+    "ready_for_qdrant": true
+  },
+  "notes": "Module 2 verified and ready for Qdrant vector embedding and RAG indexing. All 6 chapters have learning objectives, keywords, and section mappings for efficient semantic search and retrieval."
+}
