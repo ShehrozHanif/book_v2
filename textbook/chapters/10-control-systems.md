@@ -3,7 +3,7 @@ chapter_id: "10"
 module: "Module 2"
 title: "Control Systems"
 word_count_target: 2300
-word_count_actual: 2319
+word_count_actual: 6023
 status: "draft"
 code_examples: ["chapter_10_example_01.py", "chapter_10_example_02.py", "chapter_10_example_03.py"]
 references: ["astrom2008", "siciliano2009", "ros2_control_docs", "murray1994", "spong2005"]

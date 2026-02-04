@@ -140,29 +140,29 @@
 
 ### Implementation for User Story 2
 
-- [ ] T036 [P] [US2] Write Chapter 6 "ROS 2 Fundamentals" (2,300 words) in `textbook/chapters/06-ros2-fundamentals.md` with: nodes, topics, services, actions, parameter server; include code examples of publisher/subscriber patterns
+- [x] T036 [P] [US2] Write Chapter 6 "ROS 2 Fundamentals" (2,300 words) in `textbook/chapters/06-ros2-fundamentals.md` with: nodes, topics, services, actions, parameter server; include code examples of publisher/subscriber patterns [COMPLETED 2026-02-03]
 
-- [ ] T037 [P] [US2] Write Chapter 7 "Robot Description & URDF" (2,300 words) in `textbook/chapters/07-urdf-robot-description.md` with: URDF structure, link definitions, joint types, visual/collision meshes, Gazebo plugins
+- [x] T037 [P] [US2] Write Chapter 7 "Robot Description & URDF" (2,300 words) in `textbook/chapters/07-urdf-robot-description.md` with: URDF structure, link definitions, joint types, visual/collision meshes, Gazebo plugins [COMPLETED 2026-02-03]
 
-- [ ] T038 [P] [US2] Write Chapter 8 "Simulation Environments" (2,300 words) in `textbook/chapters/08-simulation-gazebo-isaac.md` with: Gazebo 11 setup, Isaac Sim basics, launch files, physics simulation configuration
+- [x] T038 [P] [US2] Write Chapter 8 "Simulation Environments" (2,300 words) in `textbook/chapters/08-simulation-gazebo-isaac.md` with: Gazebo 11 setup, Isaac Sim basics, launch files, physics simulation configuration [COMPLETED 2026-02-03]
 
-- [ ] T039 [P] [US2] Write Chapter 9 "Motion Planning" (2,300 words) in `textbook/chapters/09-motion-planning.md` with: path planning algorithms, RRT*, collision checking, MoveIt! framework overview
+- [x] T039 [P] [US2] Write Chapter 9 "Motion Planning" (2,300 words) in `textbook/chapters/09-motion-planning.md` with: path planning algorithms, RRT*, collision checking, MoveIt! framework overview [COMPLETED 2026-02-03]
 
-- [ ] T040 [P] [US2] Write Chapter 10 "Control Systems" (2,300 words) in `textbook/chapters/10-control-systems.md` with: PID control theory, trajectory following, joint-level commands, feedback loops
+- [x] T040 [P] [US2] Write Chapter 10 "Control Systems" (2,300 words) in `textbook/chapters/10-control-systems.md` with: PID control theory, trajectory following, joint-level commands, feedback loops [COMPLETED 2026-02-03]
 
-- [ ] T041 [P] [US2] Write Chapter 11 "Real-time Considerations" (2,300 words) in `textbook/chapters/11-realtime-performance.md` with: timing constraints, synchronization, performance tuning, profiling strategies
+- [x] T041 [P] [US2] Write Chapter 11 "Real-time Considerations" (2,300 words) in `textbook/chapters/11-realtime-performance.md` with: timing constraints, synchronization, performance tuning, profiling strategies [COMPLETED 2026-02-03]
 
-- [ ] T042 [P] [US2] Create Chapter 6 code examples: `textbook/code-examples/chapter_06_example_01.py` (ROS 2 publisher), `chapter_06_example_02.py` (ROS 2 subscriber), `chapter_06_example_03.py` (service client/server); test locally
+- [x] T042 [P] [US2] Create Chapter 6 code examples: `textbook/code-examples/chapter_06_example_01.py` (ROS 2 publisher), `chapter_06_example_02.py` (ROS 2 subscriber), `chapter_06_example_03.py` (service client/server); test locally [COMPLETED 2026-02-03]
 
-- [ ] T043 [P] [US2] Create Chapter 7 code examples: `textbook/code-examples/chapter_07_example_01.urdf` (complete URDF example), `chapter_07_example_02.py` (URDF parser), `chapter_07_example_03.py` (mesh loading demo); test locally
+- [x] T043 [P] [US2] Create Chapter 7 code examples: `textbook/code-examples/chapter_07_example_01.urdf` (complete URDF example), `chapter_07_example_02.py` (URDF parser), `chapter_07_example_03.py` (mesh loading demo); test locally [COMPLETED 2026-02-03]
 
-- [ ] T044 [P] [US2] Create Chapter 8 code examples: `textbook/code-examples/chapter_08_example_01.yaml` (Gazebo launch config), `chapter_08_example_02.py` (Gazebo client API), `chapter_08_example_03.yaml` (Isaac Sim setup); test locally
+- [x] T044 [P] [US2] Create Chapter 8 code examples: `textbook/code-examples/chapter_08_example_01.yaml` (Gazebo launch config), `chapter_08_example_02.py` (Gazebo client API), `chapter_08_example_03.yaml` (Isaac Sim setup); test locally [COMPLETED 2026-02-03]
 
-- [ ] T045 [P] [US2] Create Chapter 9 code examples: `textbook/code-examples/chapter_09_example_01.py` (motion planning with MoveIt), `chapter_09_example_02.py` (collision checking), `chapter_09_example_03.py` (RRT path planner demo); test locally
+- [x] T045 [P] [US2] Create Chapter 9 code examples: `textbook/code-examples/chapter_09_example_01.py` (motion planning with MoveIt), `chapter_09_example_02.py` (collision checking), `chapter_09_example_03.py` (RRT path planner demo); test locally [COMPLETED 2026-02-03]
 
-- [ ] T046 [P] [US2] Create Chapter 10 code examples: `textbook/code-examples/chapter_10_example_01.py` (PID controller implementation), `chapter_10_example_02.cpp` (real-time control loop), `chapter_10_example_03.py` (trajectory generator); test locally
+- [x] T046 [P] [US2] Create Chapter 10 code examples: `textbook/code-examples/chapter_10_example_01.py` (PID controller implementation), `chapter_10_example_02.cpp` (real-time control loop), `chapter_10_example_03.py` (trajectory generator); test locally [COMPLETED 2026-02-03]
 
-- [ ] T047 [P] [US2] Create Chapter 11 code examples: `textbook/code-examples/chapter_11_example_01.py` (timing profiler), `chapter_11_example_02.cpp` (real-time thread example), `chapter_11_example_03.py` (performance analysis); test locally
+- [x] T047 [P] [US2] Create Chapter 11 code examples: `textbook/code-examples/chapter_11_example_01.py` (timing profiler), `chapter_11_example_02.cpp` (real-time thread example), `chapter_11_example_03.py` (performance analysis); test locally [COMPLETED 2026-02-03]
 
 - [ ] T048 [US2] Run all 18 Chapter 6-11 code examples through CI/CD pipeline; confirm 100% pass rate on Ubuntu 22.04 + ROS 2 Humble (depends on T042-T047 completion)
 

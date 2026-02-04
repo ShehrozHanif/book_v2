@@ -3,7 +3,7 @@ chapter_id: "09"
 module: "Module 2"
 title: "Motion Planning"
 word_count_target: 2300
-word_count_actual: 2307
+word_count_actual: 5273
 status: "draft"
 code_examples: ["chapter_09_example_01.py", "chapter_09_example_02.py", "chapter_09_example_03.py"]
 references: ["lavalle2006", "karaman2011", "sucan2012", "chitta2012", "kingston2018"]

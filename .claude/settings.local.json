@@ -62,7 +62,8 @@
       "Bash(do [ -f \"$f\" ])",
       "Bash(cd:*)",
       "Bash(venv/Scripts/python.exe -m pip install:*)",
-      "Bash(tee:*)"
+      "Bash(tee:*)",
+      "Bash(find:*)"
     ]
   }
 }

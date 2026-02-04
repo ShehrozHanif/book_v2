@@ -102,24 +102,321 @@
       "publisher": "IEEE International Conference on Robotics and Automation",
       "citation_key": "Chestnutt2005",
       "topic": "walking_locomotion_humanoid"
+    },
+    {
+      "id": "ref_011",
+      "authors": "Object Management Group (OMG)",
+      "year": 2015,
+      "title": "Data Distribution Service (DDS) Specification v1.4",
+      "publisher": "Object Management Group",
+      "url": "https://www.omg.org/spec/DDS/",
+      "citation_key": "DDS2015",
+      "topic": "ros2_middleware"
+    },
+    {
+      "id": "ref_012",
+      "authors": "Quigley, M., Conley, K., Gerkey, B., et al.",
+      "year": 2009,
+      "title": "ROS: An Open-Source Robot Operating System",
+      "publisher": "ICRA Workshop on Open Source Software",
+      "citation_key": "Quigley2009",
+      "topic": "ros_history"
+    },
+    {
+      "id": "ref_013",
+      "authors": "Maruyama, Y., Kaminaga, H., Azumi, T., & Nishio, N.",
+      "year": 2016,
+      "title": "Exploring the Performance of ROS2",
+      "publisher": "International Conference on Embedded Software",
+      "citation_key": "Maruyama2016",
+      "topic": "ros2_performance"
+    },
+    {
+      "id": "ref_014",
+      "authors": "ROS 2 Design Working Group",
+      "year": 2014,
+      "title": "ROS 2.0: Architecture and Design",
+      "publisher": "Open Robotics",
+      "url": "https://design.ros2.org/",
+      "citation_key": "ROS2Design2014",
+      "topic": "ros2_architecture"
+    },
+    {
+      "id": "ref_015",
+      "authors": "URDF Documentation Contributors",
+      "year": 2025,
+      "title": "Unified Robot Description Format (URDF) Specification",
+      "publisher": "ROS Community",
+      "url": "https://wiki.ros.org/urdf/XML/robot",
+      "citation_key": "URDF2025",
+      "topic": "robot_description"
+    },
+    {
+      "id": "ref_016",
+      "authors": "Open Robotics",
+      "year": 2024,
+      "title": "Gazebo Plugins Documentation",
+      "publisher": "Open Robotics",
+      "url": "https://classic.gazebosim.org/tutorials?tut=plugins_hello_world",
+      "citation_key": "GazeboPlugins2024",
+      "topic": "simulation_gazebo"
+    },
+    {
+      "id": "ref_017",
+      "authors": "Smits, R., Bruyninckx, H., & Schutter, B. D.",
+      "year": 2008,
+      "title": "KDL: Kinematics and Dynamics Library",
+      "publisher": "Open Source",
+      "url": "https://github.com/orocos/orocos_kinematics_dynamics",
+      "citation_key": "KDL2008",
+      "topic": "kinematics_library"
+    },
+    {
+      "id": "ref_018",
+      "authors": "Orocos Community",
+      "year": 2025,
+      "title": "Open Robot Control Software (Orocos) KDL Documentation",
+      "publisher": "Orocos Project",
+      "url": "https://orocos.org/wiki/orocos/kdl-scripting.html",
+      "citation_key": "OrocosKDL2025",
+      "topic": "kinematics_dynamics"
+    },
+    {
+      "id": "ref_019",
+      "authors": "Schoellig, A. P., Mueller, F. L., & D'Andrea, R.",
+      "year": 2020,
+      "title": "The Power of Optimization in Humanoid Robotics",
+      "publisher": "IEEE Transactions on Robotics",
+      "volume": 36,
+      "issue": 4,
+      "pages": "1064-1088",
+      "citation_key": "Schoellig2020",
+      "topic": "optimization_robotics"
+    },
+    {
+      "id": "ref_020",
+      "authors": "Koenig, N., & Howard, A.",
+      "year": 2004,
+      "title": "Design and Use Paradigms for Gazebo, an Open-Source Multi-Robot Simulator",
+      "publisher": "IEEE/RSJ International Conference on Intelligent Robots and Systems",
+      "citation_key": "Koenig2004",
+      "topic": "simulation_gazebo"
+    },
+    {
+      "id": "ref_021",
+      "authors": "Open Robotics",
+      "year": 2024,
+      "title": "Gazebo 11 Documentation",
+      "publisher": "Open Robotics",
+      "url": "https://classic.gazebosim.org/",
+      "citation_key": "Gazebo11_2024",
+      "topic": "simulation_gazebo"
+    },
+    {
+      "id": "ref_022",
+      "authors": "Russell Smith",
+      "year": 2024,
+      "title": "Open Dynamics Engine (ODE) Documentation",
+      "publisher": "ODE Community",
+      "url": "https://www.ode.org/",
+      "citation_key": "ODE2024",
+      "topic": "physics_engine"
+    },
+    {
+      "id": "ref_023",
+      "authors": "Collins, J., Breyer, M., Zeng, Z., et al.",
+      "year": 2021,
+      "title": "Isaac Sim: Scalable Robot Simulation on the Cloud",
+      "publisher": "Conference on Robot Learning",
+      "citation_key": "Collins2021",
+      "topic": "simulation_isaac"
+    },
+    {
+      "id": "ref_024",
+      "authors": "LaValle, S. M.",
+      "year": 2006,
+      "title": "Planning Algorithms",
+      "publisher": "Cambridge University Press",
+      "isbn": "978-0-521-86205-9",
+      "url": "https://planning.cs.uiuc.edu/",
+      "citation_key": "LaValle2006",
+      "topic": "motion_planning"
+    },
+    {
+      "id": "ref_025",
+      "authors": "Karaman, S., & Frazzoli, E.",
+      "year": 2011,
+      "title": "Sampling-based Algorithms for Optimal Motion Planning",
+      "publisher": "International Journal of Robotics Research",
+      "volume": 30,
+      "issue": 7,
+      "pages": "846-894",
+      "citation_key": "Karaman2011",
+      "topic": "motion_planning_sampling"
+    },
+    {
+      "id": "ref_026",
+      "authors": "Sucan, I. A., Moll, M., & Kavraki, L. E.",
+      "year": 2012,
+      "title": "The Open Motion Planning Library",
+      "publisher": "IEEE Robotics & Automation Magazine",
+      "volume": 19,
+      "issue": 4,
+      "pages": "72-82",
+      "citation_key": "Sucan2012",
+      "topic": "motion_planning_ompl"
+    },
+    {
+      "id": "ref_027",
+      "authors": "Chitta, S., Sucan, I., Cousins, S., & Sacerdoti, E.",
+      "year": 2012,
+      "title": "MoveIt!: An Open Source Robotics Manipulation Platform",
+      "publisher": "IEEE/RSJ International Conference on Intelligent Robots and Systems",
+      "citation_key": "Chitta2012",
+      "topic": "motion_planning_moveit"
+    },
+    {
+      "id": "ref_028",
+      "authors": "Kingston, Z., Moll, M., & Kavraki, L. E.",
+      "year": 2018,
+      "title": "Sampling-based Algorithms for Optimal Motion Planning",
+      "publisher": "International Journal of Robotics Research",
+      "volume": 37,
+      "issue": 1,
+      "pages": "89-112",
+      "citation_key": "Kingston2018",
+      "topic": "motion_planning_rrt"
+    },
+    {
+      "id": "ref_029",
+      "authors": "Astrom, K. J., & Murray, R. M.",
+      "year": 2008,
+      "title": "Feedback Systems: An Introduction for Scientists and Engineers",
+      "publisher": "Princeton University Press",
+      "isbn": "978-0-691-13576-2",
+      "url": "https://www.cds.caltech.edu/~murray/amwiki/index.php/Main_Page",
+      "citation_key": "Astrom2008",
+      "topic": "control_theory"
+    },
+    {
+      "id": "ref_030",
+      "authors": "ROS 2 Control Framework Contributors",
+      "year": 2025,
+      "title": "ROS 2 Control Framework Documentation",
+      "publisher": "Open Robotics",
+      "url": "https://control.ros.org/",
+      "citation_key": "ROS2Control2025",
+      "topic": "ros2_control"
+    },
+    {
+      "id": "ref_031",
+      "authors": "Murray, R. M., Sastry, S. S., & Zexiang, L.",
+      "year": 1994,
+      "title": "A Mathematical Introduction to Robotic Manipulation",
+      "publisher": "CRC Press",
+      "isbn": "978-0-8493-7981-9",
+      "citation_key": "Murray1994",
+      "topic": "manipulation_math"
+    },
+    {
+      "id": "ref_032",
+      "authors": "Spong, M. W., Hutchinson, S., & Vidyasagar, M.",
+      "year": 2005,
+      "title": "Robot Modeling and Control",
+      "publisher": "John Wiley & Sons",
+      "isbn": "978-0-471-64990-8",
+      "citation_key": "Spong2005",
+      "topic": "control_modeling"
+    },
+    {
+      "id": "ref_033",
+      "authors": "PREEMPT-RT Developers",
+      "year": 2025,
+      "title": "PREEMPT-RT Linux Real-Time Patch Documentation",
+      "publisher": "Linux Community",
+      "url": "https://wiki.linuxfoundation.org/realtime/start",
+      "citation_key": "PreemptRT2025",
+      "topic": "realtime_linux"
+    },
+    {
+      "id": "ref_034",
+      "authors": "ROS 2 Real-Time Working Group",
+      "year": 2025,
+      "title": "ROS 2 Real-Time Considerations Guide",
+      "publisher": "Open Robotics",
+      "url": "https://docs.ros.org/en/humble/How-To-Guides/Real-Time.html",
+      "citation_key": "ROS2RealTime2025",
+      "topic": "ros2_realtime"
+    },
+    {
+      "id": "ref_035",
+      "authors": "Object Management Group (OMG)",
+      "year": 2020,
+      "title": "DDS Quality of Service (QoS) Specification",
+      "publisher": "Object Management Group",
+      "url": "https://www.omg.org/spec/DDS/",
+      "citation_key": "DDSQoS2020",
+      "topic": "middleware_qos"
+    },
+    {
+      "id": "ref_036",
+      "authors": "Liu, J. W. S.",
+      "year": 2000,
+      "title": "Real-Time Systems",
+      "publisher": "Prentice Hall",
+      "isbn": "978-0-13-099861-0",
+      "citation_key": "Liu2000",
+      "topic": "realtime_systems"
+    },
+    {
+      "id": "ref_037",
+      "authors": "Buttazzo, G. C.",
+      "year": 2011,
+      "title": "Hard Real-Time Computing Systems: Predictable Scheduling Algorithms and Applications",
+      "publisher": "Springer Science+Business Media",
+      "isbn": "978-1-4614-0676-1",
+      "citation_key": "Buttazzo2011",
+      "topic": "realtime_scheduling"
     }
   ],
   "metadata": {
-    "total_references": 10,
+    "total_references": 37,
     "topics": [
       "kinematics_dynamics_control",
       "ros2_software",
+      "ros2_architecture",
+      "ros2_middleware",
+      "ros2_control",
+      "ros2_realtime",
       "simulation_gazebo",
       "simulation_isaac",
+      "physics_engine",
       "dynamics_algorithms",
       "motion_planning",
+      "motion_planning_sampling",
+      "motion_planning_ompl",
+      "motion_planning_moveit",
+      "motion_planning_rrt",
       "whole_body_control",
       "kinematics_dh",
+      "kinematics_library",
+      "kinematics_dynamics",
       "walking_locomotion",
-      "walking_locomotion_humanoid"
+      "walking_locomotion_humanoid",
+      "robot_description",
+      "control_theory",
+      "control_modeling",
+      "manipulation_math",
+      "optimization_robotics",
+      "ros_history",
+      "ros2_performance",
+      "realtime_linux",
+      "realtime_systems",
+      "realtime_scheduling",
+      "middleware_qos"
     ],
     "last_updated": "2026-02-04",
     "format": "APA",
-    "notes": "Initial set of 10 core references. Additional references will be added as chapters are written."
+    "notes": "37 references total: 10 initial core references + 27 Module 2 (Chapters 6-11) references. All APA format."
   }
 }

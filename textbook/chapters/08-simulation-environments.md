@@ -3,7 +3,7 @@ chapter_id: "08"
 module: "Module 2"
 title: "Simulation Environments"
 word_count_target: 2300
-word_count_actual: 2341
+word_count_actual: 4658
 status: "draft"
 code_examples: ["chapter_08_example_01.yaml", "chapter_08_example_02.py", "chapter_08_example_03.yaml"]
 references: ["koenig2004", "gazebo11_docs", "ode_docs", "isaacs sim_docs", "collins2021"]

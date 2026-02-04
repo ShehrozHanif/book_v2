@@ -1,8 +1,7 @@
+<?xml version="1.0"?>
 <!-- Gazebo world SDF for humanoid robot with obstacles -->
 <!-- Launch with: ros2 launch gazebo_ros gazebo.launch.py world:=chapter_08_example_01.world -->
 <!-- Expected output: Gazebo opens with humanoid robot in environment with obstacles -->
-
-<?xml version="1.0"?>
 <sdf version="1.7">
   <world name="humanoid_test_world">
 

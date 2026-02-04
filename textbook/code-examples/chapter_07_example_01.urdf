@@ -1,7 +1,6 @@
+<?xml version="1.0"?>
 <!-- 2-link robotic arm with revolute joints -->
 <!-- Visualize with: ros2 launch urdf_tutorial display.launch.py model:=chapter_07_example_01.urdf -->
-
-<?xml version="1.0"?>
 <robot name="two_link_arm">
 
   <!-- Base link (fixed to world) -->

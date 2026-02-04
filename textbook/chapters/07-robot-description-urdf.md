@@ -3,7 +3,7 @@ chapter_id: "07"
 module: "Module 2"
 title: "Robot Description & URDF"
 word_count_target: 2300
-word_count_actual: 2328
+word_count_actual: 5073
 status: "draft"
 code_examples: ["chapter_07_example_01.urdf", "chapter_07_example_02.urdf", "chapter_07_example_03.py"]
 references: ["urdf_specification", "gazebo_plugins_docs", "kdl_parser", "orocos_kdl", "schoellig2020"]

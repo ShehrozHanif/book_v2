@@ -3,7 +3,7 @@ chapter_id: "11"
 module: "Module 2"
 title: "Real-time Considerations"
 word_count_target: 2300
-word_count_actual: 2294
+word_count_actual: 5069
 status: "draft"
 code_examples: ["chapter_11_example_01.py", "chapter_11_example_02.py", "chapter_11_example_03.py"]
 references: ["preempt_rt_docs", "ros2_realtime_docs", "dds_qos_spec", "liu2000", "buttazzo2011"]

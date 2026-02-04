@@ -27,21 +27,24 @@
       "description": "ROS 2 ecosystem, robot descriptions (URDF), simulation environments (Gazebo/Isaac), motion planning, control systems, and real-time considerations",
       "chapters": 6,
       "word_count_target": 13000,
-      "word_count_actual": 0,
+      "word_count_actual": 29880,
       "code_examples": 18,
-      "status": "not_started",
+      "status": "verification_in_progress",
       "priority": "P1",
       "chapters_list": [
-        {"chapter_id": 6, "title": "ROS 2 Fundamentals", "status": "not_started"},
-        {"chapter_id": 7, "title": "Robot Description & URDF", "status": "not_started"},
-        {"chapter_id": 8, "title": "Simulation Environments", "status": "not_started"},
-        {"chapter_id": 9, "title": "Motion Planning", "status": "not_started"},
-        {"chapter_id": 10, "title": "Control Systems", "status": "not_started"},
-        {"chapter_id": 11, "title": "Real-time Considerations", "status": "not_started"}
+        {"chapter_id": 6, "title": "ROS 2 Fundamentals", "status": "completed", "word_count": 3784},
+        {"chapter_id": 7, "title": "Robot Description & URDF", "status": "completed", "word_count": 5073},
+        {"chapter_id": 8, "title": "Simulation Environments", "status": "completed", "word_count": 4658},
+        {"chapter_id": 9, "title": "Motion Planning", "status": "completed", "word_count": 5273},
+        {"chapter_id": 10, "title": "Control Systems", "status": "completed", "word_count": 6023},
+        {"chapter_id": 11, "title": "Real-time Considerations", "status": "completed", "word_count": 5069}
       ],
-      "rag_status": "not_indexed",
+      "rag_status": "metadata_pending",
       "accuracy_score": null,
-      "review_status": "not_reviewed"
+      "review_status": "pending_submission",
+      "code_validation_status": "passed",
+      "reference_count": 27,
+      "last_updated": "2026-02-04"
     },
     {
       "module_id": 3,

@@ -1,7 +1,6 @@
+<?xml version="1.0"?>
 <!-- Humanoid torso with IMU sensor plugin for Gazebo -->
 <!-- Launch in Gazebo: ros2 launch gazebo_ros spawn_entity.launch.py -entity humanoid_torso -file chapter_07_example_02.urdf -->
-
-<?xml version="1.0"?>
 <robot name="humanoid_torso" xmlns:xacro="http://www.ros.org/wiki/xacro">
 
   <!-- Torso link -->

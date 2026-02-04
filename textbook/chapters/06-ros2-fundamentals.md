@@ -3,7 +3,7 @@ chapter_id: "06"
 module: "Module 2"
 title: "ROS 2 Fundamentals"
 word_count_target: 2300
-word_count_actual: 2315
+word_count_actual: 3784
 status: "draft"
 code_examples: ["chapter_06_example_01.py", "chapter_06_example_02.py", "chapter_06_example_03.py"]
 references: ["ros2_humble_docs", "dds_specification_2015", "ros2_design_2014", "maruyama2016", "quigley2009"]
