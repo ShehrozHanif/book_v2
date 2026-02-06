@@ -95,7 +95,8 @@ class OpenAIService:
         context_passages: List[str],
         conversation_history: Optional[List[Dict]] = None,
         temperature: float = 0.7,
-        max_tokens: int = 500
+        max_tokens: int = 500,
+        system_prompt: Optional[str] = None
     ) -> str:
         """Generate a response using GPT with RAG context and conversation history.
 
@@ -125,39 +126,43 @@ class OpenAIService:
             logger.warning("No context passages provided for generation")
 
         try:
-            # CRITICAL FIX #3: Check context strength and adapt prompt
-            strong_context = any(
-                len(passage) > 200 and 'not available' not in passage.lower()
-                for passage in context_passages
-            ) if context_passages else False
-
-            # CRITICAL FIX #4: Check if passages contain chapter-specific headers
-            # Even if content is mostly code, if it says "Chapter X -" it's valid content for that chapter
-            has_chapter_header = any(
-                f"Chapter {i} -" in passage or f"Chapter {i}:" in passage
-                for passage in context_passages
-                for i in range(1, 23)
-            ) if context_passages else False
-
-            if has_chapter_header or strong_context:
-                # Chapter-specific content or strong context - use comprehensive prompt
-                system_prompt = (
-                    "You are a helpful educational assistant for a Humanoid Robotics textbook. "
-                    "Use the provided passages to answer the user's question comprehensively. "
-                    "Include information from all content types in the passages: text, code examples, diagrams, and technical sections. "
-                    "Always cite your sources by chapter/module/section from the passages. "
-                    "Synthesize the information to provide a complete answer about the topic."
-                )
+            # Use custom system prompt if provided (from personalization)
+            if system_prompt:
+                final_system_prompt = system_prompt
             else:
-                # Weak context - USE the passages but acknowledge they may be limited
-                # CRITICAL FIX #6: Make weak context prompts more directive about using passages
-                system_prompt = (
-                    "You are a helpful educational assistant for a Humanoid Robotics textbook. "
-                    "Use the provided passages to answer the user's question. "
-                    "The passages may be limited or incomplete, but extract and synthesize all available information. "
-                    "Always cite the source (chapter/module) from the passages. "
-                    "Provide a helpful answer based on whatever information is available in the passages."
-                )
+                # CRITICAL FIX #3: Check context strength and adapt prompt
+                strong_context = any(
+                    len(passage) > 200 and 'not available' not in passage.lower()
+                    for passage in context_passages
+                ) if context_passages else False
+
+                # CRITICAL FIX #4: Check if passages contain chapter-specific headers
+                # Even if content is mostly code, if it says "Chapter X -" it's valid content for that chapter
+                has_chapter_header = any(
+                    f"Chapter {i} -" in passage or f"Chapter {i}:" in passage
+                    for passage in context_passages
+                    for i in range(1, 23)
+                ) if context_passages else False
+
+                if has_chapter_header or strong_context:
+                    # Chapter-specific content or strong context - use comprehensive prompt
+                    final_system_prompt = (
+                        "You are a helpful educational assistant for a Humanoid Robotics textbook. "
+                        "Use the provided passages to answer the user's question comprehensively. "
+                        "Include information from all content types in the passages: text, code examples, diagrams, and technical sections. "
+                        "Always cite your sources by chapter/module/section from the passages. "
+                        "Synthesize the information to provide a complete answer about the topic."
+                    )
+                else:
+                    # Weak context - USE the passages but acknowledge they may be limited
+                    # CRITICAL FIX #6: Make weak context prompts more directive about using passages
+                    final_system_prompt = (
+                        "You are a helpful educational assistant for a Humanoid Robotics textbook. "
+                        "Use the provided passages to answer the user's question. "
+                        "The passages may be limited or incomplete, but extract and synthesize all available information. "
+                        "Always cite the source (chapter/module) from the passages. "
+                        "Provide a helpful answer based on whatever information is available in the passages."
+                    )
 
             # Format context passages
             context_text = ""
@@ -170,7 +175,7 @@ class OpenAIService:
 
             # Build messages list
             messages = [
-                {"role": "system", "content": system_prompt}
+                {"role": "system", "content": final_system_prompt}
             ]
 
             # Add conversation history if provided

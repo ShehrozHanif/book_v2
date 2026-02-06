@@ -59,6 +59,7 @@ class ChatService:
         query: str,
         conversation_id: Optional[str] = None,
         user_id: Optional[str] = None,
+        difficulty_override: Optional[str] = None,
     ) -> ChatResponse:
         """Process user query through full RAG pipeline with safety checks.
 
@@ -76,6 +77,7 @@ class ChatService:
             query: User's question/query
             conversation_id: Optional UUID string for multi-turn conversations
             user_id: Optional UUID string for user tracking
+            difficulty_override: Optional difficulty override ('simplify' or 'advanced')
 
         Returns:
             ChatResponse with response text, retrieved passages, scores, and timing
@@ -204,13 +206,43 @@ class ChatService:
                         f"Proceeding without history."
                     )
 
-            # Step 5: Generate response with fallback on error
+            # Step 5: Generate response with personalization if user is authenticated
             try:
+                # Import personalization service
+                from src.personalization.services.personalization_service import get_personalization_service
+                personalization_service = await get_personalization_service(self.session)
+
+                # Build personalized prompt with user context
+                user_uuid = None
+                difficulty_override = None
+                if user_id:
+                    try:
+                        from uuid import UUID
+                        user_uuid = UUID(user_id)
+                    except (ValueError, TypeError):
+                        logger.warning(f"Invalid user_id format: {user_id}")
+
+                # Build context text from passages
+                context_text = "\n\n".join([f"[PASSAGE]\n{p}\n[/PASSAGE]" for p in context_passages])
+
+                # Generate personalized prompt
+                personalization_result = await personalization_service.build_personalized_prompt(
+                    query=query,
+                    retrieved_context=context_text,
+                    user_id=user_uuid,
+                    difficulty_override=difficulty_override if user_uuid else None
+                )
+
+                # Extract personalized system prompt
+                personalized_system_prompt = personalization_result.get("system_prompt")
+
+                # Generate response with personalized prompt
                 response_text = await self.generation_service.generate_response(
                     query=query,
                     context_passages=context_passages,
                     conversation_history=conversation_history if conversation_history else None,
-                    use_fallback_on_error=True
+                    use_fallback_on_error=True,
+                    system_prompt=personalized_system_prompt if user_uuid else None
                 )
                 logger.debug(f"Response generation complete ({len(response_text)} chars)")
             except Exception as gen_error:

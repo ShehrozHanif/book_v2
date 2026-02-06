@@ -407,3 +407,86 @@ async def reset_user_password(
     await db.commit()
 
     return True
+
+
+async def update_user(
+    db: AsyncSession,
+    user_id: UUID,
+    updates: Dict[str, Any]
+) -> Optional[User]:
+    """
+    Update user fields (generic update function).
+
+    Args:
+        db: Database session
+        user_id: User UUID
+        updates: Dictionary of fields to update
+
+    Returns:
+        Updated User object or None if user not found
+    """
+    user = await get_user_by_id(db, user_id)
+    if not user:
+        return None
+
+    # Update allowed fields
+    for key, value in updates.items():
+        if hasattr(user, key):
+            setattr(user, key, value)
+
+    await db.commit()
+    await db.refresh(user)
+
+    return user
+
+
+async def update_user_preferences(
+    db: AsyncSession,
+    user_id: UUID,
+    preferences: Dict[str, Any]
+) -> Optional[User]:
+    """
+    Update user learning preferences.
+
+    Args:
+        db: Database session
+        user_id: User UUID
+        preferences: Dictionary with preference updates
+
+    Returns:
+        Updated User object or None if user not found
+
+    Raises:
+        ValueError: If preferences validation fails
+    """
+    user = await get_user_by_id(db, user_id)
+    if not user:
+        return None
+
+    # Validate preference fields
+    valid_fields = {
+        "explanation_style": ["theory_first", "example_first"],
+        "code_language": ["python", "cpp", "both"],
+        "learning_pace": ["slow", "medium", "fast"],
+        "content_focus": ["simulation", "hardware", "balanced"]
+    }
+
+    for field, value in preferences.items():
+        if field not in valid_fields:
+            raise ValueError(f"Unknown preference field: {field}")
+        if value not in valid_fields[field]:
+            raise ValueError(
+                f"Invalid value for {field}: {value}. "
+                f"Valid options: {valid_fields[field]}"
+            )
+
+    # Update preferences (merge with existing)
+    if user.preferences_json is None:
+        user.preferences_json = {}
+
+    user.preferences_json.update(preferences)
+
+    await db.commit()
+    await db.refresh(user)
+
+    return user

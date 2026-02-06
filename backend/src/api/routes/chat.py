@@ -161,6 +161,10 @@ async def chat(
         personalization_service = await get_personalization_service(session)
         performance_service = await get_performance_service(session)
 
+        # DEBUG: Log service instances
+        logger.info(f"[HTTP] ChatService instance ID: {id(chat_service)}")
+        logger.info(f"[HTTP] RetrievalService instance ID: {id(chat_service.retrieval_service)}")
+
         # Step 3: Convert user_id if provided
         user_uuid = None
         if validated.user_id:
@@ -170,11 +174,12 @@ async def chat(
             except (ValueError, TypeError):
                 logger.warning(f"Invalid user_id format: {validated.user_id}")
 
-        # Step 4: Process query through RAG pipeline
+        # Step 4: Process query through RAG pipeline with personalization
         response = await chat_service.process_query(
             query=validated.query,
             conversation_id=validated.conversation_id,
-            user_id=validated.user_id
+            user_id=validated.user_id,
+            difficulty_override=validated.difficulty_override
         )
 
         # Step 5: Apply personalization to response if user authenticated
@@ -464,6 +469,166 @@ async def delete_conversation(
         status_code=status.HTTP_501_NOT_IMPLEMENTED,
         detail="Conversation deletion not yet implemented",
     )
+
+
+@router.post(
+    "/simplify",
+    response_model=dict,
+    summary="Simplify response difficulty",
+    description="Request a simplified version of the response for the current query.",
+    responses={
+        400: {"model": ErrorResponse, "description": "Invalid request"},
+        401: {"model": ErrorResponse, "description": "Unauthorized - user_id required"},
+        500: {"model": ErrorResponse, "description": "Internal server error"},
+    },
+)
+async def simplify_response(
+    request: ChatRequest,
+    http_request: Request,
+    session: AsyncSession = Depends(get_session),
+) -> dict:
+    """
+    Request a simplified version of the chatbot response.
+
+    This endpoint triggers adaptive difficulty adjustment:
+    - Tracks simplify request
+    - Adjusts user's skill level down by 10 points
+    - Reduces confidence score
+
+    Args:
+        request: ChatRequest (requires user_id)
+        http_request: FastAPI request object
+        session: Database session
+
+    Returns:
+        Dictionary with adjustment details and new difficulty level
+
+    Raises:
+        HTTPException: If user_id not provided or processing fails
+    """
+    try:
+        if not request.user_id:
+            logger.warning("Simplify request without user_id")
+            raise HTTPException(
+                status_code=status.HTTP_401_UNAUTHORIZED,
+                detail="user_id is required for difficulty adjustment"
+            )
+
+        # Get adaptive difficulty service
+        from src.personalization.services.adaptive_difficulty_service import (
+            get_adaptive_difficulty_service
+        )
+        from uuid import UUID
+
+        try:
+            user_uuid = UUID(request.user_id)
+        except (ValueError, TypeError):
+            logger.warning(f"Invalid user_id format: {request.user_id}")
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST,
+                detail="Invalid user_id format"
+            )
+
+        adaptive_service = await get_adaptive_difficulty_service(session)
+        result = await adaptive_service.track_simplify_request(user_uuid)
+
+        if not result.get("success"):
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST,
+                detail=result.get("message", "Failed to adjust difficulty")
+            )
+
+        logger.info(f"Difficulty simplified for user {request.user_id}")
+        return result
+
+    except HTTPException:
+        raise
+    except Exception as e:
+        logger.error(f"Error in simplify endpoint: {str(e)}", exc_info=True)
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail="Failed to process difficulty adjustment"
+        )
+
+
+@router.post(
+    "/advanced",
+    response_model=dict,
+    summary="Increase response difficulty",
+    description="Request a more advanced version of the response for the current query.",
+    responses={
+        400: {"model": ErrorResponse, "description": "Invalid request"},
+        401: {"model": ErrorResponse, "description": "Unauthorized - user_id required"},
+        500: {"model": ErrorResponse, "description": "Internal server error"},
+    },
+)
+async def advanced_response(
+    request: ChatRequest,
+    http_request: Request,
+    session: AsyncSession = Depends(get_session),
+) -> dict:
+    """
+    Request a more advanced version of the chatbot response.
+
+    This endpoint triggers adaptive difficulty adjustment:
+    - Tracks advanced request
+    - Adjusts user's skill level up by 10 points
+    - Increases confidence score
+
+    Args:
+        request: ChatRequest (requires user_id)
+        http_request: FastAPI request object
+        session: Database session
+
+    Returns:
+        Dictionary with adjustment details and new difficulty level
+
+    Raises:
+        HTTPException: If user_id not provided or processing fails
+    """
+    try:
+        if not request.user_id:
+            logger.warning("Advanced request without user_id")
+            raise HTTPException(
+                status_code=status.HTTP_401_UNAUTHORIZED,
+                detail="user_id is required for difficulty adjustment"
+            )
+
+        # Get adaptive difficulty service
+        from src.personalization.services.adaptive_difficulty_service import (
+            get_adaptive_difficulty_service
+        )
+        from uuid import UUID
+
+        try:
+            user_uuid = UUID(request.user_id)
+        except (ValueError, TypeError):
+            logger.warning(f"Invalid user_id format: {request.user_id}")
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST,
+                detail="Invalid user_id format"
+            )
+
+        adaptive_service = await get_adaptive_difficulty_service(session)
+        result = await adaptive_service.track_advanced_request(user_uuid)
+
+        if not result.get("success"):
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST,
+                detail=result.get("message", "Failed to adjust difficulty")
+            )
+
+        logger.info(f"Difficulty increased for user {request.user_id}")
+        return result
+
+    except HTTPException:
+        raise
+    except Exception as e:
+        logger.error(f"Error in advanced endpoint: {str(e)}", exc_info=True)
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail="Failed to process difficulty adjustment"
+        )
 
 
 @router.get(
