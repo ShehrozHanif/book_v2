@@ -289,6 +289,31 @@ class PersonalizationApi {
 
     return this.handleResponse(response);
   }
+
+  // Privacy endpoints
+  async getPrivacyPolicy(userId: string): Promise<{
+    title: string;
+    last_updated: string;
+    content: string;
+  }> {
+    const response = await fetch(`${API_BASE_URL}/users/${userId}/privacy-policy`, {
+      headers: this.getHeaders(),
+    });
+
+    return this.handleResponse(response);
+  }
+
+  async getTermsOfService(userId: string): Promise<{
+    title: string;
+    last_updated: string;
+    content: string;
+  }> {
+    const response = await fetch(`${API_BASE_URL}/users/${userId}/terms-of-service`, {
+      headers: this.getHeaders(),
+    });
+
+    return this.handleResponse(response);
+  }
 }
 
 // Export singleton instance
