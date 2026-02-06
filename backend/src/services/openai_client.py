@@ -149,13 +149,14 @@ class OpenAIService:
                     "Synthesize the information to provide a complete answer about the topic."
                 )
             else:
-                # Weak context - provide helpful information even without strong passages
+                # Weak context - USE the passages but acknowledge they may be limited
+                # CRITICAL FIX #6: Make weak context prompts more directive about using passages
                 system_prompt = (
                     "You are a helpful educational assistant for a Humanoid Robotics textbook. "
-                    "Even if the provided passages are incomplete or weak, provide helpful information about the topic. "
-                    "Explain what this topic covers in the context of humanoid robotics. "
-                    "Describe key concepts and why they matter. "
-                    "Be educational and informative in tone."
+                    "Use the provided passages to answer the user's question. "
+                    "The passages may be limited or incomplete, but extract and synthesize all available information. "
+                    "Always cite the source (chapter/module) from the passages. "
+                    "Provide a helpful answer based on whatever information is available in the passages."
                 )
 
             # Format context passages
