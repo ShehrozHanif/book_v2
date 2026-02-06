@@ -111,9 +111,10 @@ class RetrievalService:
         # Detect if query is asking about a specific chapter
         target_chapter = self.extract_chapter_number(query)
 
-        # CRITICAL FIX #2: For bare "Chapter X" queries, use LOWER threshold
-        is_bare_query = len(query.strip().split()) <= 2 and target_chapter
-        threshold = 0.15 if is_bare_query else self.min_relevance
+        # CRITICAL FIX #2: For any "Chapter X" queries, use LOWER threshold
+        # This applies to both bare queries ("Chapter 5") and extended queries ("Tell me about chapter 5")
+        has_chapter_query = target_chapter is not None
+        threshold = 0.15 if has_chapter_query else self.min_relevance
 
         # Filter by adaptive threshold
         filtered = [
@@ -121,8 +122,8 @@ class RetrievalService:
             if p.get("score", 0) >= threshold
         ]
 
-        if is_bare_query:
-            logger.info(f"[RETRIEVAL] Bare query threshold reduced: {threshold} (from {self.min_relevance})")
+        if has_chapter_query:
+            logger.info(f"[RETRIEVAL] Chapter query threshold reduced: {threshold} (from {self.min_relevance})")
 
         # If a specific chapter was detected, prioritize passages from that chapter
         if target_chapter:
