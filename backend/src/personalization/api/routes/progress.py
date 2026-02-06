@@ -2,7 +2,8 @@
 
 from typing import List, Optional, Dict, Any
 from uuid import UUID
-from fastapi import APIRouter, Depends, HTTPException, status
+from fastapi import APIRouter, Depends, HTTPException, status, Response
+from fastapi.responses import StreamingResponse
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from src.database.connection import get_session as get_db
@@ -15,6 +16,7 @@ from src.personalization.services import progress_service
 from src.personalization.services.achievement_service import (
     get_achievement_service, ACHIEVEMENTS_CONFIG
 )
+from src.personalization.services.badge_service import get_badge_service
 from src.personalization.api.dependencies import get_current_user
 
 router = APIRouter(prefix="/api/v1/progress", tags=["progress"])
@@ -679,4 +681,154 @@ async def get_user_achievements(
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
             detail=f"Failed to get achievements: {str(e)}"
+        )
+
+
+@router.get("/{user_id}/achievements/{achievement_id}/badge", response_class=Response)
+async def get_achievement_badge(
+    user_id: UUID,
+    achievement_id: str,
+    current_user: User = Depends(get_current_user),
+    db: AsyncSession = Depends(get_db),
+    format: str = "png"
+):
+    """
+    Get achievement badge as PNG or base64.
+
+    Args:
+        user_id: User ID (must match current user)
+        achievement_id: Achievement ID (e.g., "ch_1_complete")
+        current_user: Current authenticated user
+        db: Database session
+        format: Output format - "png" for PNG file download, "base64" for base64 string
+
+    Returns:
+        PNG image or JSON with base64 string
+
+    Raises:
+        HTTPException 403: If user_id doesn't match current user
+        HTTPException 404: If achievement not found
+    """
+    # Verify user is accessing their own badges
+    if str(current_user.user_id) != str(user_id):
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="Cannot access other users' badges"
+        )
+
+    try:
+        # Get achievement data
+        if achievement_id not in ACHIEVEMENTS_CONFIG:
+            raise HTTPException(
+                status_code=status.HTTP_404_NOT_FOUND,
+                detail=f"Achievement {achievement_id} not found"
+            )
+
+        achievement_data = ACHIEVEMENTS_CONFIG[achievement_id].copy()
+        achievement_data["earned_date"] = "2026-02-06"  # Placeholder date
+
+        # Generate badge
+        badge_service = await get_badge_service()
+        badge_bytes = badge_service.generate_badge(achievement_data, format="bytes")
+
+        if not badge_bytes:
+            raise HTTPException(
+                status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+                detail="Failed to generate badge"
+            )
+
+        # Return based on format
+        if format == "base64":
+            import base64
+            badge_base64 = base64.b64encode(badge_bytes).decode("utf-8")
+            return {"badge": badge_base64}
+        else:
+            # Return PNG file
+            return Response(
+                content=badge_bytes,
+                media_type="image/png",
+                headers={"Content-Disposition": f"attachment; filename={achievement_id}.png"}
+            )
+
+    except HTTPException:
+        raise
+    except Exception as e:
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=f"Failed to get badge: {str(e)}"
+        )
+
+
+@router.get("/{user_id}/achievements/{achievement_id}/badge-with-points", response_class=Response)
+async def get_achievement_badge_with_points(
+    user_id: UUID,
+    achievement_id: str,
+    current_user: User = Depends(get_current_user),
+    db: AsyncSession = Depends(get_db),
+    format: str = "png"
+):
+    """
+    Get achievement badge with points display as PNG or base64.
+
+    Args:
+        user_id: User ID (must match current user)
+        achievement_id: Achievement ID (e.g., "ch_1_complete")
+        current_user: Current authenticated user
+        db: Database session
+        format: Output format - "png" for PNG file download, "base64" for base64 string
+
+    Returns:
+        PNG image with points or JSON with base64 string
+
+    Raises:
+        HTTPException 403: If user_id doesn't match current user
+        HTTPException 404: If achievement not found
+    """
+    # Verify user is accessing their own badges
+    if str(current_user.user_id) != str(user_id):
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="Cannot access other users' badges"
+        )
+
+    try:
+        # Get achievement data
+        if achievement_id not in ACHIEVEMENTS_CONFIG:
+            raise HTTPException(
+                status_code=status.HTTP_404_NOT_FOUND,
+                detail=f"Achievement {achievement_id} not found"
+            )
+
+        achievement_data = ACHIEVEMENTS_CONFIG[achievement_id].copy()
+        achievement_data["earned_date"] = "2026-02-06"  # Placeholder date
+
+        # Generate badge with points
+        badge_service = await get_badge_service()
+        badge_bytes = badge_service.generate_badge_with_points(achievement_data, format="bytes")
+
+        if not badge_bytes:
+            raise HTTPException(
+                status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+                detail="Failed to generate badge"
+            )
+
+        # Return based on format
+        if format == "base64":
+            import base64
+            badge_base64 = base64.b64encode(badge_bytes).decode("utf-8")
+            return {"badge": badge_base64}
+        else:
+            # Return PNG file
+            return Response(
+                content=badge_bytes,
+                media_type="image/png",
+                headers={"Content-Disposition": f"attachment; filename={achievement_id}_with_points.png"}
+            )
+
+    except HTTPException:
+        raise
+    except Exception as e:
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=f"Failed to get badge: {str(e)}"
         )
