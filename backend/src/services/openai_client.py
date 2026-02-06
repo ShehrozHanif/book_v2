@@ -131,14 +131,22 @@ class OpenAIService:
                 for passage in context_passages
             ) if context_passages else False
 
-            if strong_context:
-                # Normal case - strong context available
+            # CRITICAL FIX #4: Check if passages contain chapter-specific headers
+            # Even if content is mostly code, if it says "Chapter X -" it's valid content for that chapter
+            has_chapter_header = any(
+                f"Chapter {i} -" in passage or f"Chapter {i}:" in passage
+                for passage in context_passages
+                for i in range(1, 23)
+            ) if context_passages else False
+
+            if has_chapter_header or strong_context:
+                # Chapter-specific content or strong context - use comprehensive prompt
                 system_prompt = (
                     "You are a helpful educational assistant for a Humanoid Robotics textbook. "
-                    "Answer questions based ONLY on the provided textbook passages. "
-                    "If you don't know the answer based on the passages, say so clearly. "
-                    "Always cite your sources by referencing [Module: X, Chapter: Y, Section: Z] "
-                    "from the passages provided. Be concise and educational in tone."
+                    "Use the provided passages to answer the user's question comprehensively. "
+                    "Include information from all content types in the passages: text, code examples, diagrams, and technical sections. "
+                    "Always cite your sources by chapter/module/section from the passages. "
+                    "Synthesize the information to provide a complete answer about the topic."
                 )
             else:
                 # Weak context - provide helpful information even without strong passages
@@ -171,7 +179,9 @@ class OpenAIService:
             # Build user message with context
             user_message = f"Question: {query}"
             if context_text:
-                user_message = f"Provided passages:\n{context_text}\n\n{user_message}"
+                # CRITICAL FIX #5: Add explicit instruction that passages should be treated as valid content
+                # This helps LLM recognize code-heavy passages from target chapters
+                user_message = f"Provided passages:\n{context_text}\n\nPlease answer based on the passages above. If the passages are from the requested chapter or topic, use their content (including code examples and technical sections) as valid information for your answer.\n\n{user_message}"
 
             messages.append({"role": "user", "content": user_message})
 
