@@ -283,6 +283,76 @@ async def get_learning_statistics(
         )
 
 
+@router.get("/users/{user_id}/progress/{chapter_id}/advanced-challenges", response_model=Dict[str, Any])
+async def get_advanced_challenges(
+    user_id: UUID,
+    chapter_id: int,
+    current_user: User = Depends(get_current_user),
+    db: AsyncSession = Depends(get_db)
+):
+    """
+    Get advanced challenges for high mastery chapters (>85% mastery).
+
+    Advanced challenges include research paper summaries and advanced practice questions.
+
+    Args:
+        user_id: User ID (must match current user)
+        chapter_id: Chapter ID (1-22)
+        current_user: Current authenticated user
+        db: Database session
+
+    Returns:
+        Response with advanced questions and research papers, or 404 if not eligible
+
+    Raises:
+        HTTPException 403: If user_id doesn't match current user
+        HTTPException 400: If chapter_id is invalid
+        HTTPException 404: If user is not eligible (mastery <= 85%)
+    """
+    # Verify user is accessing their own progress
+    if str(current_user.user_id) != str(user_id):
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="Cannot access other users' advanced challenges"
+        )
+
+    # Validate chapter_id
+    if not (1 <= chapter_id <= 22):
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Chapter ID must be between 1 and 22"
+        )
+
+    try:
+        practice_svc = await get_practice_service(db)
+        challenges = await practice_svc.get_advanced_challenges(user_id, chapter_id)
+
+        if not challenges:
+            raise HTTPException(
+                status_code=status.HTTP_404_NOT_FOUND,
+                detail="User is not eligible for advanced challenges (mastery score must be > 85%)"
+            )
+
+        return {
+            "chapter_id": challenges["chapter_id"],
+            "user_mastery": challenges["user_mastery"],
+            "advanced_questions": challenges["advanced_questions"],
+            "research_papers": challenges["research_papers"],
+            "challenge_type": challenges["challenge_type"],
+            "total_questions": challenges["total_questions"],
+            "total_papers": challenges["total_papers"],
+            "timestamp": datetime.utcnow().isoformat()
+        }
+
+    except HTTPException:
+        raise
+    except Exception as e:
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=f"Failed to get advanced challenges: {str(e)}"
+        )
+
+
 def calculate_improvement_rate(progress_data: list) -> float:
     """
     Calculate weekly improvement rate based on mastery scores.
