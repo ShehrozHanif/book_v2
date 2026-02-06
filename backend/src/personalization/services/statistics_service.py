@@ -1,6 +1,7 @@
 """Statistics service for learning analytics and progress visualization."""
 
 import logging
+import statistics as stats_module
 from typing import Dict, List, Any, Tuple
 from datetime import datetime, timedelta
 from uuid import UUID
@@ -272,6 +273,147 @@ class StatisticsService:
             ]
         }
 
+    async def calculate_advanced_learning_curve(
+        self,
+        user_id: UUID,
+        max_snapshots: int = 50
+    ) -> Dict[str, Any]:
+        """
+        Calculate advanced learning curve with skill snapshots over time.
+
+        Args:
+            user_id: User ID
+            max_snapshots: Maximum number of snapshots to include
+
+        Returns:
+            Dict with skill_snapshots and improvement metrics
+
+        Metrics:
+            - skill_snapshots: List of {timestamp, skill_level} pairs
+            - improvement_rate_per_week: Points per week improvement
+            - average_skill_level: Mean mastery score
+            - skill_std_dev: Standard deviation of scores
+            - trend: "improving", "plateau", "declining"
+        """
+        # Get user's progress sorted by chapter_id (proxy for time)
+        result = await self.db.execute(
+            select(Progress)
+            .where(Progress.user_id == user_id)
+            .order_by(Progress.chapter_id)
+        )
+        progress_records = list(result.scalars().all())
+
+        if not progress_records:
+            return {
+                "skill_snapshots": [],
+                "improvement_rate_per_week": 0.0,
+                "average_skill_level": 0.0,
+                "skill_std_dev": 0.0,
+                "trend": "insufficient_data",
+                "total_snapshots": 0
+            }
+
+        # Extract mastery scores
+        mastery_scores = [p.mastery_score for p in progress_records if p.mastery_score >= 0]
+
+        if not mastery_scores:
+            return {
+                "skill_snapshots": [],
+                "improvement_rate_per_week": 0.0,
+                "average_skill_level": 0.0,
+                "skill_std_dev": 0.0,
+                "trend": "insufficient_data",
+                "total_snapshots": 0
+            }
+
+        # Calculate snapshots (limit to max_snapshots)
+        step = max(1, len(progress_records) // max_snapshots) if len(progress_records) > max_snapshots else 1
+        skill_snapshots = [
+            {
+                "timestamp": progress_records[i].created_at.isoformat() if progress_records[i].created_at else "",
+                "skill_level": progress_records[i].mastery_score,
+                "chapter_id": progress_records[i].chapter_id
+            }
+            for i in range(0, len(progress_records), step)
+        ]
+
+        # Calculate statistics
+        avg_skill = stats_module.mean(mastery_scores)
+        std_dev = stats_module.stdev(mastery_scores) if len(mastery_scores) > 1 else 0.0
+
+        # Calculate improvement rate
+        improvement_rate = self._calculate_improvement_rate(mastery_scores)
+
+        # Detect trend
+        trend = self._detect_trend(mastery_scores)
+
+        return {
+            "skill_snapshots": skill_snapshots,
+            "improvement_rate_per_week": improvement_rate,
+            "average_skill_level": round(avg_skill, 1),
+            "skill_std_dev": round(std_dev, 2),
+            "trend": trend,
+            "total_snapshots": len(skill_snapshots)
+        }
+
+    async def detect_plateaus_and_regressions(
+        self,
+        user_id: UUID,
+        plateau_threshold: int = 3,
+        regression_threshold: float = 10.0
+    ) -> Dict[str, Any]:
+        """
+        Detect learning plateaus and regressions in user's progress.
+
+        Args:
+            user_id: User ID
+            plateau_threshold: Number of consecutive chapters with similar scores to detect plateau
+            regression_threshold: Minimum point drop to detect regression
+
+        Returns:
+            Dict with plateau and regression analysis
+
+        Metrics:
+            - plateaus: List of {start_chapter, end_chapter, avg_score, duration}
+            - regressions: List of {from_chapter, to_chapter, score_drop, severity}
+            - current_status: "improving", "plateau", "regression"
+        """
+        # Get user's progress
+        result = await self.db.execute(
+            select(Progress)
+            .where(Progress.user_id == user_id)
+            .order_by(Progress.chapter_id)
+        )
+        progress_records = list(result.scalars().all())
+
+        if len(progress_records) < plateau_threshold:
+            return {
+                "plateaus": [],
+                "regressions": [],
+                "current_status": "insufficient_data",
+                "plateau_count": 0,
+                "regression_count": 0
+            }
+
+        plateaus = self._find_plateaus(progress_records, plateau_threshold)
+        regressions = self._find_regressions(progress_records, regression_threshold)
+
+        # Determine current status
+        if regressions:
+            current_status = "regression"
+        elif plateaus:
+            current_status = "plateau"
+        else:
+            current_status = "improving"
+
+        return {
+            "plateaus": plateaus,
+            "regressions": regressions,
+            "current_status": current_status,
+            "plateau_count": len(plateaus),
+            "regression_count": len(regressions)
+        }
+
     async def get_comprehensive_statistics(self, user_id: UUID) -> Dict[str, Any]:
         """
         Get comprehensive user statistics for dashboard.
@@ -298,6 +440,147 @@ class StatisticsService:
             "achievements": achievements,
             "generated_at": datetime.utcnow().isoformat()
         }
+
+    def _calculate_improvement_rate(self, mastery_scores: List[int]) -> float:
+        """
+        Calculate weekly improvement rate.
+
+        Args:
+            mastery_scores: List of mastery scores over time
+
+        Returns:
+            Improvement rate (points per week)
+        """
+        if len(mastery_scores) < 2:
+            return 0.0
+
+        first_score = mastery_scores[0]
+        last_score = mastery_scores[-1]
+        total_improvement = last_score - first_score
+        num_chapters = len(mastery_scores)
+
+        # Assume 1 chapter per day = 7 chapters per week
+        weeks_equivalent = num_chapters / 7.0
+        if weeks_equivalent > 0:
+            return round(total_improvement / weeks_equivalent, 2)
+        return 0.0
+
+    def _detect_trend(self, mastery_scores: List[int]) -> str:
+        """
+        Detect overall trend in mastery scores.
+
+        Args:
+            mastery_scores: List of mastery scores
+
+        Returns:
+            "improving", "declining", "plateau", or "insufficient_data"
+        """
+        if len(mastery_scores) < 3:
+            return "insufficient_data"
+
+        # Split into first third, middle third, last third
+        third = len(mastery_scores) // 3
+        if third == 0:
+            return "insufficient_data"
+
+        first_avg = stats_module.mean(mastery_scores[:third]) if third > 0 else mastery_scores[0]
+        last_avg = stats_module.mean(mastery_scores[-third:]) if third > 0 else mastery_scores[-1]
+
+        improvement = last_avg - first_avg
+
+        if improvement > 5:
+            return "improving"
+        elif improvement < -5:
+            return "declining"
+        else:
+            return "plateau"
+
+    def _find_plateaus(
+        self,
+        progress_records: List,
+        threshold: int = 3
+    ) -> List[Dict[str, Any]]:
+        """
+        Find consecutive chapters with similar mastery scores (plateaus).
+
+        Args:
+            progress_records: List of progress records
+            threshold: Number of consecutive similar scores to detect plateau
+
+        Returns:
+            List of plateau periods
+        """
+        plateaus = []
+        plateau_start = 0
+        plateau_scores = [progress_records[0].mastery_score]
+
+        for i in range(1, len(progress_records)):
+            current_score = progress_records[i].mastery_score
+            prev_score = progress_records[i - 1].mastery_score
+
+            # Check if scores are within 5 points (similar)
+            if abs(current_score - prev_score) <= 5:
+                plateau_scores.append(current_score)
+            else:
+                # Plateau ended, check if it was long enough
+                if len(plateau_scores) >= threshold:
+                    plateau_avg = stats_module.mean(plateau_scores)
+                    plateaus.append({
+                        "start_chapter": progress_records[plateau_start].chapter_id,
+                        "end_chapter": progress_records[i - 1].chapter_id,
+                        "avg_score": round(plateau_avg, 1),
+                        "duration": len(plateau_scores)
+                    })
+                # Reset for new potential plateau
+                plateau_start = i
+                plateau_scores = [current_score]
+
+        # Check last plateau
+        if len(plateau_scores) >= threshold:
+            plateau_avg = stats_module.mean(plateau_scores)
+            plateaus.append({
+                "start_chapter": progress_records[plateau_start].chapter_id,
+                "end_chapter": progress_records[-1].chapter_id,
+                "avg_score": round(plateau_avg, 1),
+                "duration": len(plateau_scores)
+            })
+
+        return plateaus
+
+    def _find_regressions(
+        self,
+        progress_records: List,
+        threshold: float = 10.0
+    ) -> List[Dict[str, Any]]:
+        """
+        Find significant drops in mastery scores (regressions).
+
+        Args:
+            progress_records: List of progress records
+            threshold: Minimum points drop to detect regression
+
+        Returns:
+            List of regression events
+        """
+        regressions = []
+
+        for i in range(1, len(progress_records)):
+            current_score = progress_records[i].mastery_score
+            prev_score = progress_records[i - 1].mastery_score
+            score_drop = prev_score - current_score
+
+            if score_drop >= threshold:
+                severity = "severe" if score_drop >= 20 else "moderate"
+                regressions.append({
+                    "from_chapter": progress_records[i - 1].chapter_id,
+                    "to_chapter": progress_records[i].chapter_id,
+                    "score_drop": score_drop,
+                    "severity": severity,
+                    "previous_score": prev_score,
+                    "current_score": current_score
+                })
+
+        return regressions
 
 
 async def get_statistics_service(db: AsyncSession) -> StatisticsService:
