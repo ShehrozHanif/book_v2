@@ -2,11 +2,12 @@
 
 from typing import List, Dict, Any, Optional
 from uuid import UUID
-from datetime import datetime
+from datetime import datetime, timedelta
 from sqlalchemy import select, and_, func
 from sqlalchemy.ext.asyncio import AsyncSession
+import re
 
-from src.personalization.models.db_models import Progress, LearningPath, User
+from src.personalization.models.db_models import Progress, LearningPath, User, Achievement
 
 
 async def start_chapter(
@@ -431,3 +432,434 @@ async def suggest_next_chapter(
         }
 
     return None
+
+
+async def mark_chapter_complete(
+    db: AsyncSession,
+    user_id: UUID,
+    chapter_id: int
+) -> Progress:
+    """
+    Mark a chapter as complete (convenience method without mastery score).
+
+    Args:
+        db: Database session
+        user_id: User ID
+        chapter_id: Chapter ID (1-22)
+
+    Returns:
+        Updated Progress record
+
+    Note:
+        Uses default mastery score of 80 if not provided.
+        For custom mastery score, use complete_chapter instead.
+    """
+    return await complete_chapter(
+        db=db,
+        user_id=user_id,
+        chapter_id=chapter_id,
+        mastery_score=80
+    )
+
+
+async def get_chapter_progress(
+    db: AsyncSession,
+    user_id: UUID,
+    chapter_id: int
+) -> Optional[Progress]:
+    """
+    Get progress for a specific chapter.
+
+    Args:
+        db: Database session
+        user_id: User ID
+        chapter_id: Chapter ID
+
+    Returns:
+        Progress record with mastery_score, time_spent, practice_attempts or None
+    """
+    result = await db.execute(
+        select(Progress).where(
+            and_(
+                Progress.user_id == user_id,
+                Progress.chapter_id == chapter_id
+            )
+        )
+    )
+    return result.scalar_one_or_none()
+
+
+async def get_user_progress_summary(
+    db: AsyncSession,
+    user_id: UUID
+) -> Dict[str, Any]:
+    """
+    Get user's overall progress summary.
+
+    Args:
+        db: Database session
+        user_id: User ID
+
+    Returns:
+        Dict with:
+        - chapters_completed: List[int]
+        - total_time: int (seconds)
+        - mastery_scores: Dict[int, int] (chapter_id -> mastery_score)
+    """
+    progress_records = await get_user_progress(db, user_id)
+
+    completed_chapters = [
+        p.chapter_id for p in progress_records
+        if p.completion_status == "completed"
+    ]
+
+    total_time = sum(p.time_spent_seconds for p in progress_records)
+
+    mastery_scores = {
+        p.chapter_id: p.mastery_score
+        for p in progress_records
+        if p.mastery_score > 0
+    }
+
+    return {
+        "chapters_completed": completed_chapters,
+        "total_time": total_time,
+        "mastery_scores": mastery_scores
+    }
+
+
+async def calculate_mastery_score(
+    db: AsyncSession,
+    user_id: UUID,
+    chapter_id: int,
+    correct_answers: int,
+    total_questions: int,
+    time_spent_seconds: int
+) -> int:
+    """
+    Calculate mastery score for a chapter (0-100).
+
+    Args:
+        db: Database session
+        user_id: User ID
+        chapter_id: Chapter ID
+        correct_answers: Number of correct answers
+        total_questions: Total questions answered
+        time_spent_seconds: Time spent on chapter
+
+    Returns:
+        Mastery score (0-100)
+
+    Formula:
+        - Base: (correct_answers / total_questions) * 100
+        - Time bonus: Up to 10 points if time < average (1800s = 30 min)
+        - Practice efficiency: (1 / practice_attempts) * 10 bonus points
+        - Max: 100 points, Min: 0 points
+    """
+    if total_questions == 0:
+        return 0
+
+    # Base score from correct answers
+    base_score = (correct_answers / total_questions) * 100
+
+    # Time bonus (faster than 30 minutes gets bonus)
+    average_time = 1800  # 30 minutes
+    time_bonus = 0
+    if time_spent_seconds < average_time and time_spent_seconds > 0:
+        time_ratio = 1 - (time_spent_seconds / average_time)
+        time_bonus = min(10, time_ratio * 10)
+
+    # Practice efficiency bonus
+    progress = await get_chapter_progress(db, user_id, chapter_id)
+    practice_bonus = 0
+    if progress and progress.practice_attempts > 0:
+        practice_bonus = min(10, 10 / progress.practice_attempts)
+
+    # Calculate final score
+    final_score = base_score + time_bonus + practice_bonus
+
+    # Clamp to 0-100 range
+    return max(0, min(100, int(final_score)))
+
+
+async def update_time_spent(
+    db: AsyncSession,
+    user_id: UUID,
+    chapter_id: int,
+    seconds_added: int
+) -> Progress:
+    """
+    Update time spent on a chapter.
+
+    Args:
+        db: Database session
+        user_id: User ID
+        chapter_id: Chapter ID
+        seconds_added: Seconds to add to time_spent
+
+    Returns:
+        Updated Progress record
+    """
+    return await track_time(
+        db=db,
+        user_id=user_id,
+        chapter_id=chapter_id,
+        time_spent_seconds=seconds_added
+    )
+
+
+def detect_chapter_from_conversation(conversation_text: str) -> Optional[int]:
+    """
+    Detect chapter ID from conversation text.
+
+    Args:
+        conversation_text: User's conversation/query text
+
+    Returns:
+        Chapter ID (1-22) if detected, None otherwise
+
+    Detection patterns:
+        - "Chapter X"
+        - "Ch X"
+        - "chapter X"
+        - "Ch. X"
+    """
+    if not conversation_text:
+        return None
+
+    # Pattern: Chapter X, Ch X, Ch. X (case insensitive)
+    patterns = [
+        r'\bchapter\s+(\d+)\b',
+        r'\bch\.?\s+(\d+)\b',
+    ]
+
+    for pattern in patterns:
+        match = re.search(pattern, conversation_text, re.IGNORECASE)
+        if match:
+            chapter_id = int(match.group(1))
+            if 1 <= chapter_id <= 22:
+                return chapter_id
+
+    return None
+
+
+async def update_skill_level(
+    db: AsyncSession,
+    user_id: UUID
+) -> int:
+    """
+    Update user's skill level based on average mastery across completed chapters.
+
+    Args:
+        db: Database session
+        user_id: User ID
+
+    Returns:
+        Updated skill level (0-100)
+    """
+    # Get user
+    result = await db.execute(
+        select(User).where(User.user_id == user_id)
+    )
+    user = result.scalar_one_or_none()
+
+    if not user:
+        return 50  # Default
+
+    # Get completed progress
+    progress_records = await db.execute(
+        select(Progress).where(
+            and_(
+                Progress.user_id == user_id,
+                Progress.completion_status == "completed"
+            )
+        )
+    )
+    completed = list(progress_records.scalars().all())
+
+    if not completed:
+        return user.skill_level
+
+    # Calculate average mastery
+    avg_mastery = sum(p.mastery_score for p in completed) / len(completed)
+
+    # Update user skill level
+    user.skill_level = int(avg_mastery)
+    await db.commit()
+    await db.refresh(user)
+
+    return user.skill_level
+
+
+async def award_xp_for_chapter(
+    db: AsyncSession,
+    user_id: UUID,
+    chapter_id: int
+) -> int:
+    """
+    Award XP for completing a chapter.
+
+    Args:
+        db: Database session
+        user_id: User ID
+        chapter_id: Chapter ID
+
+    Returns:
+        XP earned (50 points per chapter)
+    """
+    # XP is derived from mastery scores in achievements
+    # For now, return fixed amount
+    return 50
+
+
+async def calculate_estimated_completion_date(
+    db: AsyncSession,
+    user_id: UUID,
+    path_id: UUID
+) -> Optional[str]:
+    """
+    Calculate estimated completion date for a learning path.
+
+    Args:
+        db: Database session
+        user_id: User ID
+        path_id: Learning path ID
+
+    Returns:
+        ISO format date string or None
+
+    Algorithm:
+        - Get average time per completed chapter
+        - Multiply by remaining chapters
+        - Add to current date
+    """
+    from src.personalization.services.learning_path_service import get_learning_path_by_id
+
+    path = await get_learning_path_by_id(db, path_id)
+    if not path:
+        return None
+
+    # Get user's completed progress
+    progress_records = await get_user_progress(db, user_id)
+    completed = [p for p in progress_records if p.completion_status == "completed"]
+
+    if not completed:
+        # No data, estimate 30 min per chapter
+        avg_time_per_chapter = 1800
+    else:
+        total_time = sum(p.time_spent_seconds for p in completed)
+        avg_time_per_chapter = total_time / len(completed)
+
+    # Count remaining chapters in path
+    completed_chapter_ids = {p.chapter_id for p in completed}
+    remaining_chapters = [
+        ch for ch in path.chapters_array
+        if ch not in completed_chapter_ids
+    ]
+
+    if not remaining_chapters:
+        return datetime.utcnow().isoformat()
+
+    # Calculate estimated time
+    estimated_seconds = len(remaining_chapters) * avg_time_per_chapter
+    estimated_days = estimated_seconds / (3600 * 24)  # Convert to days
+
+    # Add to current date
+    completion_date = datetime.utcnow() + timedelta(days=estimated_days)
+
+    return completion_date.date().isoformat()
+
+
+async def get_learning_streak(
+    db: AsyncSession,
+    user_id: UUID
+) -> int:
+    """
+    Get user's learning streak (consecutive days).
+
+    Args:
+        db: Database session
+        user_id: User ID
+
+    Returns:
+        Number of consecutive days with activity
+    """
+    # Get all progress records ordered by last access
+    result = await db.execute(
+        select(Progress)
+        .where(Progress.user_id == user_id)
+        .order_by(Progress.last_accessed_at.desc())
+    )
+    progress_records = list(result.scalars().all())
+
+    if not progress_records:
+        return 0
+
+    # Track unique days with activity
+    activity_dates = sorted(
+        {p.last_accessed_at.date() for p in progress_records if p.last_accessed_at},
+        reverse=True
+    )
+
+    if not activity_dates:
+        return 0
+
+    # Calculate streak
+    streak = 1
+    current_date = activity_dates[0]
+
+    for i in range(1, len(activity_dates)):
+        prev_date = activity_dates[i]
+        if (current_date - prev_date).days == 1:
+            streak += 1
+            current_date = prev_date
+        else:
+            break
+
+    return streak
+
+
+async def reset_chapter_progress(
+    db: AsyncSession,
+    user_id: UUID,
+    chapter_id: int
+) -> Optional[Progress]:
+    """
+    Reset chapter progress to allow for retry.
+
+    Args:
+        db: Database session
+        user_id: User ID
+        chapter_id: Chapter ID (1-22)
+
+    Returns:
+        Updated Progress record or None if not found
+
+    Note:
+        Resets completion_status to 'in_progress' and clears practice attempt history.
+    """
+    result = await db.execute(
+        select(Progress).where(
+            and_(
+                Progress.user_id == user_id,
+                Progress.chapter_id == chapter_id
+            )
+        )
+    )
+    progress = result.scalar_one_or_none()
+
+    if not progress:
+        return None
+
+    # Reset progress
+    progress.completion_status = "in_progress"
+    progress.mastery_score = 0
+    progress.time_spent_seconds = 0
+    progress.practice_attempts = 0
+    progress.highest_practice_score = 0
+    progress.last_accessed_at = datetime.utcnow()
+
+    await db.commit()
+    await db.refresh(progress)
+
+    return progress
