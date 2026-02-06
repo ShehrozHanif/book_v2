@@ -601,3 +601,82 @@ async def get_chapter_progress(
         practice_attempts=progress.practice_attempts,
         highest_practice_score=progress.highest_practice_score
     )
+
+
+@router.get("/{user_id}/achievements", response_model=Dict[str, Any])
+async def get_user_achievements(
+    user_id: UUID,
+    current_user: User = Depends(get_current_user),
+    db: AsyncSession = Depends(get_db)
+):
+    """
+    Get all achievements for a user.
+
+    Args:
+        user_id: User ID (must match current user)
+        current_user: Current authenticated user
+        db: Database session
+
+    Returns:
+        Response with achievements list and statistics
+
+    Raises:
+        HTTPException 403: If user_id doesn't match current user
+        HTTPException 404: If user not found
+    """
+    # Verify user is accessing their own achievements
+    if str(current_user.user_id) != str(user_id):
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="Cannot access other users' achievements"
+        )
+
+    try:
+        # Get achievement service
+        achievement_service = await get_achievement_service(db)
+
+        # Get all achievements
+        achievements = await achievement_service.get_user_achievements(user_id)
+
+        # Get statistics
+        stats = await achievement_service.get_achievement_stats(user_id)
+
+        # Build statistics by type
+        by_type = {}
+        for achievement in achievements:
+            ach_type = achievement.get("id", "").split("_")[0] + "_" + achievement.get("id", "").split("_")[1] if "_" in achievement.get("id", "") else "other"
+
+            # Better type categorization
+            ach_id = achievement.get("id", "")
+            if ach_id.startswith("ch_"):
+                ach_type = "chapter_complete"
+            elif ach_id.startswith("module_"):
+                ach_type = "module_complete"
+            elif ach_id.startswith("xp_"):
+                ach_type = "xp_milestone"
+            elif ach_id.startswith("streak_"):
+                ach_type = "streak"
+            elif ach_id == "perfect_score":
+                ach_type = "mastery"
+            else:
+                ach_type = "milestone"
+
+            if ach_type not in by_type:
+                by_type[ach_type] = 0
+            by_type[ach_type] += 1
+
+        return {
+            "achievements": achievements,
+            "stats": {
+                "total_achievements": stats["total_achievements"],
+                "total_points": stats["total_points"],
+                "by_type": by_type,
+                "recent": stats["recent"]
+            }
+        }
+
+    except Exception as e:
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=f"Failed to get achievements: {str(e)}"
+        )
