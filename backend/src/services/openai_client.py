@@ -125,14 +125,30 @@ class OpenAIService:
             logger.warning("No context passages provided for generation")
 
         try:
-            # System prompt for educational context
-            system_prompt = (
-                "You are a helpful educational assistant for a Humanoid Robotics textbook. "
-                "Answer questions based ONLY on the provided textbook passages. "
-                "If you don't know the answer based on the passages, say so clearly. "
-                "Always cite your sources by referencing [Module: X, Chapter: Y, Section: Z] "
-                "from the passages provided. Be concise and educational in tone."
-            )
+            # CRITICAL FIX #3: Check context strength and adapt prompt
+            strong_context = any(
+                len(passage) > 200 and 'not available' not in passage.lower()
+                for passage in context_passages
+            ) if context_passages else False
+
+            if strong_context:
+                # Normal case - strong context available
+                system_prompt = (
+                    "You are a helpful educational assistant for a Humanoid Robotics textbook. "
+                    "Answer questions based ONLY on the provided textbook passages. "
+                    "If you don't know the answer based on the passages, say so clearly. "
+                    "Always cite your sources by referencing [Module: X, Chapter: Y, Section: Z] "
+                    "from the passages provided. Be concise and educational in tone."
+                )
+            else:
+                # Weak context - provide helpful information even without strong passages
+                system_prompt = (
+                    "You are a helpful educational assistant for a Humanoid Robotics textbook. "
+                    "Even if the provided passages are incomplete or weak, provide helpful information about the topic. "
+                    "Explain what this topic covers in the context of humanoid robotics. "
+                    "Describe key concepts and why they matter. "
+                    "Be educational and informative in tone."
+                )
 
             # Format context passages
             context_text = ""

@@ -111,11 +111,18 @@ class RetrievalService:
         # Detect if query is asking about a specific chapter
         target_chapter = self.extract_chapter_number(query)
 
-        # Filter by minimum relevance threshold
+        # CRITICAL FIX #2: For bare "Chapter X" queries, use LOWER threshold
+        is_bare_query = len(query.strip().split()) <= 2 and target_chapter
+        threshold = 0.15 if is_bare_query else self.min_relevance
+
+        # Filter by adaptive threshold
         filtered = [
             p for p in passages
-            if p.get("score", 0) >= self.min_relevance
+            if p.get("score", 0) >= threshold
         ]
+
+        if is_bare_query:
+            logger.info(f"[RETRIEVAL] Bare query threshold reduced: {threshold} (from {self.min_relevance})")
 
         # If a specific chapter was detected, prioritize passages from that chapter
         if target_chapter:
@@ -239,6 +246,12 @@ class RetrievalService:
             for r in ranked[:top_k]
         ]
         scores = [r["score"] for r in ranked[:top_k]]
+
+        # CRITICAL FIX #1: If empty after filtering, return best semantic result
+        if not passages and results:
+            logger.warning(f"[RETRIEVAL] Empty after filtering, using best semantic result (score: {results[0].get('score', 0):.3f})")
+            passages = [results[0]["payload"]["content"]]
+            scores = [results[0]["score"]]
 
         # DEBUG: Log what we're returning
         logger.info(f"[RETRIEVAL] Returning {len(passages)} passages:")
