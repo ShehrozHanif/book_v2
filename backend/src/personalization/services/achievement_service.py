@@ -1,437 +1,473 @@
-"""Achievement service for gamification and milestone tracking."""
+"""Achievement Detection Service for gamification."""
 
-import logging
 import json
-from typing import Dict, List, Any, Optional
+import logging
 from datetime import datetime
+from pathlib import Path
+from typing import Dict, List, Any, Optional
 from uuid import UUID
 
-from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
+from sqlalchemy import select, and_
 
-from src.personalization.models.db_models import Achievement, Progress, LearningPath, User
-from src.personalization.services.user_service import get_user_by_id
+from src.personalization.models.db_models import Achievement, User
 
 logger = logging.getLogger(__name__)
 
+# Load achievements configuration
+ACHIEVEMENTS_FILE = Path(__file__).parent.parent / "data" / "achievements.json"
+ACHIEVEMENTS_CONFIG = {}
 
-# Achievement definitions
-ACHIEVEMENTS_CONFIG = {
-    # Chapter Completion Achievements (22 chapters)
-    "chapter_1_mastered": {
-        "title": "Fundamentals Started",
-        "description": "Completed Chapter 1: Fundamentals",
-        "icon": "🚀",
-        "points": 10,
-        "category": "chapter"
-    },
-    "chapter_5_mastered": {
-        "title": "Halfway Roboticist",
-        "description": "Completed Chapter 5: Kinematics",
-        "icon": "⚙️",
-        "points": 15,
-        "category": "chapter"
-    },
-    "chapter_10_mastered": {
-        "title": "Fundamentals Expert",
-        "description": "Completed Module 1 (Chapters 1-7)",
-        "icon": "🏆",
-        "points": 25,
-        "category": "module"
-    },
-    "chapter_15_mastered": {
-        "title": "Intermediate Master",
-        "description": "Completed Module 2 (Chapters 8-14)",
-        "icon": "🎯",
-        "points": 30,
-        "category": "module"
-    },
-    "all_chapters_completed": {
-        "title": "Robotics Sage",
-        "description": "Completed all 22 chapters",
-        "icon": "🧙",
-        "points": 100,
-        "category": "completion"
-    },
 
-    # XP/Practice Milestones
-    "xp_50": {
-        "title": "Learning Starter",
-        "description": "Earned 50 XP points",
-        "icon": "⭐",
-        "points": 50,
-        "category": "xp"
-    },
-    "xp_100": {
-        "title": "Century Club",
-        "description": "Earned 100 XP points",
-        "icon": "💯",
-        "points": 100,
-        "category": "xp"
-    },
-    "xp_250": {
-        "title": "Knowledge Seeker",
-        "description": "Earned 250 XP points",
-        "icon": "🔍",
-        "points": 250,
-        "category": "xp"
-    },
-    "xp_500": {
-        "title": "Expert Learner",
-        "description": "Earned 500 XP points",
-        "icon": "👨‍🎓",
-        "points": 500,
-        "category": "xp"
-    },
+def _load_achievements():
+    """Load achievements from JSON file."""
+    global ACHIEVEMENTS_CONFIG
+    try:
+        if ACHIEVEMENTS_FILE.exists():
+            with open(ACHIEVEMENTS_FILE, 'r', encoding='utf-8') as f:
+                data = json.load(f)
+                for ach in data.get("achievements", []):
+                    ACHIEVEMENTS_CONFIG[ach["id"]] = {
+                        "id": ach["id"],
+                        "type": ach.get("type", ""),
+                        "title": ach.get("title", ""),
+                        "description": ach.get("description", ""),
+                        "icon": ach.get("icon", ""),
+                        "points": ach.get("points", 0),
+                        "rarity": ach.get("rarity", "common"),
+                        "threshold": ach.get("threshold"),
+                        "chapter": ach.get("chapter"),
+                        "module": ach.get("module")
+                    }
+                logger.info(f"Loaded {len(ACHIEVEMENTS_CONFIG)} achievements")
+        else:
+            logger.warning(f"Achievements file not found: {ACHIEVEMENTS_FILE}")
+    except Exception as e:
+        logger.error(f"Failed to load achievements: {e}")
 
-    # Streak Achievements
-    "streak_7_days": {
-        "title": "Week Warrior",
-        "description": "7 consecutive days of learning",
-        "icon": "🔥",
-        "points": 50,
-        "category": "streak"
-    },
-    "streak_14_days": {
-        "title": "Fortnight Friend",
-        "description": "14 consecutive days of learning",
-        "icon": "🔥🔥",
-        "points": 100,
-        "category": "streak"
-    },
-    "streak_30_days": {
-        "title": "Month Master",
-        "description": "30 consecutive days of learning",
-        "icon": "🔥🔥🔥",
-        "points": 250,
-        "category": "streak"
-    },
 
-    # Mastery Achievements
-    "perfect_practice": {
-        "title": "Perfect Practice",
-        "description": "Scored 100% on a practice attempt",
-        "icon": "✨",
-        "points": 30,
-        "category": "mastery"
-    },
-    "high_mastery_5_chapters": {
-        "title": "Mastery Seeker",
-        "description": "Achieved 80%+ mastery in 5 chapters",
-        "icon": "🎓",
-        "points": 75,
-        "category": "mastery"
-    },
-    "speedrun": {
-        "title": "Speed Learner",
-        "description": "Completed a chapter in less than 1 hour",
-        "icon": "⚡",
-        "points": 25,
-        "category": "mastery"
-    },
-
-    # Special Achievements
-    "early_adopter": {
-        "title": "Early Adopter",
-        "description": "Started learning in the first week",
-        "icon": "🎖️",
-        "points": 20,
-        "category": "special"
-    },
-    "night_owl": {
-        "title": "Night Owl",
-        "description": "Completed learning sessions after 10 PM",
-        "icon": "🦉",
-        "points": 15,
-        "category": "special"
-    },
-    "morning_person": {
-        "title": "Morning Person",
-        "description": "Completed learning sessions before 8 AM",
-        "icon": "🌅",
-        "points": 15,
-        "category": "special"
-    },
-    "multi_learner": {
-        "title": "Multi-Path Learner",
-        "description": "Started learning on multiple learning paths",
-        "icon": "🛣️",
-        "points": 40,
-        "category": "special"
-    },
-
-    # Engagement Achievements
-    "question_master": {
-        "title": "Question Master",
-        "description": "Asked 50 questions in chat",
-        "icon": "❓",
-        "points": 35,
-        "category": "engagement"
-    },
-    "conversation_enthusiast": {
-        "title": "Conversation Enthusiast",
-        "description": "Had 10+ conversation sessions",
-        "icon": "💬",
-        "points": 25,
-        "category": "engagement"
-    }
-}
+# Load on module import
+_load_achievements()
 
 
 class AchievementService:
-    """Service for managing achievements and gamification."""
+    """Service for detecting and managing user achievements."""
 
     def __init__(self, db: AsyncSession):
-        """
-        Initialize achievement service.
+        """Initialize achievement service.
 
         Args:
-            db: Database session
+            db: Async database session
         """
         self.db = db
 
-    async def check_chapter_completion_achievement(self,
-                                                   user_id: UUID,
-                                                   chapter_id: int) -> Optional[str]:
-        """
-        Check if user should earn chapter completion achievement.
+    async def check_achievements(
+        self,
+        user_id: UUID,
+        event_type: str,
+        event_data: Dict[str, Any]
+    ) -> List[str]:
+        """Check and unlock achievements for a user event.
 
         Args:
-            user_id: User ID
-            chapter_id: Chapter ID (1-22)
+            user_id: User UUID
+            event_type: Type of event (chapter_complete, xp_earned, module_complete, streak_update, mastery_update)
+            event_data: Event context data
 
         Returns:
-            Achievement type if earned, None otherwise
+            List of newly unlocked achievement IDs
         """
-        progress = await self.db.execute(
-            select(Progress).where(
-                (Progress.user_id == user_id) & (Progress.chapter_id == chapter_id)
-            )
-        )
-        record = progress.scalar_one_or_none()
-
-        if record and record.completion_status == "completed":
-            # Determine which achievement to unlock
-            if chapter_id == 1:
-                return "chapter_1_mastered"
-            elif chapter_id == 5:
-                return "chapter_5_mastered"
-            elif chapter_id == 7:
-                return "chapter_10_mastered"  # End of Module 1
-            elif chapter_id == 14:
-                return "chapter_15_mastered"  # End of Module 2
-            elif chapter_id == 22:
-                # Check if all chapters completed
-                all_progress = await self.db.execute(
-                    select(Progress).where(Progress.user_id == user_id)
-                )
-                all_records = all_progress.scalars().all()
-                if all(p.completion_status == "completed" for p in all_records):
-                    return "all_chapters_completed"
-
-        return None
-
-    async def check_xp_milestone_achievements(self, user_id: UUID) -> List[str]:
-        """
-        Check if user should earn XP milestone achievements.
-
-        Args:
-            user_id: User ID
-
-        Returns:
-            List of achievement types earned
-        """
-        user = await get_user_by_id(self.db, user_id)
-        if not user:
+        if not user_id or not event_type:
             return []
 
-        # Calculate total XP from progress (mastery scores)
-        progress_records = await self.db.execute(
-            select(Progress).where(Progress.user_id == user_id)
-        )
-        records = progress_records.scalars().all()
-        total_xp = sum(p.mastery_score for p in records)
+        try:
+            # Route to appropriate checker
+            if event_type == "chapter_complete":
+                return await self._check_chapter(user_id, event_data)
+            elif event_type == "xp_earned":
+                return await self._check_xp(user_id, event_data)
+            elif event_type == "module_complete":
+                return await self._check_module(user_id, event_data)
+            elif event_type == "streak_update":
+                return await self._check_streak(user_id, event_data)
+            elif event_type == "mastery_update":
+                return await self._check_mastery(user_id, event_data)
+            else:
+                logger.warning(f"Unknown event type: {event_type}")
+                return []
+        except Exception as e:
+            logger.error(f"Error checking achievements: {e}")
+            return []
 
-        achievements = []
-        if total_xp >= 500:
-            achievements.append("xp_500")
-        elif total_xp >= 250:
-            achievements.append("xp_250")
-        elif total_xp >= 100:
-            achievements.append("xp_100")
-        elif total_xp >= 50:
-            achievements.append("xp_50")
-
-        return achievements
-
-    async def check_mastery_achievements(self, user_id: UUID) -> List[str]:
-        """
-        Check if user should earn mastery-related achievements.
-
-        Args:
-            user_id: User ID
-
-        Returns:
-            List of achievement types earned
-        """
-        achievements = []
-
-        # Check for high mastery in multiple chapters
-        progress_records = await self.db.execute(
-            select(Progress).where(Progress.user_id == user_id)
-        )
-        records = progress_records.scalars().all()
-
-        high_mastery_count = sum(1 for p in records if p.mastery_score >= 80)
-        if high_mastery_count >= 5:
-            achievements.append("high_mastery_5_chapters")
-
-        return achievements
-
-    async def unlock_achievement(self,
-                                user_id: UUID,
-                                achievement_type: str) -> Optional[Achievement]:
-        """
-        Unlock an achievement for a user.
+    async def process_progress_update(
+        self,
+        user_id: UUID,
+        chapter_id: int
+    ) -> List[str]:
+        """Process achievement unlocks for chapter completion.
 
         Args:
-            user_id: User ID
-            achievement_type: Type of achievement to unlock
+            user_id: User UUID
+            chapter_id: Completed chapter ID
 
         Returns:
-            Achievement record if successful, None if already earned or invalid
-        """
-        # Check if already earned
-        existing = await self.db.execute(
-            select(Achievement).where(
-                (Achievement.user_id == user_id) &
-                (Achievement.achievement_type == achievement_type)
-            )
-        )
-        if existing.scalar_one_or_none():
-            logger.debug(f"Achievement {achievement_type} already earned by user {user_id}")
-            return None
-
-        # Check if achievement exists
-        if achievement_type not in ACHIEVEMENTS_CONFIG:
-            logger.warning(f"Unknown achievement type: {achievement_type}")
-            return None
-
-        config = ACHIEVEMENTS_CONFIG[achievement_type]
-
-        # Create achievement record
-        achievement = Achievement(
-            user_id=user_id,
-            achievement_type=achievement_type,
-            display_info_json={
-                "title": config["title"],
-                "description": config["description"],
-                "icon": config["icon"],
-                "points": config["points"],
-                "category": config["category"]
-            }
-        )
-
-        self.db.add(achievement)
-        await self.db.commit()
-        await self.db.refresh(achievement)
-
-        logger.info(f"Achievement unlocked: {achievement_type} for user {user_id}")
-
-        return achievement
-
-    async def get_user_achievements(self, user_id: UUID) -> Dict[str, Any]:
-        """
-        Get all achievements for a user.
-
-        Args:
-            user_id: User ID
-
-        Returns:
-            Dictionary with earned and locked achievements
-        """
-        achievements = await self.db.execute(
-            select(Achievement).where(Achievement.user_id == user_id)
-        )
-        earned = achievements.scalars().all()
-        earned_ids = {a.achievement_type for a in earned}
-
-        earned_list = [
-            {
-                "type": a.achievement_type,
-                "title": a.display_info_json.get("title"),
-                "description": a.display_info_json.get("description"),
-                "icon": a.display_info_json.get("icon"),
-                "points": a.display_info_json.get("points"),
-                "earned_date": a.earned_date.isoformat() if a.earned_date else None
-            }
-            for a in earned
-        ]
-
-        locked_list = [
-            {
-                "type": ach_type,
-                "title": config["title"],
-                "description": config["description"],
-                "icon": config["icon"],
-                "points": config["points"],
-                "earned": False
-            }
-            for ach_type, config in ACHIEVEMENTS_CONFIG.items()
-            if ach_type not in earned_ids
-        ]
-
-        return {
-            "earned_count": len(earned),
-            "total_count": len(ACHIEVEMENTS_CONFIG),
-            "total_points": sum(a.display_info_json.get("points", 0) for a in earned),
-            "earned": earned_list,
-            "locked": locked_list
-        }
-
-    async def process_progress_update(self, user_id: UUID, chapter_id: int) -> List[str]:
-        """
-        Process progress update and unlock related achievements.
-
-        Args:
-            user_id: User ID
-            chapter_id: Updated chapter ID
-
-        Returns:
-            List of newly unlocked achievement types
+            List of newly unlocked achievement IDs
         """
         unlocked = []
 
-        # Check chapter completion
-        chapter_ach = await self.check_chapter_completion_achievement(user_id, chapter_id)
-        if chapter_ach:
-            result = await self.unlock_achievement(user_id, chapter_ach)
-            if result:
-                unlocked.append(chapter_ach)
+        # Check chapter completion achievement
+        ach_id = f"ch_{chapter_id}_complete"
+        if ach_id in ACHIEVEMENTS_CONFIG and await self._award_achievement(user_id, ach_id):
+            unlocked.append(ach_id)
 
-        # Check XP milestones
-        xp_achs = await self.check_xp_milestone_achievements(user_id)
-        for ach in xp_achs:
-            result = await self.unlock_achievement(user_id, ach)
-            if result:
-                unlocked.append(ach)
-
-        # Check mastery achievements
-        mastery_achs = await self.check_mastery_achievements(user_id)
-        for ach in mastery_achs:
-            result = await self.unlock_achievement(user_id, ach)
-            if result:
-                unlocked.append(ach)
+        # Check first chapter bonus
+        if chapter_id == 1 and await self._award_achievement(user_id, "first_chapter"):
+            unlocked.append("first_chapter")
 
         return unlocked
 
+    async def _check_chapter(
+        self,
+        user_id: UUID,
+        event_data: Dict[str, Any]
+    ) -> List[str]:
+        """Check for chapter completion achievements.
+
+        Args:
+            user_id: User UUID
+            event_data: Must contain chapter_id
+
+        Returns:
+            List of newly unlocked achievement IDs
+        """
+        unlocked = []
+        chapter_id = event_data.get("chapter_id")
+
+        if not chapter_id:
+            return unlocked
+
+        # Award chapter-specific achievement
+        ach_id = f"ch_{chapter_id}_complete"
+        if ach_id in ACHIEVEMENTS_CONFIG and await self._award_achievement(user_id, ach_id):
+            unlocked.append(ach_id)
+
+        # Award first chapter bonus
+        if chapter_id == 1 and await self._award_achievement(user_id, "first_chapter"):
+            unlocked.append("first_chapter")
+
+        return unlocked
+
+    async def _check_xp(
+        self,
+        user_id: UUID,
+        event_data: Dict[str, Any]
+    ) -> List[str]:
+        """Check for XP milestone achievements.
+
+        Args:
+            user_id: User UUID
+            event_data: Must contain total_xp
+
+        Returns:
+            List of newly unlocked achievement IDs
+        """
+        unlocked = []
+        total_xp = event_data.get("total_xp", 0)
+
+        # Check milestones: 100, 500, 1000, 5000
+        milestones = [
+            ("xp_100", 100),
+            ("xp_500", 500),
+            ("xp_1000", 1000),
+            ("xp_5000", 5000)
+        ]
+
+        for ach_id, threshold in milestones:
+            if total_xp >= threshold and ach_id in ACHIEVEMENTS_CONFIG:
+                if await self._award_achievement(user_id, ach_id):
+                    unlocked.append(ach_id)
+
+        return unlocked
+
+    async def _check_module(
+        self,
+        user_id: UUID,
+        event_data: Dict[str, Any]
+    ) -> List[str]:
+        """Check for module completion achievements.
+
+        Args:
+            user_id: User UUID
+            event_data: Must contain module_id
+
+        Returns:
+            List of newly unlocked achievement IDs
+        """
+        unlocked = []
+        module_id = event_data.get("module_id")
+
+        if not module_id:
+            return unlocked
+
+        ach_id = f"module_{module_id}_complete"
+        if ach_id in ACHIEVEMENTS_CONFIG and await self._award_achievement(user_id, ach_id):
+            unlocked.append(ach_id)
+
+        return unlocked
+
+    async def _check_streak(
+        self,
+        user_id: UUID,
+        event_data: Dict[str, Any]
+    ) -> List[str]:
+        """Check for learning streak achievements.
+
+        Args:
+            user_id: User UUID
+            event_data: Must contain current_streak (in days)
+
+        Returns:
+            List of newly unlocked achievement IDs
+        """
+        unlocked = []
+        current_streak = event_data.get("current_streak", 0)
+
+        # Check thresholds: 7 days, 30 days
+        streak_milestones = [
+            ("streak_7", 7),
+            ("streak_30", 30)
+        ]
+
+        for ach_id, threshold in streak_milestones:
+            if current_streak >= threshold and ach_id in ACHIEVEMENTS_CONFIG:
+                if await self._award_achievement(user_id, ach_id):
+                    unlocked.append(ach_id)
+
+        return unlocked
+
+    async def _check_mastery(
+        self,
+        user_id: UUID,
+        event_data: Dict[str, Any]
+    ) -> List[str]:
+        """Check for mastery achievements (100% score).
+
+        Args:
+            user_id: User UUID
+            event_data: Must contain mastery_score and chapter_id
+
+        Returns:
+            List of newly unlocked achievement IDs
+        """
+        unlocked = []
+        mastery_score = event_data.get("mastery_score", 0)
+        chapter_id = event_data.get("chapter_id")
+
+        if mastery_score != 100 or not chapter_id:
+            return unlocked
+
+        # For mastery, use unique ID with chapter to allow multiple awards
+        ach_id = f"perfect_score_ch{chapter_id}"
+        config = ACHIEVEMENTS_CONFIG.get("perfect_score")
+
+        if config and await self._award_achievement_with_chapter(user_id, "perfect_score", chapter_id):
+            unlocked.append("perfect_score")
+
+        return unlocked
+
+    async def _award_achievement(
+        self,
+        user_id: UUID,
+        achievement_id: str
+    ) -> bool:
+        """Award an achievement to a user (prevents duplicates).
+
+        Args:
+            user_id: User UUID
+            achievement_id: Achievement ID from config
+
+        Returns:
+            True if achievement was newly awarded, False if already owned
+        """
+        if achievement_id not in ACHIEVEMENTS_CONFIG:
+            return False
+
+        try:
+            # Check if already awarded
+            query = select(Achievement).where(
+                and_(
+                    Achievement.user_id == user_id,
+                    Achievement.achievement_type == achievement_id
+                )
+            )
+            result = await self.db.execute(query)
+            existing = result.scalar_one_or_none()
+
+            if existing:
+                return False  # Already owned
+
+            # Create new achievement record
+            config = ACHIEVEMENTS_CONFIG[achievement_id]
+            achievement = Achievement(
+                user_id=user_id,
+                achievement_type=achievement_id,
+                display_info_json={
+                    "title": config["title"],
+                    "description": config["description"],
+                    "icon": config["icon"],
+                    "points": config["points"],
+                    "rarity": config["rarity"]
+                },
+                earned_date=datetime.utcnow()
+            )
+            self.db.add(achievement)
+            await self.db.commit()
+            logger.info(f"Awarded achievement {achievement_id} to user {user_id}")
+            return True
+
+        except Exception as e:
+            logger.error(f"Failed to award achievement {achievement_id}: {e}")
+            return False
+
+    async def _award_achievement_with_chapter(
+        self,
+        user_id: UUID,
+        achievement_id: str,
+        chapter_id: int
+    ) -> bool:
+        """Award an achievement per chapter (allows duplicates per chapter).
+
+        Args:
+            user_id: User UUID
+            achievement_id: Achievement ID from config
+            chapter_id: Chapter ID for uniqueness
+
+        Returns:
+            True if achievement was newly awarded, False if already owned for chapter
+        """
+        if achievement_id not in ACHIEVEMENTS_CONFIG:
+            return False
+
+        try:
+            # Check if already awarded for this chapter
+            query = select(Achievement).where(
+                and_(
+                    Achievement.user_id == user_id,
+                    Achievement.achievement_type == achievement_id
+                )
+            )
+            result = await self.db.execute(query)
+            existing_achievements = result.scalars().all()
+
+            # Check if already awarded for this specific chapter
+            for existing in existing_achievements:
+                if existing.display_info_json.get("chapter_id") == chapter_id:
+                    return False  # Already owned for this chapter
+
+            # Create new achievement record with chapter info
+            config = ACHIEVEMENTS_CONFIG[achievement_id]
+            display_info = {
+                "title": config["title"],
+                "description": config["description"],
+                "icon": config["icon"],
+                "points": config["points"],
+                "rarity": config["rarity"],
+                "chapter_id": chapter_id
+            }
+
+            achievement = Achievement(
+                user_id=user_id,
+                achievement_type=achievement_id,
+                display_info_json=display_info,
+                earned_date=datetime.utcnow()
+            )
+            self.db.add(achievement)
+            await self.db.commit()
+            logger.info(f"Awarded achievement {achievement_id} (chapter {chapter_id}) to user {user_id}")
+            return True
+
+        except Exception as e:
+            logger.error(f"Failed to award achievement {achievement_id}: {e}")
+            return False
+
+    async def get_user_achievements(self, user_id: UUID) -> List[Dict[str, Any]]:
+        """Get all earned achievements for a user.
+
+        Args:
+            user_id: User UUID
+
+        Returns:
+            List of achievement dictionaries sorted by date (newest first)
+        """
+        if not user_id:
+            return []
+
+        try:
+            query = select(Achievement).where(
+                Achievement.user_id == user_id
+            ).order_by(Achievement.earned_date.desc())
+
+            result = await self.db.execute(query)
+            achievements = result.scalars().all()
+
+            return [
+                {
+                    "id": ach.achievement_type,
+                    "title": ach.display_info_json.get("title", ""),
+                    "description": ach.display_info_json.get("description", ""),
+                    "icon": ach.display_info_json.get("icon", ""),
+                    "points": ach.display_info_json.get("points", 0),
+                    "rarity": ach.display_info_json.get("rarity", "common"),
+                    "earned_date": ach.earned_date.isoformat() if ach.earned_date else None,
+                    "display_info": ach.display_info_json
+                }
+                for ach in achievements
+            ]
+        except Exception as e:
+            logger.error(f"Failed to get achievements for user {user_id}: {e}")
+            return []
+
+    async def get_achievement_stats(self, user_id: UUID) -> Dict[str, Any]:
+        """Get achievement statistics for a user.
+
+        Args:
+            user_id: User UUID
+
+        Returns:
+            Dictionary with stats: total_achievements, total_points, recent
+        """
+        if not user_id:
+            return {
+                "total_achievements": 0,
+                "total_points": 0,
+                "recent": []
+            }
+
+        try:
+            achievements = await self.get_user_achievements(user_id)
+
+            total_points = sum(ach["points"] for ach in achievements)
+            recent = achievements[:5]  # Last 5
+
+            return {
+                "total_achievements": len(achievements),
+                "total_points": total_points,
+                "recent": recent
+            }
+        except Exception as e:
+            logger.error(f"Failed to get achievement stats for user {user_id}: {e}")
+            return {
+                "total_achievements": 0,
+                "total_points": 0,
+                "recent": []
+            }
+
 
 async def get_achievement_service(db: AsyncSession) -> AchievementService:
-    """
-    Get achievement service instance.
+    """Get achievement service instance.
 
     Args:
-        db: Database session
+        db: Async database session
 
     Returns:
         AchievementService instance
