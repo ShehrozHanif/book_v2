@@ -414,6 +414,92 @@ class StatisticsService:
             "regression_count": len(regressions)
         }
 
+    async def get_advanced_recommendations(
+        self,
+        user_id: UUID,
+        mastery_threshold: int = 60
+    ) -> Dict[str, Any]:
+        """
+        Get advanced recommendations for weak areas with related chapters and practice suggestions.
+
+        Args:
+            user_id: User ID
+            mastery_threshold: Mastery score threshold to identify weak areas (default 60%)
+
+        Returns:
+            Dict with:
+            - weak_chapters: Chapters below threshold
+            - related_chapters: Suggested chapters to revisit
+            - practice_suggestions: Specific practice recommendations
+            - priority_order: Recommended learning order
+            - estimated_improvement_time: Estimated time to improve each chapter
+
+        Acceptance Criteria:
+            - Identifies chapters with mastery < 60%
+            - Suggests related chapters to revisit
+            - Provides practice attempt suggestions
+        """
+        # Get user's progress
+        result = await self.db.execute(
+            select(Progress)
+            .where(Progress.user_id == user_id)
+            .order_by(Progress.mastery_score.asc())
+        )
+        progress_records = list(result.scalars().all())
+
+        if not progress_records:
+            return {
+                "weak_chapters": [],
+                "related_chapters": [],
+                "practice_suggestions": [],
+                "priority_order": [],
+                "estimated_improvement_time": {},
+                "total_weak_chapters": 0
+            }
+
+        # Find weak chapters (below threshold)
+        weak_chapters = [
+            p for p in progress_records
+            if p.mastery_score < mastery_threshold
+        ]
+
+        if not weak_chapters:
+            return {
+                "weak_chapters": [],
+                "related_chapters": [],
+                "practice_suggestions": [],
+                "priority_order": [],
+                "estimated_improvement_time": {},
+                "total_weak_chapters": 0
+            }
+
+        # Generate recommendations
+        weak_chapter_ids = [w.chapter_id for w in weak_chapters]
+
+        # Identify related chapters and practice suggestions
+        related_chapters = self._identify_related_chapters(weak_chapter_ids)
+        practice_suggestions = self._generate_practice_suggestions(weak_chapters)
+        priority_order = self._calculate_priority_order(weak_chapters)
+        improvement_time = self._estimate_improvement_time(weak_chapters)
+
+        return {
+            "weak_chapters": [
+                {
+                    "chapter_id": w.chapter_id,
+                    "current_mastery": w.mastery_score,
+                    "time_spent_hours": round(w.time_spent_seconds / 3600, 1),
+                    "practice_attempts": w.practice_attempts,
+                    "gap_to_target": mastery_threshold - w.mastery_score
+                }
+                for w in weak_chapters[:5]  # Top 5 weakest
+            ],
+            "related_chapters": related_chapters,
+            "practice_suggestions": practice_suggestions,
+            "priority_order": priority_order,
+            "estimated_improvement_time": improvement_time,
+            "total_weak_chapters": len(weak_chapters)
+        }
+
     async def get_comprehensive_statistics(self, user_id: UUID) -> Dict[str, Any]:
         """
         Get comprehensive user statistics for dashboard.
@@ -581,6 +667,191 @@ class StatisticsService:
                 })
 
         return regressions
+
+    def _identify_related_chapters(self, weak_chapter_ids: List[int]) -> List[Dict[str, Any]]:
+        """
+        Identify prerequisite and related chapters to revisit.
+
+        Args:
+            weak_chapter_ids: List of weak chapter IDs
+
+        Returns:
+            List of related chapter recommendations
+
+        Logic:
+            - Chapters 1-6 are prerequisites for 7-12
+            - Chapters 7-12 are prerequisites for 13-18
+            - Chapters 13-18 are prerequisites for 19-22
+        """
+        module_structure = {
+            "module_1": (1, 6),
+            "module_2": (7, 12),
+            "module_3": (13, 18),
+            "module_4": (19, 22)
+        }
+
+        related = []
+
+        for weak_id in weak_chapter_ids:
+            # Find which module this chapter belongs to
+            for module_name, (start, end) in module_structure.items():
+                if start <= weak_id <= end:
+                    # Suggest earlier chapters in same module
+                    if weak_id > start:
+                        for ch in range(start, weak_id):
+                            related.append({
+                                "chapter_id": ch,
+                                "reason": f"Prerequisite for Chapter {weak_id}",
+                                "relation_type": "prerequisite"
+                            })
+
+                    # If in later modules, suggest earlier module basics
+                    if module_name == "module_2":
+                        for ch in range(1, 7):
+                            if ch not in weak_chapter_ids:
+                                related.append({
+                                    "chapter_id": ch,
+                                    "reason": "Review Module 1 basics",
+                                    "relation_type": "foundation"
+                                })
+                    elif module_name == "module_3":
+                        for ch in range(7, 13):
+                            if ch not in weak_chapter_ids:
+                                related.append({
+                                    "chapter_id": ch,
+                                    "reason": "Review Module 2 concepts",
+                                    "relation_type": "foundation"
+                                })
+                    elif module_name == "module_4":
+                        for ch in range(13, 19):
+                            if ch not in weak_chapter_ids:
+                                related.append({
+                                    "chapter_id": ch,
+                                    "reason": "Review Module 3 concepts",
+                                    "relation_type": "foundation"
+                                })
+                    break
+
+        # Remove duplicates while preserving order
+        seen = set()
+        unique_related = []
+        for item in related:
+            if item["chapter_id"] not in seen:
+                seen.add(item["chapter_id"])
+                unique_related.append(item)
+
+        return unique_related[:10]  # Return top 10 related chapters
+
+    def _generate_practice_suggestions(
+        self,
+        weak_chapters: List
+    ) -> List[Dict[str, Any]]:
+        """
+        Generate practice attempt suggestions for weak areas.
+
+        Args:
+            weak_chapters: List of weak progress records
+
+        Returns:
+            List of practice recommendations
+        """
+        suggestions = []
+
+        for chapter in weak_chapters[:5]:  # Top 5 weakest
+            gap = 60 - chapter.mastery_score  # Gap to target 60%
+            attempts_needed = max(2, int(gap / 15))  # ~15 points improvement per attempt
+
+            suggestions.append({
+                "chapter_id": chapter.chapter_id,
+                "current_score": chapter.mastery_score,
+                "target_score": 60,
+                "suggested_attempts": attempts_needed,
+                "rationale": f"Complete {attempts_needed} practice sessions to reach 60% mastery",
+                "difficulty_level": "medium" if chapter.mastery_score >= 40 else "easy",
+                "focus_areas": self._identify_focus_areas(chapter.mastery_score)
+            })
+
+        return suggestions
+
+    def _calculate_priority_order(self, weak_chapters: List) -> List[Dict[str, Any]]:
+        """
+        Calculate recommended learning order for weak chapters.
+
+        Args:
+            weak_chapters: List of weak progress records (already sorted by mastery)
+
+        Returns:
+            Ordered list of chapters to focus on
+        """
+        priority_list = []
+
+        for i, chapter in enumerate(weak_chapters[:5], 1):
+            # Priority based on:
+            # 1. Mastery score (lowest first)
+            # 2. Module dependency (earlier modules first)
+            # 3. Time invested (low time + low score = inefficient)
+
+            efficiency_ratio = chapter.time_spent_seconds / max(1, chapter.mastery_score)
+            priority = {
+                "priority": i,
+                "chapter_id": chapter.chapter_id,
+                "current_mastery": chapter.mastery_score,
+                "time_invested_hours": round(chapter.time_spent_seconds / 3600, 1),
+                "efficiency_ratio": round(efficiency_ratio, 2),
+                "recommendation": f"Focus on Chapter {chapter.chapter_id} (Priority {i})"
+            }
+            priority_list.append(priority)
+
+        return priority_list
+
+    def _estimate_improvement_time(self, weak_chapters: List) -> Dict[int, Dict[str, Any]]:
+        """
+        Estimate time needed to improve weak chapters to target mastery.
+
+        Args:
+            weak_chapters: List of weak progress records
+
+        Returns:
+            Dict mapping chapter_id to improvement estimates
+        """
+        improvement_time = {}
+
+        for chapter in weak_chapters[:5]:
+            gap = 60 - chapter.mastery_score
+            # Assume ~5 points improvement per hour of focused practice
+            estimated_hours = max(0.5, gap / 5)
+
+            improvement_time[chapter.chapter_id] = {
+                "current_mastery": chapter.mastery_score,
+                "target_mastery": 60,
+                "points_to_improve": gap,
+                "estimated_hours": round(estimated_hours, 1),
+                "estimated_days": round(estimated_hours / 2, 1),  # Assume 2 hours/day
+                "recommended_pace": "2-3 sessions per week"
+            }
+
+        return improvement_time
+
+    def _identify_focus_areas(self, mastery_score: int) -> List[str]:
+        """
+        Identify specific focus areas based on mastery level.
+
+        Args:
+            mastery_score: Current mastery score
+
+        Returns:
+            List of focus areas
+        """
+        focus_areas = []
+
+        if mastery_score < 30:
+            focus_areas = ["Fundamental concepts", "Basic definitions", "Key terminology"]
+        elif mastery_score < 50:
+            focus_areas = ["Core principles", "Application examples", "Problem-solving"]
+        else:
+            focus_areas = ["Advanced topics", "Edge cases", "Integration concepts"]
+
+        return focus_areas
 
 
 async def get_statistics_service(db: AsyncSession) -> StatisticsService:
