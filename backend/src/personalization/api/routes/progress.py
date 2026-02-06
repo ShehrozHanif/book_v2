@@ -1,6 +1,6 @@
 """Progress tracking routes."""
 
-from typing import List, Optional
+from typing import List, Optional, Dict, Any
 from uuid import UUID
 from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.ext.asyncio import AsyncSession
@@ -12,9 +12,242 @@ from src.personalization.models.schemas import (
 )
 from src.personalization.models.db_models import User
 from src.personalization.services import progress_service
+from src.personalization.services.achievement_service import (
+    get_achievement_service, ACHIEVEMENTS_CONFIG
+)
 from src.personalization.api.dependencies import get_current_user
 
-router = APIRouter(prefix="/api/v1/users", tags=["progress"])
+router = APIRouter(prefix="/api/v1/progress", tags=["progress"])
+
+
+@router.post("/{chapter_id}/complete", response_model=Dict[str, Any])
+async def mark_chapter_complete(
+    chapter_id: int,
+    completion_data: ProgressComplete,
+    current_user: User = Depends(get_current_user),
+    db: AsyncSession = Depends(get_db)
+):
+    """
+    Mark a chapter as completed.
+
+    Args:
+        chapter_id: Chapter ID (1-22)
+        completion_data: Completion data with mastery_score and optional time_spent_seconds
+        current_user: Current authenticated user
+        db: Database session
+
+    Returns:
+        Response with updated progress, xp_earned, achievements_unlocked
+
+    Raises:
+        HTTPException 400: If chapter_id is invalid
+        HTTPException 401: If not authenticated
+    """
+    user_id = current_user.user_id
+
+    # Validate chapter_id
+    if not (1 <= chapter_id <= 22):
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Chapter ID must be between 1 and 22"
+        )
+
+    try:
+        # Mark chapter complete
+        progress = await progress_service.complete_chapter(
+            db=db,
+            user_id=user_id,
+            chapter_id=chapter_id,
+            mastery_score=completion_data.mastery_score,
+            time_spent_seconds=completion_data.time_spent_seconds
+        )
+
+        # Award XP
+        xp_earned = await progress_service.award_xp_for_chapter(db, user_id, chapter_id)
+
+        # Update skill level
+        await progress_service.update_skill_level(db, user_id)
+
+        # Check for achievements
+        achievement_service = await get_achievement_service(db)
+        all_unlocked = []
+
+        # 1. Check chapter completion achievements
+        chapter_achievements = await achievement_service.check_achievements(
+            user_id,
+            "chapter_complete",
+            {"chapter_id": chapter_id}
+        )
+        all_unlocked.extend(chapter_achievements)
+
+        # 2. Check XP milestone achievements
+        if xp_earned > 0:
+            xp_achievements = await achievement_service.check_achievements(
+                user_id,
+                "xp_earned",
+                {"total_xp": current_user.skill_level * 10}  # Approximate XP from skill
+            )
+            all_unlocked.extend(xp_achievements)
+
+        # 3. Check mastery achievements
+        if completion_data.mastery_score == 100:
+            mastery_achievements = await achievement_service.check_achievements(
+                user_id,
+                "mastery_update",
+                {
+                    "mastery_score": completion_data.mastery_score,
+                    "chapter_id": chapter_id
+                }
+            )
+            all_unlocked.extend(mastery_achievements)
+
+        # Format achievements
+        achievements_unlocked = []
+        for ach_type in all_unlocked:
+            if ach_type in ACHIEVEMENTS_CONFIG:
+                config = ACHIEVEMENTS_CONFIG[ach_type]
+                achievements_unlocked.append({
+                    "id": config["id"],
+                    "title": config["title"],
+                    "description": config["description"],
+                    "icon": config["icon"],
+                    "points": config["points"],
+                    "rarity": config.get("rarity", "common")
+                })
+
+        return {
+            "progress": {
+                "progress_id": str(progress.progress_id),
+                "user_id": str(progress.user_id),
+                "chapter_id": progress.chapter_id,
+                "completion_status": progress.completion_status,
+                "time_spent_seconds": progress.time_spent_seconds,
+                "mastery_score": progress.mastery_score,
+                "last_accessed_at": progress.last_accessed_at.isoformat() if progress.last_accessed_at else None,
+                "practice_attempts": progress.practice_attempts,
+                "highest_practice_score": progress.highest_practice_score
+            },
+            "xp_earned": xp_earned,
+            "achievements_unlocked": achievements_unlocked
+        }
+
+    except ValueError as e:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail=str(e)
+        )
+    except Exception as e:
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=f"Failed to complete chapter: {str(e)}"
+        )
+
+
+@router.get("", response_model=Dict[str, Any])
+async def get_progress(
+    current_user: User = Depends(get_current_user),
+    db: AsyncSession = Depends(get_db)
+):
+    """
+    Get user's overall progress.
+
+    Args:
+        current_user: Current authenticated user
+        db: Database session
+
+    Returns:
+        User's overall progress including:
+        - total_chapters_completed
+        - completion_percentage
+        - chapters_completed (list)
+        - current_path_progress
+        - total_time_invested_hours
+        - total_xp_earned
+        - average_mastery_score
+        - chapter_details
+
+    Raises:
+        HTTPException 401: If not authenticated
+    """
+    user_id = current_user.user_id
+
+    try:
+        # Get progress summary
+        progress_summary = await progress_service.get_user_progress_summary(db, user_id)
+
+        # Get all progress records
+        all_progress = await progress_service.get_user_progress(db, user_id)
+
+        # Calculate metrics
+        total_chapters = 22
+        chapters_completed = progress_summary["chapters_completed"]
+        completion_percentage = round((len(chapters_completed) / total_chapters) * 100, 1)
+        total_time_hours = round(progress_summary["total_time"] / 3600, 1)
+
+        # Calculate total XP (sum of mastery scores)
+        total_xp = sum(progress_summary["mastery_scores"].values())
+
+        # Calculate average mastery
+        mastery_scores = progress_summary["mastery_scores"]
+        avg_mastery = round(
+            sum(mastery_scores.values()) / len(mastery_scores), 1
+        ) if mastery_scores else 0.0
+
+        # Get current path progress
+        from src.personalization.services.learning_path_service import get_active_learning_path
+
+        active_path = await get_active_learning_path(db, user_id)
+        current_path_progress = None
+
+        if active_path:
+            chapters_in_path = len(active_path.chapters_array)
+            completed_in_path = len([
+                ch for ch in active_path.chapters_array
+                if ch in chapters_completed
+            ])
+            path_progress_pct = round((completed_in_path / chapters_in_path) * 100, 1) if chapters_in_path > 0 else 0
+
+            # Find next chapter
+            next_chapter = None
+            for chapter_id in active_path.chapters_array:
+                if chapter_id not in chapters_completed:
+                    next_chapter = chapter_id
+                    break
+
+            current_path_progress = {
+                "path_id": active_path.path_name,
+                "chapters_in_path": chapters_in_path,
+                "completed": completed_in_path,
+                "progress_percentage": path_progress_pct,
+                "next_chapter": next_chapter
+            }
+
+        # Build chapter details
+        chapter_details = {}
+        for progress in all_progress:
+            chapter_details[str(progress.chapter_id)] = {
+                "completion_status": progress.completion_status,
+                "mastery_score": progress.mastery_score,
+                "time_spent": progress.time_spent_seconds,
+                "practice_attempts": progress.practice_attempts
+            }
+
+        return {
+            "total_chapters_completed": len(chapters_completed),
+            "completion_percentage": completion_percentage,
+            "chapters_completed": sorted(chapters_completed),
+            "current_path_progress": current_path_progress,
+            "total_time_invested_hours": total_time_hours,
+            "total_xp_earned": total_xp,
+            "average_mastery_score": avg_mastery,
+            "chapter_details": chapter_details
+        }
+
+    except Exception as e:
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=f"Failed to get progress: {str(e)}"
+        )
 
 
 @router.post("/{user_id}/progress/{chapter_id}/start", response_model=ProgressResponse)
