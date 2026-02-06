@@ -148,12 +148,17 @@ class ChatService:
             logger.debug("Query embedding complete")
 
             # Step 2: Retrieve relevant passages
+            logger.info(f"[CHAT] About to call retrieve_context with query: {query}")
             context_passages, relevance_scores = (
                 await self.retrieval_service.retrieve_context(
                     query_vector=query_vector,
                     query=query
                 )
             )
+            logger.info(f"[CHAT] retrieve_context returned {len(context_passages)} passages")
+            for i, (p, s) in enumerate(zip(context_passages, relevance_scores), 1):
+                ch = p.split('Chapter')[1].strip().split()[0] if 'Chapter' in p else '?'
+                logger.info(f"[CHAT]   [{i}] Chapter {ch} (score: {s:.3f})")
             logger.debug(
                 f"Retrieved {len(context_passages)} passages "
                 f"with avg score {sum(relevance_scores) / len(relevance_scores) if relevance_scores else 0:.3f}"
