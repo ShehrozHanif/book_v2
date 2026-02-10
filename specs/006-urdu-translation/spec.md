@@ -194,11 +194,93 @@ Users can set their preferred language once, and the app remembers it across ses
 
 ---
 
-## Open Questions
+## Clarification Decisions
 
-[NEEDS CLARIFICATION: Should chapters be translated all at once before launch, or can we launch with partial translation (e.g., first 5 chapters) and add others incrementally? This affects MVP scope and launch timeline.]
+### Q1: Translation Rollout Strategy - DECIDED ✅
 
-[NEEDS CLARIFICATION: Should the glossary support user-contributed terms and translations, or should it be admin-only? This affects community engagement but adds moderation complexity.]
+**Decision: Launch MVP with first 9 chapters (Module 2), add others incrementally**
 
-[NEEDS CLARIFICATION: What is the acceptable level of Urdu text inconsistency (e.g., different transliterations of the same term)? Should we use automated terminology checks or rely on translator consistency?]
+**Rationale**:
+- **Faster Time to Market**: Early Urdu learners get access to Module 2 (ROS 2 Fundamentals) within 3-4 months instead of 6-8 months waiting for all 17 chapters
+- **User Feedback Loop**: Real users provide feedback on RTL layout, terminology, and translation quality before translating remaining chapters
+- **Independent Modules**: Module 2 is self-contained and can be learned independently; doesn't require completion of other modules
+- **Resource Efficiency**: Translators can work on Modules 3-4 while Module 2 is live and being refined
+- **Better UX**: Clear scope (Module 2 available, Modules 3-4 coming in Phase 2) is better than "Coming Soon" placeholders
+
+**Implementation Timeline**:
+- Phase 1 (Month 1-4): Translate Module 2 (9 chapters, ~50,000 words)
+- Launch Phase 1 with Chapters 6-14 in Urdu
+- Phase 2 (Month 4-8): Translate Modules 3-4 (8 chapters, ~50,000 words) in parallel
+- Launch Phase 2 with all 17 chapters complete
+
+---
+
+### Q2: Glossary Contribution Model - DECIDED ✅
+
+**Decision: Hybrid model (Official admin-maintained glossary + User suggestion forum)**
+
+**Rationale**:
+- **Quality First**: Official glossary maintained by instructors and expert translators ensures consistency and accuracy
+- **Community Engagement**: User forum for glossary suggestions creates community participation without compromising quality
+- **Scalability**: Users can suggest new terms, examples, or alternative translations for feedback
+- **Curation Process**: Admins review suggestions and promote best ones to official glossary monthly
+- **Knowledge Crowd-Sourcing**: Leverage community expertise (students often discover nuances instructors miss)
+- **Low Moderation Burden**: Forum comments are non-destructive; only promoted items affect official glossary
+
+**Implementation**:
+- **Official Glossary** (admin-only):
+  - 150+ core robotics terms
+  - Maintained by instructors and translators
+  - Versioned and tested before updates
+  - Single source of truth
+
+- **Community Forum** (optional user contributions):
+  - Separate discussion area for each technical term
+  - Users can suggest alternative translations
+  - Users can request new terms
+  - Admins review monthly and promote to official glossary
+  - Discussions help students learn terminology in context
+
+---
+
+### Q3: Terminology Consistency - DECIDED ✅
+
+**Decision: Hybrid approach (Manual translation with post-translation automated audits)**
+
+**Rationale**:
+- **Translator Expertise**: Initial translation by human experts with style guide ensures nuance and context-awareness
+- **Automated Quality Checks**: Post-translation scans flag terminology inconsistencies automatically before publication
+- **Error Prevention**: Catches mistakes like spelling variations, inconsistent transliterations, missed terms
+- **Training & Improvement**: Feedback helps translators improve consistency for next modules
+- **Efficiency Balance**: Manual translation isn't slowed down by tool setup; validation happens in review phase
+
+**Implementation Process**:
+1. **Pre-Translation**: Provide translators with:
+   - Style guide (transliteration rules, formatting standards)
+   - Glossary database (150+ terms with preferred translations)
+   - Context examples for technical terms
+
+2. **Translation Phase**: Translators work efficiently without tool friction
+   - Can reference glossary as needed
+   - Follow style guide for consistency
+   - Focus on quality and context
+
+3. **Post-Translation Audits** (before publication):
+   - Automated scan for terminology inconsistencies
+   - Flag spelling variations (e.g., "Jakobian" vs "Jacobian" transliterations)
+   - Identify missed glossary terms
+   - Report similar-meaning terms used differently
+
+4. **Quality Review**: Human review of automated findings
+   - Resolve flagged inconsistencies
+   - Approve automated suggestions
+   - Build glossary database for future modules
+
+5. **Publication**: Publish only after audit clearance
+
+**Tools & Timeline**:
+- Use glossary database (built into CMS or translation management tool)
+- Automated scanning: 1 day per module after translation completes
+- Quality review: 2-3 days per module
+- Total validation: ~5-7 days per module before publication
 

@@ -15,7 +15,7 @@
 
 ## Requirement Completeness
 
-- [ ] No [NEEDS CLARIFICATION] markers remain (3 questions identified - see below)
+- [x] No [NEEDS CLARIFICATION] markers remain (3 questions ANSWERED - see below)
 - [x] Requirements are testable and unambiguous
 - [x] Success criteria are measurable
 - [x] Success criteria are technology-agnostic (no implementation details)
@@ -33,69 +33,68 @@
 
 ---
 
-## Open Questions Requiring Clarification
+## Clarification Decisions (RESOLVED) ✅
 
-### Question 1: Translation Rollout Strategy
+### Question 1: Translation Rollout Strategy - ANSWERED ✅
 
-**Context**: Spec states "Modules 2-4 (Chapters 6-22) will be translated initially" in Assumptions.
+**Decision**: Launch MVP with first 9 chapters (Module 2), add others incrementally
 
-**What we need to know**: Should we launch with 100% translation complete, or launch MVP with partial translation (e.g., Chapters 6-11 only) and add remaining chapters incrementally?
+**Rationale**:
+- Faster time to market (3-4 months vs. 6-8 months)
+- Early user feedback on RTL layout and terminology
+- Module 2 is self-contained and independently valuable
+- Resource efficiency: translators work on Modules 3-4 while Phase 1 is live
+- Better UX than "Coming Soon" placeholders
 
-**Suggested Answers**:
-
-| Option | Answer | Implications |
-|--------|--------|--------------|
-| A | Launch only when ALL 17 chapters fully translated | Longer launch timeline, complete feature at release, but delays getting feedback |
-| B | Launch MVP with first 9 chapters (Module 2), add others in Phase 2 | Faster MVP, earlier user feedback, partial feature experience for early users |
-| C | Launch with all chapters, but mark untranslated as "Coming Soon" | Users see full scope but some chapters unavailable, may confuse user experience |
-| Custom | Provide your own answer | Explain your preferred rollout strategy |
-
-**Your choice**: _[Awaiting user response]_
+**Timeline**:
+- Phase 1 (Month 1-4): Translate Module 2 (9 chapters)
+- Phase 2 (Month 4-8): Translate Modules 3-4 (8 chapters)
 
 ---
 
-### Question 2: Glossary Contribution Model
+### Question 2: Glossary Contribution Model - ANSWERED ✅
 
-**Context**: Out of Scope section mentions "Translate user-generated content" and glossary is admin-only, but there's no specification for whether users can suggest new terms or corrections.
+**Decision**: Hybrid model (Official admin-maintained glossary + User suggestion forum)
 
-**What we need to know**: Should the glossary be static (admin-maintained only) or dynamic (users can suggest terms/translations)?
+**Rationale**:
+- Quality first: Official glossary maintained by instructors/translators
+- Community engagement: Users can suggest new terms in forum
+- Low moderation burden: Only promoted items affect official glossary
+- Scalability: Leverage crowdsourced knowledge for continuous improvement
 
-**Suggested Answers**:
-
-| Option | Answer | Implications |
-|--------|--------|--------------|
-| A | Static glossary: Admin-only, no user contributions | Simpler to build, consistent quality, but misses community knowledge; slower to grow |
-| B | Dynamic glossary with moderation: Users suggest, admins approve before publishing | Crowdsourced content, community engagement, but requires moderation workflow |
-| C | Hybrid: Admin-maintained core glossary, separate user discussion forum for suggestions | Best of both, but more complex; users can still contribute without polluting official glossary |
-| Custom | Provide your own answer | Explain your preferred glossary model |
-
-**Your choice**: _[Awaiting user response]_
+**Implementation**:
+- **Official Glossary** (admin-only, versioned, 150+ core terms)
+- **Community Forum** (per-term discussion areas for user suggestions)
+- **Curation Process** (monthly admin review, promote best suggestions)
 
 ---
 
-### Question 3: Terminology Standardization
+### Question 3: Terminology Standardization - ANSWERED ✅
 
-**Context**: FR-010 requires "pronunciation guides (in Latin characters: transliteration)" and we maintain English technical terms, but the spec doesn't define how strict consistency enforcement should be.
+**Decision**: Hybrid approach (Manual translation + post-translation automated audits)
 
-**What we need to know**: How should we ensure terminology consistency across translations? Should we use automated checks or rely on translator consistency?
+**Rationale**:
+- Manual translation preserves context and nuance
+- Automated audits flag inconsistencies before publication
+- Style guide ensures translator consistency
+- Error prevention without slowing translation workflow
+- Training feedback improves future modules
 
-**Suggested Answers**:
-
-| Option | Answer | Implications |
-|--------|--------|--------------|
-| A | Automated terminology database: Build glossary lookup tool that flags inconsistent translations | Prevents errors, consistent quality, but requires glossary database setup; may slow translation |
-| B | Manual translator consistency: Provide style guide, rely on translator expertise | Simple to implement, faster translation, but risks inconsistencies; needs quality review |
-| C | Hybrid with periodic audits: Use manual translation with post-translation automated scans to flag inconsistencies | Best balance, quality checked after completion, allows iterative improvement |
-| Custom | Provide your own answer | Explain your preferred consistency approach |
-
-**Your choice**: _[Awaiting user response]_
+**Process**:
+1. Pre-translation: Provide glossary + style guide
+2. Translation: Translators work efficiently
+3. Post-translation audits: Automated scans for inconsistencies (1 day per module)
+4. Quality review: Human verification of findings (2-3 days per module)
+5. Publication: Only after audit clearance
 
 ---
 
-## Notes
+## Status Summary
 
-- Specification has 3 clarifications needed (questions identified above)
-- All other quality criteria pass
-- Once clarifications are resolved, spec will be ready for `/sp.clarify` or `/sp.plan`
-- Suggest scheduling discussion with stakeholders to provide answers before planning phase
+- [x] Specification Quality: ✅ PASS
+- [x] Requirement Completeness: ✅ PASS
+- [x] Feature Readiness: ✅ PASS
+- [x] Clarifications Resolved: ✅ ALL ANSWERED
+
+**READY FOR**: `/sp.plan` - Implementation Architecture Planning
 
