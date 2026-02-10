@@ -5,6 +5,7 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
 import { ChatBot } from "./components";
+import { AuthContextProvider } from "./contexts/AuthContext";
 import "./index.css";
 
 // Get root element
@@ -19,6 +20,8 @@ const reactRoot = ReactDOM.createRoot(root);
 
 reactRoot.render(
   <React.StrictMode>
-    <ChatBot />
+    <AuthContextProvider>
+      <ChatBot />
+    </AuthContextProvider>
   </React.StrictMode>
 );

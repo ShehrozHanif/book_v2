@@ -9,7 +9,6 @@
  */
 
 import axios, { AxiosInstance } from 'axios';
-import { apiClient } from './apiClient';
 
 
 interface ChatbotResponse {
@@ -52,7 +51,10 @@ class ChatbotTranslationAPI {
 
   constructor(baseURL: string = '/api/v1') {
     this.baseURL = baseURL;
-    this.client = apiClient;
+    this.client = axios.create({
+      baseURL,
+      timeout: 30000,
+    });
   }
 
   /**

@@ -1,16 +1,3 @@
-"""
-useChatbotLanguage Hook
-
-Custom React hook for managing chatbot language and fetching translated responses.
-
-Provides:
-- Get translated chatbot response in user's language
-- Handle language switching with auto-fetch
-- Cache responses to avoid redundant API calls
-- Loading and error states
-- Fallback to English if translation unavailable
-"""
-
 import { useState, useCallback, useEffect, useRef } from 'react';
 import { useLanguagePreference } from './useLanguagePreference';
 import { useAuth } from './useAuth';

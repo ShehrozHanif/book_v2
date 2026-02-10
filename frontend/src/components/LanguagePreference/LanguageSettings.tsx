@@ -20,7 +20,7 @@ export const LanguageSettings: React.FC<LanguageSettingsProps> = ({
   onPreferenceChange,
   showLabel = true,
 }) => {
-  const [language, setLanguage] = useState<string>("english");
+  const [language, setLanguage] = useState<'english' | 'urdu'>("english");
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -72,7 +72,7 @@ export const LanguageSettings: React.FC<LanguageSettingsProps> = ({
     }
   };
 
-  const handleLanguageChange = (newLanguage: string) => {
+  const handleLanguageChange = (newLanguage: 'english' | 'urdu') => {
     setLanguage(newLanguage);
     setSuccess(false);
   };
@@ -120,7 +120,7 @@ export const LanguageSettings: React.FC<LanguageSettingsProps> = ({
             name="language"
             value="english"
             checked={language === "english"}
-            onChange={(e) => handleLanguageChange(e.target.value)}
+            onChange={(e) => handleLanguageChange(e.target.value as 'english' | 'urdu')}
             className="w-4 h-4 text-blue-600"
             disabled={saving}
           />
@@ -142,7 +142,7 @@ export const LanguageSettings: React.FC<LanguageSettingsProps> = ({
             name="language"
             value="urdu"
             checked={language === "urdu"}
-            onChange={(e) => handleLanguageChange(e.target.value)}
+            onChange={(e) => handleLanguageChange(e.target.value as 'english' | 'urdu')}
             className="w-4 h-4 text-blue-600"
             disabled={saving}
           />

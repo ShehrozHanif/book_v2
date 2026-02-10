@@ -13,7 +13,7 @@
  */
 
 import React, { ReactNode } from 'react';
-import '../styles/chatbot-message-rtl.css';
+import '../../styles/chatbot-message-rtl.css';
 
 export interface ChatbotMessageRTLProps {
   /** Content to render (can be string or JSX) */

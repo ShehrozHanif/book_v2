@@ -152,10 +152,8 @@ export const ChatBot: React.FC<ChatBotProps> = ({ onMessage }) => {
             {showGlossary && (
               <div className="glossary-panel">
                 <ChatbotGlossary
-                  onTermSelect={(termId, term) => {
-                    console.log(`Selected glossary term: ${term}`);
-                  }}
-                  maxResults={15}
+                  isOpen={showGlossary}
+                  onClose={() => setShowGlossary(false)}
                 />
               </div>
             )}

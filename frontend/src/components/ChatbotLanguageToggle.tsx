@@ -1,13 +1,3 @@
-"""
-ChatbotLanguageToggle Component
-
-A bilingual language selector for the chatbot interface.
-- Shows English/Urdu toggle buttons
-- Requires authentication for Urdu
-- Updates user preference on selection
-- Shows RTL text direction for Urdu
-"""
-
 import React, { useState, useCallback } from 'react';
 import { useLanguagePreference } from '../hooks/useLanguagePreference';
 import { useAuth } from '../hooks/useAuth';

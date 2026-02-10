@@ -1,16 +1,3 @@
-"""
-ChatbotUI Component
-
-Main chatbot interface with integrated language toggle.
-
-Features:
-- Display chatbot conversation history
-- Integrated language toggle (English/Urdu)
-- Support for bilingual responses
-- RTL support for Urdu text
-- Message styling with proper direction handling
-"""
-
 import React, { useState, useEffect, useRef } from 'react';
 import { useAuth } from '../hooks/useAuth';
 import { useLanguagePreference } from '../hooks/useLanguagePreference';

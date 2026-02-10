@@ -1,15 +1,3 @@
-"""
-ChatbotMessageRTL Component
-
-Renders chatbot messages with proper RTL support for Urdu text.
-
-Features:
-- Proper text direction for Urdu/English
-- Code blocks stay LTR
-- Numbers display correctly in RTL context
-- Timestamp handling
-"""
-
 import React from 'react';
 import '../styles/chatbot-message-rtl.css';
 

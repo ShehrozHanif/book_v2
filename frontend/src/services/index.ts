@@ -5,7 +5,5 @@ export { ChatApiError } from "./chatApi";
 export { glossaryAPI } from "./glossaryAPI";
 export type {
   GlossaryTerm,
-  GlossaryStats,
-  GlossaryFeedbackResponse,
+  GlossaryFeedback,
 } from "./glossaryAPI";
-export { GlossaryApiError } from "./glossaryAPI";

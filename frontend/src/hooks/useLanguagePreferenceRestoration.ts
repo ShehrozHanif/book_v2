@@ -41,9 +41,11 @@ export const useLanguagePreferenceRestoration =
       setLoading(true);
       setError(null);
 
+      let storedLanguage: "english" | "urdu" | null = null;
+
       try {
         // Step 1: Check localStorage first (faster, for guests)
-        const storedLanguage = languagePreferenceAPI.getStoredLanguage();
+        storedLanguage = languagePreferenceAPI.getStoredLanguage();
         if (storedLanguage) {
           setLanguage(storedLanguage);
           languagePreferenceAPI.applyLanguagePreference(storedLanguage);
