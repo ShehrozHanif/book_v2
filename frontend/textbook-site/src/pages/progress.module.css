@@ -1,0 +1,270 @@
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 40px 20px;
+  min-height: 100vh;
+}
+
+.container h1 {
+  text-align: center;
+  margin-bottom: 40px;
+  font-size: 2.5em;
+  color: #333;
+}
+
+.overallStats {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 40px;
+  margin-bottom: 50px;
+  align-items: center;
+}
+
+.progressCircle {
+  position: relative;
+  width: 250px;
+  height: 250px;
+  margin: 0 auto;
+}
+
+.svg {
+  position: absolute;
+  top: 0;
+  left: 0;
+  transform: rotate(-90deg);
+  width: 100%;
+  height: 100%;
+}
+
+.bgCircle {
+  fill: none;
+  stroke: #e0e0e0;
+  stroke-width: 8;
+}
+
+.progressCirclesvg {
+  fill: none;
+  stroke-width: 8;
+  stroke-linecap: round;
+  transition: stroke-dashoffset 0.6s ease;
+  stroke-dasharray: 282.7;
+}
+
+.circleContent {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  text-align: center;
+}
+
+.percentage {
+  font-size: 3em;
+  font-weight: bold;
+  color: #333;
+}
+
+.label {
+  font-size: 1em;
+  color: #999;
+  margin-top: 5px;
+}
+
+.statsBox {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+}
+
+.statItem {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  padding: 25px;
+  border-radius: 10px;
+  text-align: center;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.statNumber {
+  font-size: 2.5em;
+  font-weight: bold;
+  margin-bottom: 5px;
+}
+
+.statText {
+  font-size: 0.9em;
+  opacity: 0.9;
+}
+
+.chaptersSection {
+  margin-bottom: 40px;
+}
+
+.chaptersSection h2 {
+  font-size: 1.8em;
+  color: #333;
+  margin-bottom: 20px;
+  border-bottom: 3px solid #667eea;
+  padding-bottom: 10px;
+}
+
+.chaptersList {
+  display: grid;
+  gap: 20px;
+}
+
+.chapterItem {
+  background: white;
+  border: 1px solid #e0e0e0;
+  border-radius: 10px;
+  padding: 25px;
+  transition: box-shadow 0.2s, transform 0.2s;
+}
+
+.chapterItem:hover {
+  transform: translateX(5px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.chapterHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 15px;
+}
+
+.chapterTitle {
+  margin: 0;
+  font-size: 1.3em;
+  color: #333;
+  flex: 1;
+}
+
+.masteryBadge {
+  display: inline-block;
+  padding: 8px 16px;
+  border-radius: 20px;
+  color: white;
+  font-weight: bold;
+  font-size: 0.95em;
+  min-width: 60px;
+  text-align: center;
+}
+
+.progressBar {
+  height: 10px;
+  background: #e0e0e0;
+  border-radius: 5px;
+  overflow: hidden;
+  margin-bottom: 12px;
+}
+
+.progressFill {
+  height: 100%;
+  transition: width 0.3s ease;
+}
+
+.chapterStats {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  font-size: 0.9em;
+  color: #666;
+}
+
+.chapterStats span {
+  display: flex;
+  align-items: center;
+}
+
+.tips {
+  background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+  color: white;
+  padding: 30px;
+  border-radius: 10px;
+  margin-top: 40px;
+}
+
+.tips h2 {
+  margin-top: 0;
+  color: white;
+  border-bottom: 2px solid rgba(255, 255, 255, 0.3);
+}
+
+.tips ul {
+  margin: 0;
+  padding-left: 20px;
+}
+
+.tips li {
+  margin: 10px 0;
+  line-height: 1.6;
+}
+
+.loading,
+.error,
+.empty {
+  text-align: center;
+  padding: 60px 20px;
+  font-size: 1.1em;
+  color: #666;
+}
+
+.error {
+  color: #d32f2f;
+  background: #ffebee;
+  padding: 20px;
+  border-radius: 5px;
+}
+
+@media (max-width: 768px) {
+  .container {
+    padding: 20px 10px;
+  }
+
+  .container h1 {
+    font-size: 1.8em;
+    margin-bottom: 30px;
+  }
+
+  .overallStats {
+    grid-template-columns: 1fr;
+    gap: 30px;
+  }
+
+  .progressCircle {
+    width: 200px;
+    height: 200px;
+  }
+
+  .percentage {
+    font-size: 2.3em;
+  }
+
+  .statsBox {
+    grid-template-columns: 1fr;
+  }
+
+  .chaptersSection h2 {
+    font-size: 1.5em;
+  }
+
+  .chapterHeader {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+  }
+
+  .chapterStats {
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .tips {
+    padding: 20px;
+  }
+
+  .tips h2 {
+    font-size: 1.4em;
+  }
+}

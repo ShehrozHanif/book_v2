@@ -1,0 +1,258 @@
+[
+  {
+    "english_term": "Robot",
+    "urdu_translation": "روبوٹ",
+    "pronunciation_transliterated": "robot",
+    "definition_english": "A programmable automated machine capable of performing a complex series of actions automatically.",
+    "definition_urdu": "ایک قابلِ پروگرام خودکار مشین جو خودبخود پیچیدہ کام انجام دیتی ہے۔",
+    "category": "robotics"
+  },
+  {
+    "english_term": "Kinematics",
+    "urdu_translation": "حرکت کی سائنس",
+    "pronunciation_transliterated": "Kinematics",
+    "definition_english": "The branch of mechanics dealing with motion without considering forces.",
+    "definition_urdu": "میکانکس کی شاخ جو قوت کے بغیر حرکت کا مطالعہ کرتی ہے۔",
+    "category": "kinematics"
+  },
+  {
+    "english_term": "Dynamics",
+    "urdu_translation": "حرکت کی وجوہات",
+    "pronunciation_transliterated": "Dynamics",
+    "definition_english": "The branch of mechanics dealing with the motion of objects and the forces that cause them.",
+    "definition_urdu": "میکانکس کی شاخ جو اشیاء کی حرکت اور ان کے سبب قوتوں کا مطالعہ کرتی ہے۔",
+    "category": "mechanics"
+  },
+  {
+    "english_term": "Joint",
+    "urdu_translation": "جوڑ",
+    "pronunciation_transliterated": "joint",
+    "definition_english": "A connection between two rigid bodies that allows relative motion.",
+    "definition_urdu": "دو سخت اجسام کے درمیان ایک رابطہ جو نسبتی حرکت کی اجازت دیتا ہے۔",
+    "category": "robotics"
+  },
+  {
+    "english_term": "Link",
+    "urdu_translation": "لنک",
+    "pronunciation_transliterated": "link",
+    "definition_english": "A rigid body in a mechanical system that is connected to other links by joints.",
+    "definition_urdu": "میکانیکل نظام میں ایک سخت جسم جو دوسرے لنکس سے جوڑوں کے ذریعے جڑا ہوتا ہے۔",
+    "category": "robotics"
+  },
+  {
+    "english_term": "Actuator",
+    "urdu_translation": "فعال کرنے والا",
+    "pronunciation_transliterated": "Actuator",
+    "definition_english": "A device that converts energy into controlled mechanical motion in a robot.",
+    "definition_urdu": "ایک آلہ جو توانائی کو روبوٹ میں کنٹرول شدہ میکانیکل حرکت میں تبدیل کرتا ہے۔",
+    "category": "robotics"
+  },
+  {
+    "english_term": "Servo Motor",
+    "urdu_translation": "سروو موٹر",
+    "pronunciation_transliterated": "Servo Motor",
+    "definition_english": "A high-precision motor that maintains a desired position or speed through feedback control.",
+    "definition_urdu": "ایک اعلیٰ درستگی والی موٹر جو فیڈ بیک کنٹرول کے ذریعے مطلوبہ حالت یا رفتار برقرار رکھتی ہے۔",
+    "category": "robotics"
+  },
+  {
+    "english_term": "Grasper",
+    "urdu_translation": "پکڑ نے والا",
+    "pronunciation_transliterated": "Grasper",
+    "definition_english": "An end-effector that can grasp or pick up objects.",
+    "definition_urdu": "ایک آخری آلہ جو اشیاء کو پکڑ سکتا ہے۔",
+    "category": "robotics"
+  },
+  {
+    "english_term": "Degrees of Freedom",
+    "urdu_translation": "آزادی کی ڈگریاں",
+    "pronunciation_transliterated": "Degrees of Freedom",
+    "definition_english": "The number of independent parameters required to describe the configuration of a system.",
+    "definition_urdu": "ایک نظام کی شکل کو بیان کرنے کے لیے درکار آزاد پیرامیٹرز کی تعداد۔",
+    "category": "kinematics"
+  },
+  {
+    "english_term": "End Effector",
+    "urdu_translation": "آخری اثر انگیز",
+    "pronunciation_transliterated": "End Effector",
+    "definition_english": "The tool or device at the end of a robot arm that interacts with the environment.",
+    "definition_urdu": "روبوٹ کی بانہ کے آخر میں ایک آلہ جو ماحول کے ساتھ تعامل کرتا ہے۔",
+    "category": "robotics"
+  },
+  {
+    "english_term": "Forward Kinematics",
+    "urdu_translation": "آگے کی حرکت کی سائنس",
+    "pronunciation_transliterated": "Forward Kinematics",
+    "definition_english": "Calculating the position and orientation of the end effector given joint angles.",
+    "definition_urdu": "جوڑوں کے زاویوں کو دیکھتے ہوئے آخری اثر انگیز کی حالت اور سمت کا حساب لگانا۔",
+    "category": "kinematics"
+  },
+  {
+    "english_term": "Inverse Kinematics",
+    "urdu_translation": "پیچھے کی حرکت کی سائنس",
+    "pronunciation_transliterated": "Inverse Kinematics",
+    "definition_english": "Calculating joint angles needed to achieve a desired end effector position.",
+    "definition_urdu": "مطلوبہ آخری اثر انگیز کی حالت حاصل کرنے کے لیے درکار جوڑوں کے زاویوں کا حساب لگانا۔",
+    "category": "kinematics"
+  },
+  {
+    "english_term": "Jacobian",
+    "urdu_translation": "جیکوبین",
+    "pronunciation_transliterated": "Jacobian",
+    "definition_english": "A matrix that relates joint velocities to end effector velocities.",
+    "definition_urdu": "ایک میٹرکس جو جوڑوں کی رفتار کو آخری اثر انگیز کی رفتار سے منسلک کرتا ہے۔",
+    "category": "kinematics"
+  },
+  {
+    "english_term": "Trajectory",
+    "urdu_translation": "رفتار کا راستہ",
+    "pronunciation_transliterated": "Trajectory",
+    "definition_english": "The path followed by a robot or object as it moves through space.",
+    "definition_urdu": "روبوٹ یا چیز کا راستہ جیسے وہ خلا میں حرکت کرتی ہے۔",
+    "category": "robotics"
+  },
+  {
+    "english_term": "Control System",
+    "urdu_translation": "کنٹرول سسٹم",
+    "pronunciation_transliterated": "Control System",
+    "definition_english": "A set of devices and algorithms that manages the behavior of a mechanical system.",
+    "definition_urdu": "ایک نظام جو میکانیکل نظام کے رویے کو کنٹرول کرتا ہے۔",
+    "category": "control"
+  },
+  {
+    "english_term": "PID Controller",
+    "urdu_translation": "پی آئی ڈی کنٹرولر",
+    "pronunciation_transliterated": "PID Controller",
+    "definition_english": "A feedback control system with Proportional, Integral, and Derivative terms.",
+    "definition_urdu": "تناسب، انضمام اور مشتق شرائط کے ساتھ ایک فیڈ بیک کنٹرول سسٹم۔",
+    "category": "control"
+  },
+  {
+    "english_term": "Feedback",
+    "urdu_translation": "واپس اطلاع",
+    "pronunciation_transliterated": "Feedback",
+    "definition_english": "Information returned about a system's output to control its behavior.",
+    "definition_urdu": "ایک نظام کی آؤٹ پٹ کے بارے میں معلومات جو اس کے رویے کو کنٹرول کرتی ہے۔",
+    "category": "control"
+  },
+  {
+    "english_term": "Sensor",
+    "urdu_translation": "حس کار",
+    "pronunciation_transliterated": "Sensor",
+    "definition_english": "A device that detects and responds to physical stimuli.",
+    "definition_urdu": "ایک آلہ جو جسمانی محرک کو محسوس کرتا ہے اور اس پر ردعمل دیتا ہے۔",
+    "category": "robotics"
+  },
+  {
+    "english_term": "Position Sensor",
+    "urdu_translation": "حالت کا حس کار",
+    "pronunciation_transliterated": "Position Sensor",
+    "definition_english": "A sensor that measures the position or location of an object.",
+    "definition_urdu": "ایک حس کار جو کسی چیز کی حالت یا مقام کو ناپتا ہے۔",
+    "category": "robotics"
+  },
+  {
+    "english_term": "Velocity Sensor",
+    "urdu_translation": "رفتار کا حس کار",
+    "pronunciation_transliterated": "Velocity Sensor",
+    "definition_english": "A sensor that measures the speed or velocity of an object.",
+    "definition_urdu": "ایک حس کار جو کسی چیز کی رفتار کو ناپتا ہے۔",
+    "category": "robotics"
+  },
+  {
+    "english_term": "Force Sensor",
+    "urdu_translation": "قوت کا حس کار",
+    "pronunciation_transliterated": "Force Sensor",
+    "definition_english": "A sensor that measures the force applied on an object.",
+    "definition_urdu": "ایک حس کار جو کسی چیز پر لاگو قوت کو ناپتا ہے۔",
+    "category": "robotics"
+  },
+  {
+    "english_term": "IMU",
+    "urdu_translation": "Inertial Measurement Unit",
+    "pronunciation_transliterated": "IMU",
+    "definition_english": "An instrument that measures acceleration and rotation rate of a device.",
+    "definition_urdu": "ایک آلہ جو کسی آلے کی رفتار اور گھومنے کی شرح کو ناپتا ہے۔",
+    "category": "robotics"
+  },
+  {
+    "english_term": "Encoder",
+    "urdu_translation": "کوڈ کار",
+    "pronunciation_transliterated": "Encoder",
+    "definition_english": "A device that converts mechanical motion into digital signals.",
+    "definition_urdu": "ایک آلہ جو میکانیکل حرکت کو ڈیجیٹل سگنل میں بدلتا ہے۔",
+    "category": "robotics"
+  },
+  {
+    "english_term": "Torque",
+    "urdu_translation": "پیچ قوت",
+    "pronunciation_transliterated": "Torque",
+    "definition_english": "A rotational force that tends to cause rotation about an axis.",
+    "definition_urdu": "ایک گھومنے والی قوت جو ایک محور کے ارد گرد گھومنے کا سبب بنتی ہے۔",
+    "category": "mechanics"
+  },
+  {
+    "english_term": "Inertia",
+    "urdu_translation": "بے حرکی",
+    "pronunciation_transliterated": "Inertia",
+    "definition_english": "The property of matter to resist acceleration or changes in motion.",
+    "definition_urdu": "معاملے کی خصوصیت جو رفتار یا حرکت میں تبدیلی کی مزاحمت کرتی ہے۔",
+    "category": "mechanics"
+  },
+  {
+    "english_term": "Momentum",
+    "urdu_translation": "حرکی مقدار",
+    "pronunciation_transliterated": "Momentum",
+    "definition_english": "The product of an object's mass and velocity.",
+    "definition_urdu": "کسی چیز کے بڑے پن اور رفتار کا حاصل ضرب۔",
+    "category": "mechanics"
+  },
+  {
+    "english_term": "Work",
+    "urdu_translation": "کام",
+    "pronunciation_transliterated": "Work",
+    "definition_english": "The product of force and displacement in the direction of the force.",
+    "definition_urdu": "قوت اور قوت کی سمت میں بے جائی کا حاصل ضرب۔",
+    "category": "mechanics"
+  },
+  {
+    "english_term": "Energy",
+    "urdu_translation": "توانائی",
+    "pronunciation_transliterated": "Energy",
+    "definition_english": "The capacity of a system to do work.",
+    "definition_urdu": "ایک نظام کی کام کرنے کی صلاحیت۔",
+    "category": "mechanics"
+  },
+  {
+    "english_term": "Potential Energy",
+    "urdu_translation": "ممکنہ توانائی",
+    "pronunciation_transliterated": "Potential Energy",
+    "definition_english": "The energy that an object possesses due to its position or state.",
+    "definition_urdu": "وہ توانائی جو کسی چیز کے پاس اس کی حالت یا مقام کی وجہ سے ہوتی ہے۔",
+    "category": "mechanics"
+  },
+  {
+    "english_term": "Kinetic Energy",
+    "urdu_translation": "حرکی توانائی",
+    "pronunciation_transliterated": "Kinetic Energy",
+    "definition_english": "The energy that an object possesses due to its motion.",
+    "definition_urdu": "وہ توانائی جو کسی چیز کے پاس اس کی حرکت کی وجہ سے ہوتی ہے۔",
+    "category": "mechanics"
+  },
+  {
+    "english_term": "Friction",
+    "urdu_translation": "رگڑ",
+    "pronunciation_transliterated": "Friction",
+    "definition_english": "A force that opposes the relative motion between two surfaces in contact.",
+    "definition_urdu": "ایک قوت جو ایک دوسرے کے ساتھ رابطے میں دو سطحوں کے درمیان نسبتی حرکت کی مزاحمت کرتی ہے۔",
+    "category": "mechanics"
+  },
+  {
+    "english_term": "Center of Mass",
+    "urdu_translation": "بڑے کا مرکز",
+    "pronunciation_transliterated": "Center of Mass",
+    "definition_english": "The point where the entire mass of an object is considered to be concentrated.",
+    "definition_urdu": "وہ نقطہ جہاں کسی چیز کے تمام بڑے کو متمرکز سمجھا جاتا ہے۔",
+    "category": "mechanics"
+  }
+]

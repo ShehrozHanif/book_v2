@@ -3,6 +3,7 @@ id: chapter-13
 title: "Walking & Locomotion"
 sidebar_label: "Ch 13: Walking & Locomotion"
 sidebar_position: 13
+chapter_id: 13
 ---
 
 

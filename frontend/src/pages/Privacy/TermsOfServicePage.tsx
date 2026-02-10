@@ -51,7 +51,7 @@ const TermsOfServicePage: React.FC = () => {
           {terms && <p className={styles.lastUpdated}>Last updated: {terms.last_updated}</p>}
         </div>
 
-        {isLoading && <LoadingIndicator />}
+        {isLoading && <LoadingIndicator isVisible={isLoading} />}
 
         {error && (
           <div className={styles.errorContainer}>

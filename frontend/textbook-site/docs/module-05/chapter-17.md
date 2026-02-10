@@ -3,6 +3,7 @@ id: chapter-17
 title: "Debugging & Troubleshooting"
 sidebar_label: "Ch 17: Debugging & Troubleshooting"
 sidebar_position: 17
+chapter_id: 17
 ---
 
 

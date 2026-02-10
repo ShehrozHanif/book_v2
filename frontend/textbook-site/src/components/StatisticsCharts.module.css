@@ -1,0 +1,255 @@
+/* Statistics Charts Styles */
+
+.container {
+  background: white;
+  border-radius: 12px;
+  padding: 24px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.title {
+  margin: 0 0 24px;
+  color: #333;
+  font-size: 24px;
+  font-weight: 600;
+}
+
+.chartSection {
+  margin-bottom: 32px;
+}
+
+.chartSection:last-of-type {
+  margin-bottom: 0;
+}
+
+.chartTitle {
+  margin: 0 0 16px;
+  color: #333;
+  font-size: 16px;
+  font-weight: 600;
+}
+
+/* Heatmap */
+.heatmapContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.heatmapGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(40px, 1fr));
+  gap: 6px;
+}
+
+.heatmapCell {
+  aspect-ratio: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 2px solid #e0e0e0;
+  border-radius: 4px;
+  font-size: 12px;
+  font-weight: 600;
+  color: #333;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.heatmapCell:hover {
+  transform: scale(1.1);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+}
+
+.heatmapLabel {
+  display: block;
+}
+
+.heatmapLegend {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 12px;
+  color: #999;
+}
+
+.legendGradient {
+  width: 100px;
+  height: 20px;
+  background: linear-gradient(90deg, rgba(76, 175, 80, 0.2), rgba(76, 175, 80, 1));
+  border-radius: 4px;
+  border: 1px solid #ddd;
+}
+
+/* Bar Chart */
+.barChart {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.barItem {
+  display: grid;
+  grid-template-columns: 40px 1fr 40px;
+  align-items: center;
+  gap: 12px;
+}
+
+.barLabel {
+  text-align: right;
+  font-size: 12px;
+  color: #666;
+  font-weight: 600;
+}
+
+.barContainer {
+  width: 100%;
+  height: 20px;
+  background: #f0f0f0;
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.bar {
+  height: 100%;
+  border-radius: 4px;
+  transition: width 0.3s ease;
+}
+
+.barValue {
+  text-align: left;
+  font-size: 12px;
+  color: #666;
+  font-weight: 600;
+}
+
+/* Learning Curve */
+.learningCurve {
+  background: #f9f9f9;
+  border-radius: 8px;
+  padding: 20px;
+  min-height: 200px;
+}
+
+.noData {
+  text-align: center;
+  color: #999;
+  margin: 0;
+  padding: 40px 20px;
+}
+
+.curveContainer {
+  position: relative;
+  height: 200px;
+  display: flex;
+  align-items: flex-end;
+  gap: 4px;
+  padding-bottom: 30px;
+}
+
+.curvePoint {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  height: 100%;
+  gap: 8px;
+}
+
+.curveBar {
+  width: 100%;
+  min-height: 4px;
+  border-radius: 2px;
+  transition: all 0.2s ease;
+}
+
+.curveBar:hover {
+  opacity: 0.8;
+  box-shadow: 0 2px 4px rgba(255, 152, 0, 0.3);
+}
+
+.curveDate {
+  font-size: 10px;
+  color: #999;
+  text-align: center;
+  white-space: nowrap;
+}
+
+/* Summary Section */
+.summarySection {
+  margin-top: 32px;
+  padding-top: 24px;
+  border-top: 2px solid #f0f0f0;
+}
+
+.summaryGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+  gap: 16px;
+}
+
+.summaryCard {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  padding: 16px;
+  background: #f9f9f9;
+  border-radius: 8px;
+  text-align: center;
+  border-left: 3px solid #2196f3;
+}
+
+.summaryIcon {
+  font-size: 28px;
+}
+
+.summaryValue {
+  color: #2196f3;
+  font-size: 18px;
+  font-weight: 600;
+}
+
+.summaryLabel {
+  color: #999;
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+@media (max-width: 768px) {
+  .container {
+    padding: 16px;
+  }
+
+  .title {
+    font-size: 20px;
+    margin-bottom: 20px;
+  }
+
+  .chartSection {
+    margin-bottom: 24px;
+  }
+
+  .heatmapGrid {
+    grid-template-columns: repeat(auto-fill, minmax(35px, 1fr));
+  }
+
+  .barItem {
+    grid-template-columns: 35px 1fr 35px;
+    gap: 8px;
+  }
+
+  .summaryGrid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .curveContainer {
+    gap: 2px;
+  }
+
+  .curveDate {
+    font-size: 9px;
+  }
+}

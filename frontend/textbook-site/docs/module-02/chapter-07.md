@@ -3,6 +3,7 @@ id: chapter-07
 title: "Robot Description & URDF"
 sidebar_label: "Ch 07: Robot Description & URDF"
 sidebar_position: 7
+chapter_id: 7
 ---
 
 

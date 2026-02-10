@@ -1,5 +1,8 @@
 """Assessment service for knowledge evaluation and skill scoring."""
 
+import json
+import os
+from pathlib import Path
 from typing import List, Dict, Any, Tuple
 from uuid import UUID
 from sqlalchemy import select
@@ -8,139 +11,50 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from src.personalization.models.db_models import KnowledgeAssessment, User
 
 
-# Assessment question bank with 10 questions across difficulty levels
-ASSESSMENT_QUESTIONS = [
-    {
-        "question_id": 1,
-        "text": "What is the primary purpose of inverse kinematics in robotics?",
-        "options": [
-            "A) To calculate joint angles from desired end-effector position",
-            "B) To calculate end-effector position from joint angles",
-            "C) To optimize robot energy consumption",
-            "D) To plan collision-free paths"
-        ],
-        "correct_answer": "A",
-        "difficulty": "beginner",
-        "points": 10
-    },
-    {
-        "question_id": 2,
-        "text": "Which of the following is NOT a common coordinate frame representation in robotics?",
-        "options": [
-            "A) Euler angles",
-            "B) Quaternions",
-            "C) Rotation matrices",
-            "D) Fibonacci sequences"
-        ],
-        "correct_answer": "D",
-        "difficulty": "beginner",
-        "points": 10
-    },
-    {
-        "question_id": 3,
-        "text": "What does ZMP (Zero Moment Point) represent in bipedal robotics?",
-        "options": [
-            "A) The center of mass of the robot",
-            "B) The point where net ground reaction moment is zero",
-            "C) The highest point on the robot",
-            "D) The midpoint between two feet"
-        ],
-        "correct_answer": "B",
-        "difficulty": "intermediate",
-        "points": 15
-    },
-    {
-        "question_id": 4,
-        "text": "In the Denavit-Hartenberg (DH) convention, how many parameters are used to describe each link?",
-        "options": [
-            "A) 2",
-            "B) 3",
-            "C) 4",
-            "D") 6"
-        ],
-        "correct_answer": "C",
-        "difficulty": "intermediate",
-        "points": 15
-    },
-    {
-        "question_id": 5,
-        "text": "What is the main advantage of using Model Predictive Control (MPC) for robot locomotion?",
-        "options": [
-            "A) It requires no computation",
-            "B) It can incorporate constraints and optimize over a time horizon",
-            "C) It works without sensor feedback",
-            "D) It only uses historical data"
-        ],
-        "correct_answer": "B",
-        "difficulty": "advanced",
-        "points": 20
-    },
-    {
-        "question_id": 6,
-        "text": "Which Python library is commonly used for numerical computation in robotics?",
-        "options": [
-            "A) pandas",
-            "B) NumPy",
-            "C) Flask",
-            "D) Django"
-        ],
-        "correct_answer": "B",
-        "difficulty": "beginner",
-        "points": 10
-    },
-    {
-        "question_id": 7,
-        "text": "What is the purpose of a Jacobian matrix in robotics?",
-        "options": [
-            "A) To store robot configuration",
-            "B) To relate joint velocities to end-effector velocities",
-            "C) To represent sensor data",
-            "D) To calculate robot weight"
-        ],
-        "correct_answer": "B",
-        "difficulty": "intermediate",
-        "points": 15
-    },
-    {
-        "question_id": 8,
-        "text": "In humanoid robotics, what is 'gait generation'?",
-        "options": [
-            "A) The process of designing robot appearance",
-            "B) The creation of walking patterns and trajectories",
-            "C) The manufacturing of robot joints",
-            "D) The programming of speech synthesis"
-        ],
-        "correct_answer": "B",
-        "difficulty": "beginner",
-        "points": 10
-    },
-    {
-        "question_id": 9,
-        "text": "What challenge does the 'curse of dimensionality' present in robot motion planning?",
-        "options": [
-            "A) Robots become physically larger",
-            "B) Computational complexity grows exponentially with degrees of freedom",
-            "C) Robots move too slowly",
-            "D) Sensors become less accurate"
-        ],
-        "correct_answer": "B",
-        "difficulty": "advanced",
-        "points": 20
-    },
-    {
-        "question_id": 10,
-        "text": "Which of the following is a key consideration for stable bipedal walking?",
-        "options": [
-            "A) Keeping the center of pressure within the support polygon",
-            "B) Maximizing robot height",
-            "C) Using only open-loop control",
-            "D) Minimizing number of sensors"
-        ],
-        "correct_answer": "A",
-        "difficulty": "intermediate",
-        "points": 15
-    }
-]
+# Load assessment questions from JSON file
+def _load_assessment_questions() -> List[Dict[str, Any]]:
+    """Load assessment questions from JSON file."""
+    current_dir = Path(__file__).parent.parent
+    json_path = current_dir / "data" / "assessment_questions.json"
+
+    if not json_path.exists():
+        raise FileNotFoundError(f"Assessment questions file not found: {json_path}")
+
+    with open(json_path, 'r', encoding='utf-8') as f:
+        questions = json.load(f)
+
+    # Transform to internal format for backward compatibility
+    transformed_questions = []
+    for q in questions:
+        # Find the correct option
+        correct_option_idx = None
+        option_texts = []
+        points = 0
+
+        for idx, opt in enumerate(q["options"]):
+            option_texts.append(opt["text"])
+            if opt["correct"]:
+                correct_option_idx = idx
+                points = opt["points"]
+
+        # Convert to letter answer (A, B, C, D)
+        answer_letters = ["A", "B", "C", "D", "E", "F"]
+        correct_answer = answer_letters[correct_option_idx] if correct_option_idx is not None else "A"
+
+        transformed_questions.append({
+            "question_id": q["question_id"],
+            "text": q["text"],
+            "options": [f"{answer_letters[i]}) {opt}" for i, opt in enumerate(option_texts)],
+            "correct_answer": correct_answer,
+            "difficulty": q["difficulty"],
+            "points": points
+        })
+
+    return transformed_questions
+
+
+# Load questions at module initialization
+ASSESSMENT_QUESTIONS = _load_assessment_questions()
 
 
 def get_assessment_questions() -> List[Dict[str, Any]]:

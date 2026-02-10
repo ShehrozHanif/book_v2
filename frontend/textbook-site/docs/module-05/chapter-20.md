@@ -3,6 +3,7 @@ id: chapter-20
 title: "Emerging Technologies"
 sidebar_label: "Ch 20: Emerging Technologies"
 sidebar_position: 20
+chapter_id: 20
 ---
 
 

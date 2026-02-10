@@ -6,7 +6,7 @@ from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
 from sqlalchemy.ext.asyncio import AsyncSession
 from uuid import UUID
 
-from src.database.connection import get_db
+from src.database.connection import get_session
 from src.personalization.utils.auth import verify_access_token, extract_user_id_from_token
 from src.personalization.services.user_service import get_user_by_id
 
@@ -16,7 +16,7 @@ security = HTTPBearer(auto_error=False)
 
 async def get_current_user(
     credentials: Optional[HTTPAuthorizationCredentials] = Depends(security),
-    db: AsyncSession = Depends(get_db)
+    db: AsyncSession = Depends(get_session)
 ):
     """
     Dependency to get current authenticated user from JWT token.
@@ -88,7 +88,7 @@ async def get_current_user(
 
 async def get_optional_user(
     credentials: Optional[HTTPAuthorizationCredentials] = Depends(security),
-    db: AsyncSession = Depends(get_db)
+    db: AsyncSession = Depends(get_session)
 ):
     """
     Dependency to get current user if authenticated, or None for anonymous access.

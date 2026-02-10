@@ -1,0 +1,640 @@
+{
+  "chapters": [
+    {
+      "query": "Chapter 1",
+      "description": "Chapter 1",
+      "chapters": [
+        "1",
+        "1",
+        "19"
+      ],
+      "scores": [
+        "0.59",
+        "0.38",
+        "0.36"
+      ],
+      "has_info": true,
+      "response": "Chapter 1 of Module 1 focuses on foundational concepts related to humanoid robots, such as their def"
+    },
+    {
+      "query": "Chapter 2",
+      "description": "Chapter 2",
+      "chapters": [
+        "22",
+        "2",
+        "22"
+      ],
+      "scores": [
+        "0.41",
+        "0.39",
+        "0.39"
+      ],
+      "has_info": false,
+      "response": "I'm sorry, but there is no specific information provided in the passages about the content of Chapte"
+    },
+    {
+      "query": "Chapter 3",
+      "description": "Chapter 3",
+      "chapters": [
+        "1",
+        "14",
+        "19"
+      ],
+      "scores": [
+        "0.47",
+        "0.39",
+        "0.37"
+      ],
+      "has_info": false,
+      "response": "I'm sorry, but there is no information provided regarding Chapter 3 in the passages you shared."
+    },
+    {
+      "query": "Chapter 4",
+      "description": "Chapter 4",
+      "chapters": [
+        "4",
+        "4",
+        "1"
+      ],
+      "scores": [
+        "0.34",
+        "0.32",
+        "0.47"
+      ],
+      "has_info": true,
+      "response": "Chapter 4 of the provided passages covers various topics related to sensors and perception fundament"
+    },
+    {
+      "query": "Chapter 5",
+      "description": "Chapter 5",
+      "chapters": [
+        "5",
+        "5",
+        "1"
+      ],
+      "scores": [
+        "0.36",
+        "0.33",
+        "0.47"
+      ],
+      "has_info": true,
+      "response": "Chapter 5 covers various important topics related to humanoid robotics, including gears, joint desig"
+    },
+    {
+      "query": "Chapter 6",
+      "description": "Chapter 6",
+      "chapters": [
+        "6",
+        "6",
+        "1"
+      ],
+      "scores": [
+        "0.35",
+        "0.33",
+        "0.46"
+      ],
+      "has_info": true,
+      "response": "Chapter 6 of the provided passages discusses the architecture and uses of Robot Operating System (RO"
+    },
+    {
+      "query": "Chapter 7",
+      "description": "Chapter 7",
+      "chapters": [
+        "1",
+        "19",
+        "21"
+      ],
+      "scores": [
+        "0.44",
+        "0.40",
+        "0.37"
+      ],
+      "has_info": false,
+      "response": "I'm sorry, but there is no information provided about Chapter 7 in the passages you provided. If you"
+    },
+    {
+      "query": "Chapter 8",
+      "description": "Chapter 8",
+      "chapters": [
+        "8",
+        "1",
+        "22"
+      ],
+      "scores": [
+        "0.32",
+        "0.43",
+        "0.37"
+      ],
+      "has_info": true,
+      "response": "I'm sorry, but there seems to be no specific content provided for Chapter 8 in the passages I have a"
+    },
+    {
+      "query": "Chapter 9",
+      "description": "Chapter 9",
+      "chapters": [
+        "9",
+        "9",
+        "1"
+      ],
+      "scores": [
+        "0.34",
+        "0.33",
+        "0.43"
+      ],
+      "has_info": true,
+      "response": "Chapter 9 covers integrated planning and control in the context of a simulated humanoid arm tracking"
+    },
+    {
+      "query": "Chapter 10",
+      "description": "Chapter 10",
+      "chapters": [
+        "1",
+        "21",
+        "19"
+      ],
+      "scores": [
+        "0.46",
+        "0.39",
+        "0.38"
+      ],
+      "has_info": false,
+      "response": "I'm sorry, but there is no information provided on Chapter 10 in the passages you shared. If you hav"
+    },
+    {
+      "query": "Chapter 11",
+      "description": "Chapter 11",
+      "chapters": [
+        "11",
+        "1",
+        "19"
+      ],
+      "scores": [
+        "0.33",
+        "0.44",
+        "0.39"
+      ],
+      "has_info": true,
+      "response": "Chapter 11 focuses on real-time considerations essential for production humanoid systems. It covers "
+    },
+    {
+      "query": "Chapter 12",
+      "description": "Chapter 12",
+      "chapters": [
+        "12",
+        "12",
+        "1"
+      ],
+      "scores": [
+        "0.32",
+        "0.31",
+        "0.43"
+      ],
+      "has_info": true,
+      "response": "Chapter 12 covers Advanced Kinematics in Humanoid Robotics. It introduces the Denavit-Hartenberg con"
+    },
+    {
+      "query": "Chapter 13",
+      "description": "Chapter 13",
+      "chapters": [
+        "1",
+        "19",
+        "14"
+      ],
+      "scores": [
+        "0.36",
+        "0.33",
+        "0.33"
+      ],
+      "has_info": false,
+      "response": "I'm sorry, but there is no information provided about Chapter 13 in the passages."
+    },
+    {
+      "query": "Chapter 14",
+      "description": "Chapter 14",
+      "chapters": [
+        "14",
+        "14",
+        "14"
+      ],
+      "scores": [
+        "0.37",
+        "0.32",
+        "0.31"
+      ],
+      "has_info": true,
+      "response": "Chapter 14 of Module 3 focuses on Manipulation & Grasping in humanoid robotics. It covers arm kinema"
+    },
+    {
+      "query": "Chapter 15",
+      "description": "Chapter 15",
+      "chapters": [
+        "15",
+        "15",
+        "1"
+      ],
+      "scores": [
+        "0.34",
+        "0.31",
+        "0.43"
+      ],
+      "has_info": true,
+      "response": "Chapter 15 discusses whole-body control for humanoid robots, emphasizing the need to address multipl"
+    },
+    {
+      "query": "Chapter 16",
+      "description": "Chapter 16",
+      "chapters": [
+        "16",
+        "1",
+        "22"
+      ],
+      "scores": [
+        "0.33",
+        "0.38",
+        "0.34"
+      ],
+      "has_info": true,
+      "response": "I'm sorry, but the provided passages do not contain specific information related to potential source"
+    },
+    {
+      "query": "Chapter 17",
+      "description": "Chapter 17",
+      "chapters": [
+        "17",
+        "17",
+        "17"
+      ],
+      "scores": [
+        "0.36",
+        "0.36",
+        "0.31"
+      ],
+      "has_info": true,
+      "response": "Chapter 17 covers the topic of debugging and troubleshooting in humanoid robotic systems. It emphasi"
+    },
+    {
+      "query": "Chapter 18",
+      "description": "Chapter 18",
+      "chapters": [
+        "1",
+        "19",
+        "22"
+      ],
+      "scores": [
+        "0.38",
+        "0.35",
+        "0.33"
+      ],
+      "has_info": false,
+      "response": "I'm sorry, but there is no information provided about Chapter 18 in the passages given. If you have "
+    },
+    {
+      "query": "Chapter 19",
+      "description": "Chapter 19",
+      "chapters": [
+        "19",
+        "1",
+        "22"
+      ],
+      "scores": [
+        "0.39",
+        "0.38",
+        "0.35"
+      ],
+      "has_info": false,
+      "response": "I'm sorry, but there is no specific information provided in the passages regarding the content of Ch"
+    },
+    {
+      "query": "Chapter 20",
+      "description": "Chapter 20",
+      "chapters": [
+        "20",
+        "20",
+        "19"
+      ],
+      "scores": [
+        "0.31",
+        "0.30",
+        "0.36"
+      ],
+      "has_info": true,
+      "response": "I'm sorry, but there is no specific question provided for Chapter 20 of Module 5. If you have a ques"
+    },
+    {
+      "query": "Chapter 21",
+      "description": "Chapter 21",
+      "chapters": [
+        "21",
+        "1",
+        "19"
+      ],
+      "scores": [
+        "0.38",
+        "0.41",
+        "0.37"
+      ],
+      "has_info": false,
+      "response": "I'm sorry, but there is no specific information provided about the content of Chapter 21 in the pass"
+    },
+    {
+      "query": "Chapter 22",
+      "description": "Chapter 22",
+      "chapters": [
+        "22",
+        "22",
+        "22"
+      ],
+      "scores": [
+        "0.35",
+        "0.33",
+        "0.32"
+      ],
+      "has_info": true,
+      "response": "Chapter 22 of Module 5 focuses on the practical aspects of humanoid robotics, guiding readers throug"
+    }
+  ],
+  "modules": [
+    {
+      "query": "Module 1",
+      "description": "Information about Module 1",
+      "chapters": [
+        "1",
+        "1",
+        "4"
+      ],
+      "scores": [
+        "0.67",
+        "0.42",
+        "0.41"
+      ],
+      "has_info": true,
+      "response": "I'm sorry, but your question is unclear. Could you please provide more specific details or clarify w"
+    },
+    {
+      "query": "Module 2",
+      "description": "Information about Module 2",
+      "chapters": [
+        "1",
+        "6",
+        "22"
+      ],
+      "scores": [
+        "0.56",
+        "0.45",
+        "0.44"
+      ],
+      "has_info": true,
+      "response": "I'm sorry, but the question does not explicitly mention any specific content or information from Mod"
+    },
+    {
+      "query": "Module 3",
+      "description": "Information about Module 3",
+      "chapters": [
+        "1",
+        "11",
+        "14"
+      ],
+      "scores": [
+        "0.54",
+        "0.43",
+        "0.43"
+      ],
+      "has_info": true,
+      "response": "I'm sorry, but the passages provided do not contain specific information about Module 3 as a standal"
+    },
+    {
+      "query": "Module 4",
+      "description": "Information about Module 4",
+      "chapters": [
+        "1",
+        "21",
+        "17"
+      ],
+      "scores": [
+        "0.52",
+        "0.43",
+        "0.42"
+      ],
+      "has_info": false,
+      "response": "I'm sorry, but there is no information provided about Module 4 in the passages. If you have any othe"
+    },
+    {
+      "query": "Module 5",
+      "description": "Information about Module 5",
+      "chapters": [
+        "1",
+        "19",
+        "21"
+      ],
+      "scores": [
+        "0.53",
+        "0.45",
+        "0.45"
+      ],
+      "has_info": true,
+      "response": "I'm sorry, but the passages provided do not contain specific information about the content of Module"
+    },
+    {
+      "query": "Explain Module 1",
+      "description": "Explain what is in Module 1",
+      "chapters": [
+        "1",
+        "1",
+        "17"
+      ],
+      "scores": [
+        "0.62",
+        "0.42",
+        "0.41"
+      ],
+      "has_info": true,
+      "response": "I cannot provide a detailed explanation of Module 1 based on the passages provided. The passages men"
+    },
+    {
+      "query": "What is in Module 2",
+      "description": "Question about Module 2 content",
+      "chapters": [
+        "1",
+        "6",
+        "22"
+      ],
+      "scores": [
+        "0.52",
+        "0.44",
+        "0.43"
+      ],
+      "has_info": true,
+      "response": "Module 2 covers the architecture and uses of robotics in the wild, with a focus on ROS 2 fundamental"
+    }
+  ],
+  "topics": [
+    {
+      "query": "Chapter 1 humanoid robotics definition",
+      "description": "Chapter + topic",
+      "chapters": [
+        "1",
+        "1",
+        "1"
+      ],
+      "scores": [
+        "0.79",
+        "0.75",
+        "0.71"
+      ],
+      "has_info": true,
+      "response": "Chapter 1 of the provided passages defines humanoid robotics as the field that involves creating mac"
+    },
+    {
+      "query": "Chapter 4 sensors IMU",
+      "description": "Chapter + topic",
+      "chapters": [
+        "4",
+        "4",
+        "4"
+      ],
+      "scores": [
+        "0.66",
+        "0.66",
+        "0.65"
+      ],
+      "has_info": true,
+      "response": "In Chapter 4, sensors discussed include Inertial Measurement Units (IMUs), which combine acceleromet"
+    },
+    {
+      "query": "Chapter 6 action servers ROS",
+      "description": "Chapter + topic",
+      "chapters": [
+        "6",
+        "6",
+        "6"
+      ],
+      "scores": [
+        "0.69",
+        "0.63",
+        "0.63"
+      ],
+      "has_info": true,
+      "response": "Action servers in ROS 2 are used for handling long-running, preemptible tasks. They consist of a goa"
+    },
+    {
+      "query": "Chapter 11 learning algorithms",
+      "description": "Chapter + topic",
+      "chapters": [
+        "11",
+        "16",
+        "16"
+      ],
+      "scores": [
+        "0.39",
+        "0.46",
+        "0.46"
+      ],
+      "has_info": true,
+      "response": "I'm sorry, but the provided passages do not contain information about learning algorithms in Chapter"
+    },
+    {
+      "query": "Chapter 22 getting started project",
+      "description": "Chapter + topic",
+      "chapters": [
+        "22",
+        "22",
+        "22"
+      ],
+      "scores": [
+        "0.51",
+        "0.49",
+        "0.46"
+      ],
+      "has_info": true,
+      "response": "Chapter 22 of the textbook focuses on getting started with your first project in humanoid robotics. "
+    }
+  ],
+  "generic": [
+    {
+      "query": "What is humanoid robotics",
+      "description": "Generic topic",
+      "chapters": [
+        "1",
+        "1",
+        "1"
+      ],
+      "scores": [
+        "0.75",
+        "0.73",
+        "0.67"
+      ],
+      "has_info": true,
+      "response": "Humanoid robotics is an interdisciplinary field that involves the design and creation of autonomous "
+    },
+    {
+      "query": "Explain kinematics",
+      "description": "Generic topic",
+      "chapters": [
+        "2",
+        "12",
+        "3"
+      ],
+      "scores": [
+        "0.54",
+        "0.43",
+        "0.41"
+      ],
+      "has_info": true,
+      "response": "Kinematics in humanoid robotics focuses on understanding the motion of robots without considering th"
+    },
+    {
+      "query": "What is ROS 2",
+      "description": "Generic topic",
+      "chapters": [
+        "6",
+        "6",
+        "6"
+      ],
+      "scores": [
+        "0.58",
+        "0.57",
+        "0.55"
+      ],
+      "has_info": true,
+      "response": "ROS 2 (Robot Operating System 2) is a complete architectural redesign of the original ROS framework,"
+    },
+    {
+      "query": "Tell me about sensors",
+      "description": "Generic topic",
+      "chapters": [
+        "4",
+        "4",
+        "4"
+      ],
+      "scores": [
+        "0.55",
+        "0.53",
+        "0.50"
+      ],
+      "has_info": true,
+      "response": "Sensors in humanoid robotics play a crucial role in providing feedback from the environment to the r"
+    },
+    {
+      "query": "What is dynamics",
+      "description": "Generic topic",
+      "chapters": [
+        "3",
+        "3",
+        "1"
+      ],
+      "scores": [
+        "0.45",
+        "0.44",
+        "0.37"
+      ],
+      "has_info": true,
+      "response": "Dynamics is the branch of robotics that focuses on understanding the forces and torques that cause m"
+    }
+  ],
+  "summary": {
+    "chapter_success_rate": "16/22",
+    "module_success_rate": "6/7",
+    "topic_success_rate": "5/5 correct, 5/5 informative",
+    "generic_success_rate": "5/5"
+  }
+}

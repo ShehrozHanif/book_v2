@@ -3,6 +3,7 @@ id: chapter-14
 title: "Manipulation & Grasping"
 sidebar_label: "Ch 14: Manipulation & Grasping"
 sidebar_position: 14
+chapter_id: 14
 ---
 
 

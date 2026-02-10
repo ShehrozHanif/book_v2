@@ -1,0 +1,154 @@
+[
+  {
+    "template_key": "greeting_welcome",
+    "english_content": "Welcome to the Robotics Learning Assistant! I'm here to help you understand robotics concepts, answer your questions, and guide you through your learning journey."
+  },
+  {
+    "template_key": "greeting_return",
+    "english_content": "Welcome back! I'm glad to see you again. What would you like to learn about robotics today?"
+  },
+  {
+    "template_key": "intro_robotics",
+    "english_content": "Robotics is the science and technology of designing, building, and using robots. It combines mechanical engineering, electrical engineering, and computer science to create intelligent machines that can perform tasks autonomously."
+  },
+  {
+    "template_key": "explain_kinematics",
+    "english_content": "Kinematics is the study of motion without considering the forces that cause it. In robotics, we use kinematics to determine how a robot's joints and links move to achieve desired positions and orientations."
+  },
+  {
+    "template_key": "explain_dynamics",
+    "english_content": "Dynamics is the study of motion including the forces that cause it. In robotics, dynamics helps us understand how forces and torques affect robot motion, which is crucial for designing controllers and predicting robot behavior."
+  },
+  {
+    "template_key": "forward_kinematics_simple",
+    "english_content": "Forward kinematics calculates the position and orientation of a robot's end-effector given the angles of its joints. It's like asking: 'If my arm joints are at these angles, where will my hand be?'"
+  },
+  {
+    "template_key": "inverse_kinematics_simple",
+    "english_content": "Inverse kinematics solves the opposite problem: given a desired position for the end-effector, what joint angles are needed? This is essential for robot path planning and control."
+  },
+  {
+    "template_key": "joint_types",
+    "english_content": "Robot joints come in several types: revolute joints (rotate around an axis), prismatic joints (translate along an axis), and spherical joints (rotate in multiple directions). Each type contributes to the robot's degrees of freedom."
+  },
+  {
+    "template_key": "degrees_of_freedom",
+    "english_content": "Degrees of freedom (DOF) is the number of independent parameters needed to describe a robot's configuration. A 6-DOF robot arm can reach any position and orientation in its workspace, making it very versatile."
+  },
+  {
+    "template_key": "workspace_definition",
+    "english_content": "A robot's workspace is the set of all positions and orientations that the end-effector can reach. The size and shape of the workspace depend on the robot's structure, joint ranges, and link lengths."
+  },
+  {
+    "template_key": "actuator_types",
+    "english_content": "Robots use different types of actuators: electric motors (precise, popular in industrial robots), hydraulic actuators (powerful, used in heavy-duty applications), and pneumatic actuators (fast, used in assembly tasks)."
+  },
+  {
+    "template_key": "servo_motor_explain",
+    "english_content": "A servo motor is a high-precision motor with feedback control. It continuously adjusts its output to reach and maintain a desired position or speed, making it ideal for robotic applications requiring accuracy."
+  },
+  {
+    "template_key": "end_effector_concept",
+    "english_content": "An end-effector is the 'hand' of a robot - the tool at the end of the arm that interacts with objects. Common end-effectors include grippers for grasping, welding tools, sensors, and painting heads."
+  },
+  {
+    "template_key": "gripper_types",
+    "english_content": "Robot grippers come in many types: parallel grippers (simple, uses two fingers), angular grippers (rotates fingers around pivot), vacuum grippers (uses suction), and specialized grippers for delicate or irregular objects."
+  },
+  {
+    "template_key": "sensor_types_intro",
+    "english_content": "Robots use various sensors to perceive their environment: position sensors (track joint angles), force sensors (measure applied forces), touch sensors (detect contact), and vision systems (process images)."
+  },
+  {
+    "template_key": "encoder_explanation",
+    "english_content": "An encoder is a device that converts mechanical motion into digital signals. Encoders measure rotation or linear movement and provide feedback to the robot's control system, enabling precise position control."
+  },
+  {
+    "template_key": "imu_sensor",
+    "english_content": "An IMU (Inertial Measurement Unit) contains accelerometers and gyroscopes that measure acceleration and rotation. Mobile robots use IMUs to estimate their orientation and detect movement changes."
+  },
+  {
+    "template_key": "control_system_basics",
+    "english_content": "A control system manages robot behavior by processing sensor feedback and adjusting actuators. The control loop continuously monitors the system state, compares it to desired values, and makes corrections."
+  },
+  {
+    "template_key": "pid_controller_intro",
+    "english_content": "A PID controller is a common feedback control algorithm with three components: Proportional (reacts to error), Integral (corrects accumulated error), and Derivative (anticipates future error). Together, they enable smooth and stable control."
+  },
+  {
+    "template_key": "trajectory_planning",
+    "english_content": "Trajectory planning determines the path a robot should follow to move from start to goal position. A good trajectory is smooth, avoids obstacles, and respects joint limits and velocity constraints."
+  },
+  {
+    "template_key": "torque_explanation",
+    "english_content": "Torque is a rotational force that causes objects to spin. In robotics, we calculate required torques to move joints against gravity and inertia, which determines the motor specifications needed."
+  },
+  {
+    "template_key": "inertia_in_robotics",
+    "english_content": "In robotics, inertia refers to an object's resistance to changes in motion. Heavy, fast-moving robot parts have high inertia and require large torques to accelerate, decelerate, or change direction."
+  },
+  {
+    "template_key": "friction_effects",
+    "english_content": "Friction in robot joints and bearings opposes motion and dissipates energy as heat. While some friction helps (like in grippers), excessive friction reduces efficiency. Proper lubrication and design minimize negative friction effects."
+  },
+  {
+    "template_key": "center_of_mass",
+    "english_content": "The center of mass is the point where all of an object's weight is considered concentrated. For robot stability, the center of mass should be within the base of support, especially during movement."
+  },
+  {
+    "template_key": "potential_energy",
+    "english_content": "Potential energy is energy stored due to position. In robotics, a raised robot arm has gravitational potential energy. This energy affects the torques needed to move the arm and plays a role in energy-efficient planning."
+  },
+  {
+    "template_key": "kinetic_energy",
+    "english_content": "Kinetic energy is energy due to motion. A moving robot part has kinetic energy proportional to its mass and speed squared. Understanding kinetic energy helps with collision prediction and safety analysis."
+  },
+  {
+    "template_key": "jacobian_matrix",
+    "english_content": "The Jacobian matrix relates joint velocities to end-effector velocities. It's fundamental in robotics for converting between joint and task spaces, and it indicates singularities where the robot loses dexterity."
+  },
+  {
+    "template_key": "singularity_warning",
+    "english_content": "A singularity is a configuration where the robot loses some degrees of freedom or requires infinite torque. At singularities, the Jacobian is singular (determinant = 0), and the robot cannot move smoothly in certain directions."
+  },
+  {
+    "template_key": "collision_avoidance",
+    "english_content": "Collision avoidance is critical for robot safety. Techniques include path planning algorithms (RRT, RRM), distance checking between robot and obstacles, and implementing safety zones around the robot."
+  },
+  {
+    "template_key": "robot_types_industrial",
+    "english_content": "Industrial robots include articulated robots (most common, resembling human arms), SCARA robots (good for assembly), parallel robots (fast, precision), and cylindrical robots (older design, still used in some applications)."
+  },
+  {
+    "template_key": "robot_types_mobile",
+    "english_content": "Mobile robots have locomotion capabilities. Types include wheeled robots (popular, stable), legged robots (navigate rough terrain), aerial robots (drones), and aquatic robots (submarines, underwater drones)."
+  },
+  {
+    "template_key": "robot_programming",
+    "english_content": "Robot programming uses languages like ROS (Robotic Operating System), C++, Python, and specialized robot programming languages. Modern approaches emphasize modularity, reusability, and simulation before real-world deployment."
+  },
+  {
+    "template_key": "safety_in_robotics",
+    "english_content": "Robot safety includes hardware safety (emergency stops, force limiting), software safety (validated code, failsafes), and operational safety (proper training, supervision, protective zones)."
+  },
+  {
+    "template_key": "robot_maintenance",
+    "english_content": "Regular maintenance keeps robots performing optimally: lubrication of joints, checking encoder accuracy, calibrating sensors, inspecting mechanical wear, and updating software."
+  },
+  {
+    "template_key": "learning_path_suggestion",
+    "english_content": "To master robotics, follow this path: 1) Learn fundamentals (kinematics, dynamics), 2) Study control systems, 3) Practice with simulations, 4) Build small projects, 5) Work on complex robots."
+  },
+  {
+    "template_key": "practice_recommendation",
+    "english_content": "Practice what you've learned by solving these challenges: complete forward kinematics calculations, design a simple trajectory, analyze forces in a mechanism, or program a robot simulation."
+  },
+  {
+    "template_key": "resources_recommendation",
+    "english_content": "To deepen your knowledge, explore additional resources: textbooks on robotics, online simulation tools, ROS tutorials, robotics research papers, and hands-on projects with real or simulated robots."
+  },
+  {
+    "template_key": "challenge_encouragement",
+    "english_content": "Great effort so far! You've learned important concepts. Keep practicing with increasingly complex problems. Robotics is a vast field - continuous learning and experimentation are key to mastery."
+  }
+]

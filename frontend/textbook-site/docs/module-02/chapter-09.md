@@ -3,6 +3,7 @@ id: chapter-09
 title: "Motion Planning"
 sidebar_label: "Ch 09: Motion Planning"
 sidebar_position: 9
+chapter_id: 9
 ---
 
 

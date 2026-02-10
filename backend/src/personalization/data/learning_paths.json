@@ -1,0 +1,62 @@
+[
+  {
+    "path_id": "beginner",
+    "path_name": "Beginner Path - Robotics Foundations",
+    "description": "Start with fundamentals and build a strong foundation in robotics concepts. This path covers essential topics like basic kinematics, simple simulations, and core robotics principles. Perfect for those new to robotics or looking to solidify their understanding of foundational concepts.",
+    "target_skill_range": [0, 49],
+    "chapters": [1, 2, 3, 4, 5, 6],
+    "duration_weeks": 6,
+    "difficulty": "easy",
+    "prerequisites": [],
+    "focus": "Core concepts, basic kinematics, simple simulations",
+    "estimated_hours": 30
+  },
+  {
+    "path_id": "intermediate",
+    "path_name": "Intermediate Path - Balanced Learning",
+    "description": "Balanced approach covering theory and practice. This path includes more advanced kinematics, dynamics, control systems, and practical implementation. Ideal for learners who have mastered the basics and want to deepen their knowledge with both theoretical foundations and hands-on applications.",
+    "target_skill_range": [50, 74],
+    "chapters": [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 12, 14],
+    "duration_weeks": 8,
+    "difficulty": "medium",
+    "prerequisites": ["Basic math and programming"],
+    "focus": "Theory foundations with practical applications",
+    "estimated_hours": 55
+  },
+  {
+    "path_id": "developer",
+    "path_name": "Developer Path - Practical Implementation",
+    "description": "Focus on programming, simulation, and practical robot control. This hands-on path emphasizes Python programming for robotics, simulation tools, and real-world control implementation. Best suited for those who want to build and program robots with a focus on software development and practical skills.",
+    "target_skill_range": [41, 100],
+    "chapters": [1, 2, 6, 7, 8, 9, 12, 14, 15],
+    "duration_weeks": 7,
+    "difficulty": "medium",
+    "prerequisites": ["Basic programming knowledge"],
+    "focus": "Python programming, simulation tools, control implementation",
+    "estimated_hours": 45
+  },
+  {
+    "path_id": "researcher",
+    "path_name": "Researcher Path - Advanced Theory",
+    "description": "Deep dive into mathematical foundations and cutting-edge techniques. This comprehensive path covers advanced topics in robotics including optimization, machine learning integration, advanced dynamics, and research-level topics. Designed for those pursuing advanced studies or research in robotics.",
+    "target_skill_range": [75, 100],
+    "chapters": [1, 2, 3, 4, 5, 10, 11, 13, 16, 17, 18, 19, 20, 21, 22],
+    "duration_weeks": 12,
+    "difficulty": "hard",
+    "prerequisites": ["Linear algebra", "Calculus", "Programming"],
+    "focus": "Mathematical rigor, advanced algorithms, research topics",
+    "estimated_hours": 80
+  },
+  {
+    "path_id": "hardware",
+    "path_name": "Hardware Integration Path",
+    "description": "Learn about physical robot systems and hardware interfaces. This path focuses on actuators, sensors, electronics integration, and physical system design. Ideal for engineers interested in the hardware aspects of robotics including mechanical systems, electrical interfaces, and embedded systems.",
+    "target_skill_range": [41, 100],
+    "chapters": [1, 2, 3, 4, 6, 7, 14, 15, 19],
+    "duration_weeks": 6,
+    "difficulty": "medium",
+    "prerequisites": ["Basic electronics"],
+    "focus": "Actuators, sensors, hardware control, physical systems",
+    "estimated_hours": 40
+  }
+]

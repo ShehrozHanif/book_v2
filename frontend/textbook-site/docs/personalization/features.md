@@ -159,7 +159,7 @@ Response:
 ### What It Does
 Analyzes your learning and suggests personalized recommendations:
 
-- **Weak Chapter Identification** - Chapters where you scored <60%
+- **Weak Chapter Identification** - Chapters where you scored &lt;60%
 - **Related Content** - Chapters that build on each other
 - **Practice Suggestions** - Specific areas to focus on
 - **Priority Ranking** - Most impactful chapters to improve
@@ -207,7 +207,7 @@ Response:
 ### Recommendation Engine
 
 **Algorithm:**
-1. Identify weak chapters (mastery < 60%)
+1. Identify weak chapters (mastery &lt; 60%)
 2. Map chapter prerequisites using module structure
 3. Calculate improvement efficiency (time vs. mastery gain)
 4. Sort by priority (impact on dependent chapters)
@@ -294,7 +294,7 @@ Response:
 ## 5. Advanced Challenges
 
 ### What It Does
-Unlocks advanced content when you achieve mastery (>85%):
+Unlocks advanced content when you achieve mastery (&gt;85%):
 
 - **Advanced Practice Questions** - Deeper, harder questions
 - **Research Paper Summaries** - Academic papers related to content

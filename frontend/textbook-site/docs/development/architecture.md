@@ -203,7 +203,7 @@ POST /api/v1/users/login
 - Health checks for all services
 - Persistent named volumes
 - Custom bridge network isolation
-- <20 second startup time
+- &lt;20 second startup time
 
 ---
 
@@ -271,16 +271,16 @@ preferences
 
 | Operation | Time | Optimization |
 |-----------|------|--------------|
-| Dashboard Load | <50ms | Redis cache |
-| DB Query | <50ms | Strategic indexes |
-| API Response | <100ms | Combined |
-| Cache Hit | <10ms | Redis |
-| Cache Miss | <100ms | DB + cache write |
+| Dashboard Load | &lt;50ms | Redis cache |
+| DB Query | &lt;50ms | Strategic indexes |
+| API Response | &lt;100ms | Combined |
+| Cache Hit | &lt;10ms | Redis |
+| Cache Miss | &lt;100ms | DB + cache write |
 
 ### Scalability
 
 **Current Deployment:**
-- Supports <100 concurrent users
+- Supports &lt;100 concurrent users
 - ~600-700MB RAM total
 - Single PostgreSQL instance
 - Single Redis instance

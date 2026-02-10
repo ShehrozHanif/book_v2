@@ -72,10 +72,11 @@ async def get_session():
 
 async def init_db():
     """Initialize database tables."""
-    from src.models.database import Base
+    from src.personalization.models.db_models import Base as PersonalizationBase
 
     async with engine.begin() as conn:
-        await conn.run_sync(Base.metadata.create_all)
+        # Create personalization tables only (uses PostgreSQL-specific types)
+        await conn.run_sync(PersonalizationBase.metadata.create_all)
 
 
 async def close_db():

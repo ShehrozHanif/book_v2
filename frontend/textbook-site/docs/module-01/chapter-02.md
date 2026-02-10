@@ -3,6 +3,7 @@ id: chapter-02
 title: "Kinematics Basics"
 sidebar_label: "Ch 02: Kinematics Basics"
 sidebar_position: 2
+chapter_id: 2
 ---
 
 

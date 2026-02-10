@@ -3,6 +3,7 @@ id: chapter-03
 title: "Dynamics & Motion"
 sidebar_label: "Ch 03: Dynamics & Motion"
 sidebar_position: 3
+chapter_id: 3
 ---
 
 

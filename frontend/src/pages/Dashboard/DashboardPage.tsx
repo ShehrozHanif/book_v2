@@ -14,7 +14,7 @@ import LearningPathsCard from "../../components/personalization/LearningPathsCar
 import AchievementsGallery from "../../components/personalization/AchievementsGallery";
 import PreferencesForm from "../../components/personalization/PreferencesForm";
 import StatisticsCharts from "../../components/personalization/StatisticsCharts";
-import LoadingSpinner from "../../components/LoadingSpinner";
+import LoadingIndicator from "../../components/LoadingIndicator";
 
 type TabType = "overview" | "achievements" | "practice" | "settings";
 
@@ -89,7 +89,7 @@ const DashboardPage: React.FC = () => {
       <div className={styles.content}>
         {isLoading && (
           <div className={styles.loadingContainer}>
-            <LoadingSpinner />
+            <LoadingIndicator isVisible={isLoading} />
             <p>Loading dashboard...</p>
           </div>
         )}

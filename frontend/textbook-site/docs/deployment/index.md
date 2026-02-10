@@ -51,7 +51,7 @@ The system is designed for production deployment using Docker Compose, supportin
     └─────────┘   └─────────┘   └─────────┘
 ```
 
-**Single Server (Recommended for <100 concurrent users):**
+**Single Server (Recommended for &lt;100 concurrent users):**
 - 1 FastAPI instance
 - 1 PostgreSQL instance
 - 1 Redis instance

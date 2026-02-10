@@ -3,6 +3,7 @@ id: chapter-18
 title: "Real-World Applications"
 sidebar_label: "Ch 18: Real-World Applications"
 sidebar_position: 18
+chapter_id: 18
 ---
 
 

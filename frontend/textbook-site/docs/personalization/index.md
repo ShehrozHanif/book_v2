@@ -130,10 +130,10 @@ The Hackathon1 Book includes an advanced personalization engine that:
 
 The system is optimized for speed:
 
-- **Dashboard Load**: <50ms (with caching)
-- **API Response**: <100ms average
-- **Database Query**: <50ms with indexes
-- **Cache Hit**: <10ms
+- **Dashboard Load**: &lt;50ms (with caching)
+- **API Response**: &lt;100ms average
+- **Database Query**: &lt;50ms with indexes
+- **Cache Hit**: &lt;10ms
 
 Performance improvements achieved through:
 - Strategic database indexes (5-30x improvement)

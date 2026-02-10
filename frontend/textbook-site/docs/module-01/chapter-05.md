@@ -3,6 +3,7 @@ id: chapter-05
 title: "Hardware Overview"
 sidebar_label: "Ch 05: Hardware Overview"
 sidebar_position: 5
+chapter_id: 5
 ---
 
 

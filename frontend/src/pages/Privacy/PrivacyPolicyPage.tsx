@@ -52,7 +52,7 @@ const PrivacyPolicyPage: React.FC = () => {
           {policy && <p className={styles.lastUpdated}>Last updated: {policy.last_updated}</p>}
         </div>
 
-        {isLoading && <LoadingIndicator />}
+        {isLoading && <LoadingIndicator isVisible={isLoading} />}
 
         {error && (
           <div className={styles.errorContainer}>

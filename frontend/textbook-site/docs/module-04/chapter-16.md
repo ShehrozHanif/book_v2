@@ -3,6 +3,7 @@ id: chapter-16
 title: "Learning-Based Control"
 sidebar_label: "Ch 16: Learning-Based Control"
 sidebar_position: 16
+chapter_id: 16
 ---
 
 

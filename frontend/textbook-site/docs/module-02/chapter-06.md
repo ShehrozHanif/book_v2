@@ -3,6 +3,7 @@ id: chapter-06
 title: "ROS 2 Fundamentals"
 sidebar_label: "Ch 06: ROS 2 Fundamentals"
 sidebar_position: 6
+chapter_id: 6
 ---
 
 

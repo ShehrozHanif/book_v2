@@ -3,6 +3,7 @@ id: chapter-04
 title: "Sensors & Perception"
 sidebar_label: "Ch 04: Sensors & Perception"
 sidebar_position: 4
+chapter_id: 4
 ---
 
 

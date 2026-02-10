@@ -3,6 +3,7 @@ id: chapter-10
 title: "Control Systems"
 sidebar_label: "Ch 10: Control Systems"
 sidebar_position: 10
+chapter_id: 10
 ---
 
 

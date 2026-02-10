@@ -3,6 +3,7 @@ id: chapter-15
 title: "Whole-Body Control"
 sidebar_label: "Ch 15: Whole-Body Control"
 sidebar_position: 15
+chapter_id: 15
 ---
 
 

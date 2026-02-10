@@ -1,0 +1,417 @@
+/**
+ * RTL (Right-to-Left) Styling for Urdu and other RTL languages
+ * Uses CSS logical properties for flexible LTR/RTL support
+ *
+ * Logical Properties:
+ * - inline-start/inline-end = left/right (direction-aware)
+ * - block-start/block-end = top/bottom (direction-aware)
+ * - padding-inline-start/end = padding-left/right (direction-aware)
+ * - margin-inline-start/end = margin-left/right (direction-aware)
+ */
+
+/* ===================================================================== */
+/* BASE RTL/LTR DIRECTION HANDLING */
+/* ===================================================================== */
+
+.dir-ltr {
+  direction: ltr;
+  text-align: left;
+}
+
+.dir-rtl {
+  direction: rtl;
+  text-align: right;
+}
+
+/* Ensure proper text direction for HTML element */
+html.dir-ltr {
+  direction: ltr;
+}
+
+html.dir-rtl {
+  direction: rtl;
+}
+
+body.dir-ltr {
+  direction: ltr;
+}
+
+body.dir-rtl {
+  direction: rtl;
+}
+
+/* ===================================================================== */
+/* TAILWIND LOGICAL PROPERTY MAPPINGS */
+/* ===================================================================== */
+
+/* Padding inline (start/end instead of left/right) */
+.ps-1 { padding-inline-start: 0.25rem; }
+.ps-2 { padding-inline-start: 0.5rem; }
+.ps-3 { padding-inline-start: 0.75rem; }
+.ps-4 { padding-inline-start: 1rem; }
+.ps-6 { padding-inline-start: 1.5rem; }
+.ps-8 { padding-inline-start: 2rem; }
+
+.pe-1 { padding-inline-end: 0.25rem; }
+.pe-2 { padding-inline-end: 0.5rem; }
+.pe-3 { padding-inline-end: 0.75rem; }
+.pe-4 { padding-inline-end: 1rem; }
+.pe-6 { padding-inline-end: 1.5rem; }
+.pe-8 { padding-inline-end: 2rem; }
+
+/* Margin inline (start/end instead of left/right) */
+.ms-1 { margin-inline-start: 0.25rem; }
+.ms-2 { margin-inline-start: 0.5rem; }
+.ms-3 { margin-inline-start: 0.75rem; }
+.ms-4 { margin-inline-start: 1rem; }
+.ms-6 { margin-inline-start: 1.5rem; }
+.ms-8 { margin-inline-start: 2rem; }
+
+.me-1 { margin-inline-end: 0.25rem; }
+.me-2 { margin-inline-end: 0.5rem; }
+.me-3 { margin-inline-end: 0.75rem; }
+.me-4 { margin-inline-end: 1rem; }
+.me-6 { margin-inline-end: 1.5rem; }
+.me-8 { margin-inline-end: 2rem; }
+
+/* ===================================================================== */
+/* CHATBOT MESSAGE RTL SUPPORT */
+/* ===================================================================== */
+
+.chatbot-message {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  padding: 1rem;
+  border-radius: 0.5rem;
+}
+
+.chatbot-message.rtl {
+  direction: rtl;
+  text-align: right;
+}
+
+.chatbot-message.ltr {
+  direction: ltr;
+  text-align: left;
+}
+
+/* Message header (avatar, name, timestamp) */
+.chatbot-message-header {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding-inline-end: 0.5rem;
+}
+
+.chatbot-message.rtl .chatbot-message-header {
+  flex-direction: row-reverse;
+}
+
+/* Message content */
+.chatbot-message-content {
+  flex: 1;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+}
+
+/* Code blocks in RTL context - MUST STAY LTR */
+.chatbot-message.rtl code,
+.chatbot-message.rtl pre,
+.chatbot-message.rtl [class*="language-"] {
+  direction: ltr !important;
+  text-align: left !important;
+  unicode-bidi: bidi-override !important;
+}
+
+.chatbot-message.rtl pre {
+  text-align: left;
+  overflow-x: auto;
+  background-color: #f5f5f5;
+  padding: 1rem;
+  border-radius: 0.375rem;
+  border-inline-start: 4px solid #3b82f6;
+}
+
+.chatbot-message.rtl code {
+  background-color: #f3f4f6;
+  padding: 0.125rem 0.375rem;
+  border-radius: 0.25rem;
+  font-family: 'Courier New', monospace;
+}
+
+/* RTL-aware inline code formatting */
+.chatbot-message.rtl code {
+  unicode-bidi: embed;
+  direction: ltr;
+}
+
+/* ===================================================================== */
+/* URDU-SPECIFIC TYPOGRAPHY */
+/* ===================================================================== */
+
+/* Urdu font stack for proper script rendering */
+.urdu-text,
+.dir-rtl {
+  font-family: 'Noto Sans Urdu', 'Segoe UI', 'Helvetica Neue', sans-serif;
+  font-size: 1rem;
+  line-height: 1.8;  /* Urdu script needs more line height */
+  letter-spacing: 0.01em;
+}
+
+/* Urdu headings with proper sizing */
+.urdu-text h1,
+.urdu-text h2,
+.urdu-text h3,
+.urdu-text h4,
+.urdu-text h5,
+.urdu-text h6,
+.dir-rtl h1,
+.dir-rtl h2,
+.dir-rtl h3,
+.dir-rtl h4,
+.dir-rtl h5,
+.dir-rtl h6 {
+  font-weight: 600;
+  margin-block: 0.5em;
+  line-height: 1.4;
+}
+
+/* ===================================================================== */
+/* RTL NUMBER AND DATE FORMATTING */
+/* ===================================================================== */
+
+/* Numbers should display correctly in RTL context */
+.rtl-number,
+.dir-rtl .number {
+  unicode-bidi: embed;
+  direction: ltr;
+}
+
+/* Dates in RTL (e.g., "١٥/٠٢/٢٠٢٦") */
+.rtl-date,
+.dir-rtl .date {
+  unicode-bidi: embed;
+  font-variant-numeric: tabular-nums;
+}
+
+/* Phone numbers and formatted text */
+.rtl-phone,
+.dir-rtl .phone {
+  unicode-bidi: embed;
+  direction: ltr;
+  font-family: monospace;
+}
+
+/* ===================================================================== */
+/* GLOSSARY AND TERMINOLOGY STYLING */
+/* ===================================================================== */
+
+.glossary-term {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  padding: 1rem;
+  border-left: 4px solid #3b82f6;
+  background-color: #f0f9ff;
+  border-radius: 0.375rem;
+}
+
+.glossary-term.rtl {
+  border-left: none;
+  border-right: 4px solid #3b82f6;
+  direction: rtl;
+  text-align: right;
+}
+
+.glossary-term-english {
+  font-weight: 600;
+  color: #1f2937;
+}
+
+.glossary-term-urdu {
+  font-size: 1.1rem;
+  color: #374151;
+  font-family: 'Noto Sans Urdu', sans-serif;
+}
+
+.glossary-term-pronunciation {
+  font-size: 0.875rem;
+  color: #6b7280;
+  font-style: italic;
+}
+
+.glossary-term-definition {
+  font-size: 0.9375rem;
+  color: #4b5563;
+  line-height: 1.6;
+}
+
+/* ===================================================================== */
+/* LIST STYLING FOR RTL */
+/* ===================================================================== */
+
+.dir-rtl ul,
+.dir-rtl ol {
+  padding-inline-start: 1.5rem;
+  padding-inline-end: 0;
+}
+
+.dir-rtl li {
+  margin-inline-start: 0;
+}
+
+/* Bullet points and numbering adjust automatically with dir attribute */
+.dir-rtl li::marker {
+  unicode-bidi: embed;
+}
+
+/* ===================================================================== */
+/* FORM ELEMENTS IN RTL */
+/* ===================================================================== */
+
+.dir-rtl input,
+.dir-rtl textarea,
+.dir-rtl select {
+  direction: rtl;
+  text-align: right;
+}
+
+.dir-rtl input::placeholder,
+.dir-rtl textarea::placeholder {
+  text-align: right;
+}
+
+/* ===================================================================== */
+/* MOBILE RESPONSIVE RTL */
+/* ===================================================================== */
+
+@media (max-width: 640px) {
+  .chatbot-message {
+    padding: 0.75rem;
+  }
+
+  .chatbot-message-header {
+    gap: 0.375rem;
+  }
+
+  .dir-rtl {
+    font-size: 0.9375rem;
+    line-height: 1.6;
+  }
+}
+
+/* ===================================================================== */
+/* UTILITY CLASSES FOR DEVELOPERS */
+/* ===================================================================== */
+
+/* Force specific direction */
+.force-ltr {
+  direction: ltr;
+  text-align: left;
+  unicode-bidi: bidi-override;
+}
+
+.force-rtl {
+  direction: rtl;
+  text-align: right;
+  unicode-bidi: bidi-override;
+}
+
+/* Language indicators */
+[lang="ur"],
+[lang="urdu"],
+[lang="ur-PK"] {
+  direction: rtl;
+  font-family: 'Noto Sans Urdu', sans-serif;
+}
+
+[lang="en"],
+[lang="en-US"] {
+  direction: ltr;
+  text-align: left;
+}
+
+/* ===================================================================== */
+/* ACCESSIBILITY ENHANCEMENTS FOR RTL */
+/* ===================================================================== */
+
+/* Screen reader optimization for RTL */
+.sr-only.rtl {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border-width: 0;
+  direction: rtl;
+}
+
+/* Focus states for RTL */
+.dir-rtl *:focus {
+  outline: 2px solid #3b82f6;
+  outline-offset: 2px;
+}
+
+/* ===================================================================== */
+/* ANIMATION AND TRANSITION SUPPORT FOR RTL */
+/* ===================================================================== */
+
+/* Slide animations for RTL */
+@keyframes slideInRtl {
+  from {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+@keyframes slideOutRtl {
+  from {
+    transform: translateX(0);
+    opacity: 1;
+  }
+  to {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+}
+
+.dir-rtl .slide-in {
+  animation: slideInRtl 0.3s ease-out;
+}
+
+.dir-rtl .slide-out {
+  animation: slideOutRtl 0.3s ease-in;
+}
+
+/* ===================================================================== */
+/* DARK MODE RTL SUPPORT (Optional) */
+/* ===================================================================== */
+
+@media (prefers-color-scheme: dark) {
+  .dir-rtl {
+    color: #e5e7eb;
+  }
+
+  .glossary-term.rtl {
+    background-color: #1e293b;
+    border-right-color: #60a5fa;
+    color: #e5e7eb;
+  }
+
+  .glossary-term-english {
+    color: #f3f4f6;
+  }
+
+  .chatbot-message.rtl {
+    background-color: #374151;
+    color: #e5e7eb;
+  }
+}

@@ -3,6 +3,7 @@ id: chapter-11
 title: "Real-time Considerations"
 sidebar_label: "Ch 11: Real-time Considerations"
 sidebar_position: 11
+chapter_id: 11
 ---
 
 

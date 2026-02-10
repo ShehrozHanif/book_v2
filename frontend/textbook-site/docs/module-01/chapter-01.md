@@ -3,6 +3,7 @@ id: chapter-01
 title: "What is a Humanoid Robot?"
 sidebar_label: "Ch 01: What is a Humanoid Robot?"
 sidebar_position: 1
+chapter_id: 1
 ---
 
 

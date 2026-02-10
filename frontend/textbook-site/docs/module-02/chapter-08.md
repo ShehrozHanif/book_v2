@@ -3,6 +3,7 @@ id: chapter-08
 title: "Simulation Environments"
 sidebar_label: "Ch 08: Simulation Environments"
 sidebar_position: 8
+chapter_id: 8
 ---
 
 
@@ -154,7 +155,7 @@ This SDF world file defines an environment for humanoid navigation testing.
             <friction>
               <ode>
                 <mu>1.0</mu>
-                <mu2>1.0</mu2>
+                <mu2&gt;1.0</mu2&gt;
               </ode>
             </friction>
           </surface>

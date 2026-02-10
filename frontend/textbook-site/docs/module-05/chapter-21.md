@@ -3,6 +3,7 @@ id: chapter-21
 title: "Competition & Benchmarks"
 sidebar_label: "Ch 21: Competition & Benchmarks"
 sidebar_position: 21
+chapter_id: 21
 ---
 
 

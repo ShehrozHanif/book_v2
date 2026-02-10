@@ -4,7 +4,7 @@ import logging
 import os
 from typing import List, Dict, Optional
 from qdrant_client import QdrantClient
-from qdrant_client.models import Distance, VectorParams, PointStruct
+from qdrant_client.models import Distance, VectorParams, PointStruct, FieldCondition, MatchValue, Filter
 
 logger = logging.getLogger(__name__)
 
@@ -55,6 +55,18 @@ class QdrantService:
                 )
             )
             logger.info(f"Collection '{self.collection_name}' created successfully")
+
+            # Create payload indices for filtering
+            try:
+                self.client.create_payload_index(
+                    collection_name=self.collection_name,
+                    field_name="chapter",
+                    field_schema="keyword"
+                )
+                logger.info("Created payload index on 'chapter' field")
+            except Exception as e:
+                logger.warning(f"Failed to create payload index on 'chapter': {e}")
+
             return True
 
         except Exception as e:
@@ -65,7 +77,8 @@ class QdrantService:
         self,
         query_vector: List[float],
         top_k: int = 5,
-        score_threshold: Optional[float] = None
+        score_threshold: Optional[float] = None,
+        filter_chapter: Optional[str] = None
     ) -> List[Dict]:
         """Search for similar passages using vector similarity.
 
@@ -73,6 +86,7 @@ class QdrantService:
             query_vector: 1536-dimensional embedding vector from OpenAI
             top_k: Number of top results to return (default: 5)
             score_threshold: Minimum similarity score (0.0-1.0, optional)
+            filter_chapter: Filter results to specific chapter (e.g., "Chapter 4"), optional
 
         Returns:
             List of dicts with id, score, and payload fields:
@@ -101,12 +115,26 @@ class QdrantService:
             )
 
         try:
+            # Build filter for chapter if specified
+            query_filter = None
+            if filter_chapter:
+                query_filter = Filter(
+                    must=[
+                        FieldCondition(
+                            key="chapter",
+                            match=MatchValue(value=filter_chapter)
+                        )
+                    ]
+                )
+                logger.info(f"Applying chapter filter: {filter_chapter}")
+
             # Use query_points method for semantic search in Qdrant
             results = self.client.query_points(
                 collection_name=self.collection_name,
                 query=query_vector,
                 limit=top_k,
-                score_threshold=score_threshold
+                score_threshold=score_threshold,
+                query_filter=query_filter
             )
 
             # Transform results to dict format
@@ -118,7 +146,7 @@ class QdrantService:
                     "payload": dict(result.payload) if result.payload else {}
                 })
 
-            logger.debug(f"Retrieved {len(passages)} passages for query")
+            logger.debug(f"Retrieved {len(passages)} passages for query (chapter_filter={filter_chapter})")
             return passages
 
         except Exception as e:

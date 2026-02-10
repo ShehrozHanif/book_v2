@@ -3,6 +3,7 @@ id: chapter-19
 title: "Ethical Considerations"
 sidebar_label: "Ch 19: Ethical Considerations"
 sidebar_position: 19
+chapter_id: 19
 ---
 
 

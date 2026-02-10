@@ -3,6 +3,7 @@ id: chapter-12
 title: "Advanced Kinematics"
 sidebar_label: "Ch 12: Advanced Kinematics"
 sidebar_position: 12
+chapter_id: 12
 ---
 
 

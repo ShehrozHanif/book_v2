@@ -3,6 +3,7 @@ id: chapter-22
 title: "Getting Started: Your First Project"
 sidebar_label: "Ch 22: Getting Started: Your First Project"
 sidebar_position: 22
+chapter_id: 22
 ---
 
 

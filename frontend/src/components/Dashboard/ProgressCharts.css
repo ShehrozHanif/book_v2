@@ -1,0 +1,203 @@
+/* Progress Charts Styles (T045) */
+
+.progress-charts {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 2rem;
+}
+
+.progress-charts h2 {
+  font-size: 2rem;
+  margin-bottom: 2rem;
+  color: #1a1a1a;
+  text-align: center;
+}
+
+.progress-charts h3 {
+  font-size: 1.5rem;
+  margin-bottom: 1.5rem;
+  color: #2d2d2d;
+}
+
+/* Chart Containers */
+.chart-container {
+  background: white;
+  padding: 2rem;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  margin-bottom: 2rem;
+}
+
+.chart-description {
+  margin-top: 1rem;
+  color: #666;
+  font-size: 0.95rem;
+  text-align: center;
+  font-style: italic;
+}
+
+/* Summary Insights */
+.chart-summary {
+  background: white;
+  padding: 2rem;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  margin-top: 2rem;
+}
+
+.insights-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1.5rem;
+  margin-top: 1.5rem;
+}
+
+.insight-card {
+  background: linear-gradient(135deg, #f5f5f5 0%, #e8e8e8 100%);
+  padding: 1.5rem;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.insight-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+}
+
+.insight-icon {
+  font-size: 2.5rem;
+  line-height: 1;
+}
+
+.insight-content h4 {
+  margin: 0 0 0.5rem 0;
+  font-size: 0.9rem;
+  color: #666;
+  font-weight: 500;
+}
+
+.insight-value {
+  font-size: 2rem;
+  font-weight: bold;
+  color: #1a1a1a;
+  margin: 0;
+}
+
+/* Recharts Customization */
+.recharts-wrapper {
+  margin: 0 auto;
+}
+
+.recharts-cartesian-axis-tick-value {
+  font-size: 0.85rem;
+  fill: #666;
+}
+
+.recharts-legend-wrapper {
+  padding-top: 1rem;
+}
+
+.recharts-legend-item-text {
+  color: #2d2d2d;
+  font-size: 0.9rem;
+}
+
+.recharts-tooltip-wrapper {
+  outline: none;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .progress-charts {
+    padding: 1rem;
+  }
+
+  .progress-charts h2 {
+    font-size: 1.5rem;
+  }
+
+  .chart-container {
+    padding: 1.5rem;
+  }
+
+  .insights-grid {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+
+  .insight-card {
+    padding: 1rem;
+  }
+
+  .insight-icon {
+    font-size: 2rem;
+  }
+
+  .insight-value {
+    font-size: 1.5rem;
+  }
+
+  /* Make charts more mobile-friendly */
+  .recharts-surface {
+    max-width: 100%;
+  }
+}
+
+@media (max-width: 480px) {
+  .chart-container {
+    padding: 1rem;
+  }
+
+  .progress-charts h3 {
+    font-size: 1.2rem;
+  }
+
+  .chart-description {
+    font-size: 0.85rem;
+  }
+}
+
+/* Loading State */
+.progress-charts.loading {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 400px;
+  font-size: 1.2rem;
+  color: #666;
+}
+
+/* Animation for chart appearance */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.chart-container {
+  animation: fadeInUp 0.5s ease forwards;
+}
+
+.chart-container:nth-child(1) {
+  animation-delay: 0.1s;
+}
+
+.chart-container:nth-child(2) {
+  animation-delay: 0.2s;
+}
+
+.chart-container:nth-child(3) {
+  animation-delay: 0.3s;
+}
+
+.chart-container:nth-child(4) {
+  animation-delay: 0.4s;
+}
