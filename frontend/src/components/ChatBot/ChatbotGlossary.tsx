@@ -1,378 +1,171 @@
-/**
- * ChatbotGlossary Component (T037)
- *
- * Provides a searchable glossary UI for technical terminology support.
- *
- * Features:
- * - Bilingual term display (English + Urdu)
- * - Full-text search across terms
- * - Category filtering
- * - RTL support for Urdu content
- * - Loading and error states
- * - Mobile responsive design
- * - Pronunciation guides
- * - Related terms linking
- */
-
-import React, { useState, useCallback, useEffect } from 'react';
+import React, { useState } from 'react';
 import { useGlossary } from '../../hooks/useGlossary';
-import { useLanguagePreference } from '../../hooks/useLanguagePreference';
-import './styles/chatbot-glossary.css';
+import { GlossaryFeedback } from '../../services/glossaryAPI';
 
-/**
- * Props for ChatbotGlossary component
- */
-export interface ChatbotGlossaryProps {
-  /** Optional CSS class name */
-  className?: string;
-  /** Optional callback when term is selected */
-  onTermSelect?: (termId: string, term: string) => void;
-  /** Optional initial search query */
-  initialQuery?: string;
-  /** Show as expanded view (full screen) or compact view */
-  expanded?: boolean;
-  /** Maximum number of results to display */
-  maxResults?: number;
+interface ChatbotGlossaryProps {
+  isOpen: boolean;
+  onClose: () => void;
+  authToken?: string;
+  selectedTerm?: string;
 }
 
-/**
- * ChatbotGlossary Component
- *
- * Renders a glossary interface with search and filtering capabilities.
- *
- * @example
- * <ChatbotGlossary
- *   onTermSelect={(id, term) => console.log(id, term)}
- *   initialQuery="sensor"
- *   maxResults={10}
- * />
- */
 export const ChatbotGlossary: React.FC<ChatbotGlossaryProps> = ({
-  className = '',
-  onTermSelect,
-  initialQuery = '',
-  expanded = false,
-  maxResults = 20,
+  isOpen,
+  onClose,
+  authToken,
+  selectedTerm,
 }) => {
-  const { language } = useLanguagePreference();
-  const {
-    searchTerms,
-    getCategories,
-    getTerm,
-    searchResults,
-    categories,
-    isLoading,
-    error,
-    clearCache,
-  } = useGlossary();
+  const { terms, loading, error, selectedTerm: glossaryTerm, searchTerms, getTerm, submitFeedback } = useGlossary();
+  const [searchQuery, setSearchQuery] = useState('');
+  const [searchLanguage, setSearchLanguage] = useState<'english' | 'urdu'>('english');
+  const [feedbackType, setFeedbackType] = useState<'suggestion' | 'correction' | 'new_term'>('suggestion');
+  const [feedbackContent, setFeedbackContent] = useState('');
+  const [feedbackSubmitted, setFeedbackSubmitted] = useState(false);
+  const [feedbackError, setFeedbackError] = useState('');
 
-  // State management
-  const [query, setQuery] = useState(initialQuery);
-  const [selectedCategory, setSelectedCategory] = useState<string | undefined>();
-  const [selectedTerm, setSelectedTerm] = useState<string | undefined>();
-  const [showTermDetail, setShowTermDetail] = useState(false);
-  const [categoriesLoaded, setCategoriesLoaded] = useState(false);
+  React.useEffect(() => {
+    if (selectedTerm && isOpen) {
+      getTerm(selectedTerm);
+    }
+  }, [selectedTerm, isOpen, getTerm]);
 
-  // Load categories on mount
-  useEffect(() => {
-    const loadCategories = async () => {
-      await getCategories();
-      setCategoriesLoaded(true);
-    };
-
-    loadCategories();
-  }, [getCategories]);
-
-  // Search terms when query or category changes
-  useEffect(() => {
-    const performSearch = async () => {
-      if (query.trim().length > 0) {
-        await searchTerms(
-          query,
-          language === 'urdu' ? 'urdu' : 'english',
-          selectedCategory,
-          maxResults
-        );
-      }
-    };
-
-    performSearch();
-  }, [query, selectedCategory, language, searchTerms, maxResults]);
-
-  /**
-   * Handle search input change
-   */
-  const handleSearchChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
-    setQuery(e.target.value);
-    setShowTermDetail(false);
-  }, []);
-
-  /**
-   * Handle category filter change
-   */
-  const handleCategoryChange = useCallback(
-    (e: React.ChangeEvent<HTMLSelectElement>) => {
-      const value = e.target.value;
-      setSelectedCategory(value === '' ? undefined : value);
-    },
-    []
-  );
-
-  /**
-   * Handle term selection
-   */
-  const handleTermSelect = useCallback(
-    async (termId: string, termName: string) => {
-      setSelectedTerm(termId);
-      setShowTermDetail(true);
-
-      if (onTermSelect) {
-        onTermSelect(termId, termName);
-      }
-    },
-    [onTermSelect]
-  );
-
-  /**
-   * Handle clear search
-   */
-  const handleClearSearch = useCallback(() => {
-    setQuery('');
-    setSelectedCategory(undefined);
-    setShowTermDetail(false);
-  }, []);
-
-  /**
-   * Get RTL direction for content
-   */
-  const getDirection = (lang: 'english' | 'urdu' = language): 'rtl' | 'ltr' => {
-    return lang === 'urdu' ? 'rtl' : 'ltr';
+  const handleSearch = async () => {
+    if (!searchQuery.trim()) return;
+    await searchTerms(searchQuery, searchLanguage);
   };
 
-  /**
-   * Render loading state
-   */
-  const renderLoading = () => (
-    <div
-      className="glossary-loading"
-      dir={getDirection()}
-      role="status"
-      aria-live="polite"
-    >
-      <div className="spinner"></div>
-      <p className="loading-text">
-        {language === 'urdu' ? 'لوڈ ہو رہا ہے...' : 'Loading...'}
-      </p>
-    </div>
-  );
-
-  /**
-   * Render error state
-   */
-  const renderError = () => (
-    <div className="glossary-error" role="alert">
-      <span className="error-icon">⚠️</span>
-      <p className="error-message">
-        {language === 'urdu'
-          ? `خرابی: ${error?.message || 'کچھ غلط ہو گیا'}`
-          : `Error: ${error?.message || 'Something went wrong'}`}
-      </p>
-      <button
-        className="error-retry-btn"
-        onClick={() => clearCache()}
-        aria-label={language === 'urdu' ? 'دوبارہ کوشش کریں' : 'Retry'}
-      >
-        {language === 'urdu' ? 'دوبارہ کوشش کریں' : 'Retry'}
-      </button>
-    </div>
-  );
-
-  /**
-   * Render glossary term card
-   */
-  const renderTermCard = (term: any, isUrdu: boolean = false) => (
-    <div
-      key={term.id}
-      className={`glossary-term-card ${isUrdu ? 'urdu' : 'english'}`}
-      dir={isUrdu ? 'rtl' : 'ltr'}
-      lang={isUrdu ? 'ur' : 'en'}
-      onClick={() => handleTermSelect(term.id, term.english_term)}
-      role="button"
-      tabIndex={0}
-      onKeyDown={(e) => {
-        if (e.key === 'Enter' || e.key === ' ') {
-          e.preventDefault();
-          handleTermSelect(term.id, term.english_term);
-        }
-      }}
-    >
-      <div className="term-header">
-        <h3 className="term-name">
-          {isUrdu ? term.urdu_translation : term.english_term}
-        </h3>
-        <span className="term-category">{term.category}</span>
-      </div>
-
-      {term.pronunciation_transliterated && (
-        <p className="term-pronunciation">
-          {language === 'urdu' ? 'تلفظ: ' : 'Pronunciation: '}
-          <em>{term.pronunciation_transliterated}</em>
-        </p>
-      )}
-
-      <p className="term-definition">
-        {isUrdu ? term.definition_urdu : term.definition_english}
-      </p>
-
-      {term.related_terms && term.related_terms.length > 0 && (
-        <div className="related-terms">
-          <small>
-            {language === 'urdu' ? 'متعلقہ شرائط: ' : 'Related terms: '}
-            {term.related_terms.join(', ')}
-          </small>
-        </div>
-      )}
-    </div>
-  );
-
-  /**
-   * Render search results
-   */
-  const renderResults = () => {
-    if (query.trim().length === 0) {
-      return (
-        <div className="glossary-empty" dir={getDirection()}>
-          <p>
-            {language === 'urdu'
-              ? 'اصطلاحات تلاش کرنے کے لیے اوپر ٹائپ کریں'
-              : 'Type above to search for terms'}
-          </p>
-        </div>
-      );
-    }
-
-    if (!searchResults.data || searchResults.data.length === 0) {
-      return (
-        <div className="glossary-no-results" dir={getDirection()}>
-          <p>
-            {language === 'urdu'
-              ? `"${query}" کے لیے کوئی نتائج نہیں ملے`
-              : `No results found for "${query}"`}
-          </p>
-        </div>
-      );
-    }
-
-    return (
-      <div className="glossary-results" role="listbox">
-        {searchResults.data.map((term) => (
-          <div key={term.id} className="result-item">
-            {renderTermCard(term, false)}
-            {language === 'urdu' && (
-              <div className="urdu-translation">
-                {renderTermCard(term, true)}
-              </div>
-            )}
-          </div>
-        ))}
-      </div>
-    );
+  const handleSelectTerm = async (termName: string) => {
+    await getTerm(termName);
   };
 
-  /**
-   * Render glossary interface
-   */
+  const handleSubmitFeedback = async () => {
+    if (!authToken || !feedbackContent.trim()) return;
+
+    try {
+      const feedback: GlossaryFeedback = {
+        feedback_type: feedbackType,
+        content: feedbackContent,
+        glossary_term_id: glossaryTerm?.id,
+      };
+      await submitFeedback(feedback, authToken);
+      setFeedbackSubmitted(true);
+      setFeedbackContent('');
+      setTimeout(() => setFeedbackSubmitted(false), 3000);
+    } catch (err) {
+      setFeedbackError(err instanceof Error ? err.message : 'Error');
+    }
+  };
+
+  if (!isOpen) return null;
+
   return (
-    <div
-      className={`chatbot-glossary ${expanded ? 'expanded' : 'compact'} ${className}`}
-      dir={getDirection()}
-      role="region"
-      aria-label={
-        language === 'urdu' ? 'اصطلاحات کی فہرست' : 'Glossary search'
-      }
-    >
-      {/* Header */}
-      <div className="glossary-header">
-        <h2 className="glossary-title">
-          {language === 'urdu' ? 'اصطلاحات کی فہرست' : 'Glossary'}
-        </h2>
-        <p className="glossary-subtitle">
-          {language === 'urdu'
-            ? 'تکنیکی اصطلاحات تلاش کریں'
-            : 'Search technical terminology'}
-        </p>
-      </div>
+    <div style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.5)', zIndex: 1000 }}>
+      <div style={{ background: 'white', borderRadius: '8px', maxWidth: '600px', margin: '50px auto', maxHeight: '80vh', overflow: 'auto' }}>
+        <div style={{ padding: '20px', borderBottom: '1px solid #ddd', display: 'flex', justifyContent: 'space-between' }}>
+          <h2>Technical Glossary</h2>
+          <button onClick={onClose}>×</button>
+        </div>
 
-      {/* Search Bar */}
-      <div className="glossary-search-bar">
-        <div className="search-input-wrapper">
-          <input
-            type="text"
-            className="search-input"
-            placeholder={
-              language === 'urdu'
-                ? 'اصطلاح تلاش کریں...'
-                : 'Search terms...'
-            }
-            value={query}
-            onChange={handleSearchChange}
-            aria-label={
-              language === 'urdu' ? 'اصطلاح تلاش کریں' : 'Search terms'
-            }
-            dir={getDirection()}
-          />
-          {query && (
-            <button
-              className="clear-search-btn"
-              onClick={handleClearSearch}
-              aria-label={language === 'urdu' ? 'صاف کریں' : 'Clear'}
-              title={language === 'urdu' ? 'صاف کریں' : 'Clear search'}
+        <div style={{ padding: '20px' }}>
+          <div style={{ display: 'flex', gap: '10px', marginBottom: '20px' }}>
+            <input
+              type="text"
+              placeholder="Search term..."
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              onKeyPress={(e) => e.key === 'Enter' && handleSearch()}
+              style={{ flex: 1, padding: '8px', border: '1px solid #ccc' }}
+            />
+            <select
+              value={searchLanguage}
+              onChange={(e) => setSearchLanguage(e.target.value as any)}
+              style={{ padding: '8px', border: '1px solid #ccc' }}
             >
-              ✕
+              <option value="english">English</option>
+              <option value="urdu">Urdu</option>
+            </select>
+            <button
+              onClick={handleSearch}
+              disabled={loading}
+              style={{ padding: '8px 16px', background: '#007bff', color: 'white', border: 'none' }}
+            >
+              Search
             </button>
+          </div>
+
+          {error && <div style={{ color: 'red', marginBottom: '10px' }}>{error}</div>}
+
+          {terms.length > 0 && !glossaryTerm && (
+            <div>
+              <h3>Results ({terms.length})</h3>
+              {terms.map((term) => (
+                <button
+                  key={term.id}
+                  onClick={() => handleSelectTerm(term.english_term)}
+                  style={{ display: 'block', width: '100%', padding: '10px', textAlign: 'left', marginBottom: '5px', border: '1px solid #ddd' }}
+                >
+                  <strong>{term.english_term}</strong> - {term.urdu_translation}
+                </button>
+              ))}
+            </div>
+          )}
+
+          {glossaryTerm && (
+            <div>
+              <h3>{glossaryTerm.english_term}</h3>
+              <p style={{ fontSize: '18px', color: '#666' }}>{glossaryTerm.urdu_translation}</p>
+              <p><strong>Pronunciation:</strong> {glossaryTerm.pronunciation_transliterated}</p>
+              <div style={{ marginTop: '15px' }}>
+                <h4>English Definition</h4>
+                <p>{glossaryTerm.definition_english}</p>
+                <h4>Urdu Definition</h4>
+                <p style={{ direction: 'rtl' }}>{glossaryTerm.definition_urdu}</p>
+              </div>
+
+              {authToken && (
+                <div style={{ marginTop: '20px', borderTop: '1px solid #ddd', paddingTop: '15px' }}>
+                  <h4>Feedback</h4>
+                  <select
+                    value={feedbackType}
+                    onChange={(e) => setFeedbackType(e.target.value as any)}
+                    style={{ width: '100%', padding: '8px', marginBottom: '10px' }}
+                  >
+                    <option value="suggestion">Suggestion</option>
+                    <option value="correction">Correction</option>
+                    <option value="new_term">New Term</option>
+                  </select>
+                  <textarea
+                    value={feedbackContent}
+                    onChange={(e) => setFeedbackContent(e.target.value)}
+                    placeholder="Your feedback..."
+                    style={{ width: '100%', padding: '8px', minHeight: '80px', marginBottom: '10px' }}
+                    maxLength={500}
+                  />
+                  {feedbackError && <div style={{ color: 'red' }}>{feedbackError}</div>}
+                  {feedbackSubmitted && <div style={{ color: 'green' }}>Feedback submitted!</div>}
+                  <button
+                    onClick={handleSubmitFeedback}
+                    disabled={loading}
+                    style={{ padding: '8px 16px', background: '#28a745', color: 'white', border: 'none' }}
+                  >
+                    Submit
+                  </button>
+                </div>
+              )}
+
+              <button
+                onClick={() => {
+                  setSearchQuery('');
+                  setFeedbackContent('');
+                }}
+                style={{ marginTop: '15px', padding: '8px 16px', background: '#6c757d', color: 'white', border: 'none' }}
+              >
+                Back
+              </button>
+            </div>
           )}
         </div>
-
-        {/* Category Filter */}
-        {categoriesLoaded && categories.data && categories.data.length > 0 && (
-          <select
-            className="category-filter"
-            value={selectedCategory || ''}
-            onChange={handleCategoryChange}
-            aria-label={
-              language === 'urdu' ? 'زمرہ منتخب کریں' : 'Select category'
-            }
-            dir={getDirection()}
-          >
-            <option value="">
-              {language === 'urdu' ? 'تمام زمرہ جات' : 'All Categories'}
-            </option>
-            {categories.data.map((cat) => (
-              <option key={cat} value={cat}>
-                {cat}
-              </option>
-            ))}
-          </select>
-        )}
       </div>
-
-      {/* Content */}
-      <div className="glossary-content">
-        {error && renderError()}
-        {isLoading && query.trim().length > 0 && renderLoading()}
-        {!isLoading && !error && renderResults()}
-      </div>
-
-      {/* Footer Stats */}
-      {searchResults.data && searchResults.data.length > 0 && (
-        <div className="glossary-footer" dir={getDirection()}>
-          <small className="result-count">
-            {language === 'urdu'
-              ? `${searchResults.data.length} نتیجے ملے`
-              : `${searchResults.data.length} results found`}
-          </small>
-        </div>
-      )}
     </div>
   );
 };

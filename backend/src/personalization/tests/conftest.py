@@ -6,6 +6,7 @@ from typing import AsyncGenerator, Generator
 from sqlalchemy.ext.asyncio import AsyncSession, create_async_engine, async_sessionmaker
 from sqlalchemy.pool import NullPool
 from httpx import AsyncClient
+from fastapi.testclient import TestClient
 
 from src.personalization.models.db_models import Base
 from src.personalization.utils.auth import init_auth_config
@@ -113,7 +114,7 @@ async def test_db(test_engine) -> AsyncGenerator[AsyncSession, None]:
 
 
 @pytest.fixture(scope="function")
-async def client(test_db) -> AsyncGenerator[AsyncClient, None]:
+def client(test_db) -> Generator[TestClient, None, None]:
     """Create a test HTTP client."""
     from src.main import app
     from src.database.connection import get_session
@@ -124,8 +125,8 @@ async def client(test_db) -> AsyncGenerator[AsyncClient, None]:
 
     app.dependency_overrides[get_session] = override_get_session
 
-    async with AsyncClient(app=app, base_url="http://test") as ac:
-        yield ac
+    with TestClient(app) as tc:
+        yield tc
 
     app.dependency_overrides.clear()
 
