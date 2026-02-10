@@ -6,8 +6,8 @@ from jose import JWTError, jwt
 from passlib.context import CryptContext
 import secrets
 
-# Password hashing context
-pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
+# Password hashing context - using argon2 (more secure, no 72-byte limit)
+pwd_context = CryptContext(schemes=["argon2"], deprecated="auto")
 
 # JWT configuration (will be loaded from config)
 SECRET_KEY = None
