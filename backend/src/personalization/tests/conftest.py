@@ -7,6 +7,7 @@ from sqlalchemy.ext.asyncio import AsyncSession, create_async_engine, async_sess
 from sqlalchemy.pool import NullPool
 from httpx import AsyncClient
 from fastapi.testclient import TestClient
+from starlette.testclient import TestClient as StarletteTestClient
 
 from src.personalization.models.db_models import Base
 from src.personalization.utils.auth import init_auth_config
@@ -67,20 +68,7 @@ async def test_engine():
     # Patch JSONB and ARRAY for SQLite BEFORE creating tables
     _jsonb_to_json_sqlite()
 
-    # Force reload of Base metadata to apply changes
     from src.personalization.models.db_models import Base
-    Base.metadata.clear()
-
-    # Re-import models to regenerate tables with patched types
-    from src.personalization.models import db_models
-    import importlib
-    importlib.reload(db_models)
-
-    # Get the updated Base
-    from src.personalization.models.db_models import Base
-
-    # Patch again after reload
-    _jsonb_to_json_sqlite()
 
     engine = create_async_engine(
         TEST_DATABASE_URL,
@@ -114,10 +102,11 @@ async def test_db(test_engine) -> AsyncGenerator[AsyncSession, None]:
 
 
 @pytest.fixture(scope="function")
-def client(test_db) -> Generator[TestClient, None, None]:
-    """Create a test HTTP client."""
+async def client(test_db) -> AsyncGenerator[AsyncClient, None]:
+    """Create a test HTTP async client."""
     from src.main import app
     from src.database.connection import get_session
+    from httpx import ASGITransport
 
     # Override the database dependency
     async def override_get_session():
@@ -125,8 +114,9 @@ def client(test_db) -> Generator[TestClient, None, None]:
 
     app.dependency_overrides[get_session] = override_get_session
 
-    with TestClient(app) as tc:
-        yield tc
+    transport = ASGITransport(app=app)
+    async with AsyncClient(transport=transport, base_url="http://test") as ac:
+        yield ac
 
     app.dependency_overrides.clear()
 
