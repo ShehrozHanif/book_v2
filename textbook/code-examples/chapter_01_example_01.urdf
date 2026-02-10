@@ -7,7 +7,7 @@
 
   Compatible with: ROS 2 Humble
   Visualization: rviz2
-  Usage: ros2 run robot_state_publisher robot_state_publisher --ros-args -p robot_description:="$(cat chapter_01_example_01.urdf)"
+  Usage: Load URDF into ROS 2 parameter server using robot_state_publisher node
 
   Note: This is a simplified model for learning URDF structure. Production humanoid robots
   have significantly more complex joint hierarchies, collision geometries, and inertial properties.

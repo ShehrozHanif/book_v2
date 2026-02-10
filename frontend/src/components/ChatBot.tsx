@@ -4,8 +4,10 @@ import { ChatMessage } from "./ChatMessage";
 import { LoadingIndicator } from "./LoadingIndicator";
 import { ConversationHistory } from "./ConversationHistory";
 import { ErrorMessage } from "./ErrorMessage";
+import { ChatbotGlossary } from "./ChatBot/ChatbotGlossary";
 import { useChat } from "../hooks/useChat";
 import { useTextSelection } from "../hooks/useTextSelection";
+import { useLanguagePreference } from "../hooks/useLanguagePreference";
 import "../styles/chatbot.css";
 
 interface ChatBotProps {
@@ -15,6 +17,7 @@ interface ChatBotProps {
 export const ChatBot: React.FC<ChatBotProps> = ({ onMessage }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [showHistory, setShowHistory] = useState(window.innerWidth > 768);
+  const [showGlossary, setShowGlossary] = useState(false);
   const [highlightedMessageId, setHighlightedMessageId] = useState<string | null>(null);
   const {
     messages,
@@ -27,6 +30,7 @@ export const ChatBot: React.FC<ChatBotProps> = ({ onMessage }) => {
     retryLastMessage
   } = useChat();
   const { selectedText, clearSelection, hasSelection } = useTextSelection();
+  const { language } = useLanguagePreference();
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const messagesContainerRef = useRef<HTMLDivElement>(null);
   const [elapsedTime, setElapsedTime] = useState(0);
@@ -113,7 +117,16 @@ export const ChatBot: React.FC<ChatBotProps> = ({ onMessage }) => {
               )}
             </div>
             <div className="header-actions">
-                <button
+              <button
+                onClick={() => setShowGlossary(!showGlossary)}
+                className={`glossary-toggle-btn ${showGlossary ? 'active' : ''}`}
+                aria-label={language === 'urdu' ? 'اصطلاحات کی فہرست' : 'Toggle glossary'}
+                title={language === 'urdu' ? 'اصطلاحات کی فہرست' : 'Toggle glossary'}
+                aria-pressed={showGlossary}
+              >
+                📚
+              </button>
+              <button
                 onClick={() => setIsOpen(false)}
                 className="close-btn"
                 aria-label="Close chatbot"
@@ -125,7 +138,7 @@ export const ChatBot: React.FC<ChatBotProps> = ({ onMessage }) => {
           </div>
 
           {/* Main Content Area */}
-          <div className="chatbot-main">
+          <div className={`chatbot-main ${showGlossary ? 'with-glossary' : ''}`}>
             {/* Conversation History Sidebar (Desktop Only) */}
             {showHistory && window.innerWidth > 768 && (
               <ConversationHistory
@@ -135,8 +148,20 @@ export const ChatBot: React.FC<ChatBotProps> = ({ onMessage }) => {
               />
             )}
 
+            {/* Glossary Panel */}
+            {showGlossary && (
+              <div className="glossary-panel">
+                <ChatbotGlossary
+                  onTermSelect={(termId, term) => {
+                    console.log(`Selected glossary term: ${term}`);
+                  }}
+                  maxResults={15}
+                />
+              </div>
+            )}
+
             {/* Messages Panel */}
-            <div className="messages-panel">
+            <div className={`messages-panel ${showGlossary ? 'with-glossary' : ''}`}>
               {/* Messages Container */}
               <div className="messages-container" ref={messagesContainerRef}>
                 {messages.length === 0 && (
@@ -160,6 +185,7 @@ export const ChatBot: React.FC<ChatBotProps> = ({ onMessage }) => {
                     relevanceScores={msg.relevanceScores}
                     isHighlighted={highlightedMessageId === msg.id}
                     messageId={msg.id}
+                    language={language as "english" | "urdu"}
                   />
                 ))}
 

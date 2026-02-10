@@ -1,0 +1,184 @@
+╔════════════════════════════════════════════════════════════════════════════╗
+║                                                                            ║
+║          PERSONALIZATION INTEGRATION - LOCAL TESTING SETUP                ║
+║                                                                            ║
+╚════════════════════════════════════════════════════════════════════════════╝
+
+🚀 OPTION 1: QUICK START (Recommended for Windows)
+─────────────────────────────────────────────────
+
+1. Double-click the file:
+   → start_servers.bat
+
+   This will automatically:
+   ✓ Start Backend API (port 8000)
+   ✓ Start Frontend Docusaurus (port 3000)
+   ✓ Open browser to http://localhost:3000/book/
+
+
+🛠️  OPTION 2: MANUAL START (If Option 1 doesn't work)
+─────────────────────────────────────────────────────
+
+You'll need TWO Terminal/PowerShell windows open at the same time.
+
+TERMINAL 1 - Start Backend API:
+─────────────────────────────
+cd C:\Users\Shehroz Hanif\Desktop\Hackathon1\book\backend
+python -m uvicorn src.main:app --reload --port 8000
+
+Wait for: "Application startup complete"
+
+
+TERMINAL 2 - Start Frontend:
+──────────────────────────
+cd C:\Users\Shehroz Hanif\Desktop\Hackathon1\book\frontend\textbook-site
+npm run start
+
+Wait for: Browser opens automatically at http://localhost:3000/book/
+
+
+🎯 WHAT YOU'LL SEE
+──────────────────
+
+✅ Backend Running:
+   INFO:     Uvicorn running on http://127.0.0.1:8000
+   INFO:     Application startup complete
+
+✅ Frontend Running:
+   Docusaurus is running at http://localhost:3000/book/
+   (Browser opens automatically)
+
+
+🧪 TESTING CHECKLIST
+────────────────────
+
+After both servers start:
+
+1. Login Page
+   → Go to: http://localhost:3000/book/login
+   → Click "Sign up" 
+   → Create account
+   → Should log you in automatically
+
+2. Check Sidebar Progress
+   → Go to: http://localhost:3000/book/docs/module-01/chapter-01
+   → Look at LEFT SIDEBAR
+   → You should see small icons next to chapter names
+   → Icons: ✓ (done), 📈 (in progress), ◯ (not started)
+
+3. Practice Questions
+   → Scroll to BOTTOM of chapter page
+   → Look for "📝 Test Your Knowledge" section
+   → Click to expand
+   → Answer all questions
+   → Click "Submit Answers"
+   → See your score
+
+4. Dashboard
+   → Go to: http://localhost:3000/book/dashboard
+   → See progress overview
+   → See mastery heatmap
+   → See charts and recommendations
+
+5. Check Console
+   → Press F12 in browser
+   → Go to "Console" tab
+   → Should see NO red errors
+   → Only blue info messages
+
+
+📊 URLS TO TEST
+───────────────
+
+Homepage:       http://localhost:3000/book/
+Login:          http://localhost:3000/book/login
+Chapter 1:      http://localhost:3000/book/docs/module-01/chapter-01
+Dashboard:      http://localhost:3000/book/dashboard
+Backend API:    http://localhost:8000
+
+
+🔍 IF SOMETHING DOESN'T WORK
+────────────────────────────
+
+1. Check Backend is Running
+   Open new terminal and run:
+   curl http://localhost:8000/api/v1/health
+
+2. Check Frontend is Running
+   Open new terminal and run:
+   curl http://localhost:3000/book/
+
+3. Check Browser Console
+   Press F12 → Console tab
+   Look for red error messages
+
+4. Clear Browser Cache
+   Press Ctrl+Shift+Delete
+   Clear all data
+   Refresh page
+
+5. Restart Both Servers
+   Close both terminal windows
+   Run start_servers.bat again
+
+
+⏹️  STOPPING SERVERS
+───────────────────
+
+Option 1: Close the terminal windows
+   → Click X on each window
+
+Option 2: In each terminal
+   → Press Ctrl+C
+
+
+📈 KEY FEATURES TO TEST
+──────────────────────
+
+✓ Authentication (login/register)
+✓ Progress icons in sidebar (✓ 📈 ◯)
+✓ Practice questions with scoring
+✓ Sidebar updates after practice submission
+✓ Dashboard with statistics
+✓ Charts and visualizations
+✓ Learning curve and recommendations
+✓ Mobile responsive (press F12 → responsive mode)
+
+
+💡 TIPS
+──────
+
+• First run might take longer (npm installing, building)
+• Backend uses port 8000 - if busy, edit start_servers.bat
+• Frontend uses port 3000 - if busy, Docusaurus will suggest alternative
+• Keep terminal windows open while testing
+• Browser will open automatically to textbook
+
+
+📚 DETAILED GUIDE
+─────────────────
+
+For more detailed testing instructions, see:
+→ START_LOCAL_TESTING.md
+
+
+🎯 NEXT STEPS
+─────────────
+
+1. Run start_servers.bat (or use Option 2 manual start)
+2. Test all features using checklist above
+3. Check browser console for errors (should be clean)
+4. Review documentation if something doesn't work
+5. Deploy to production when ready
+
+
+═══════════════════════════════════════════════════════════════════════════
+
+Ready? Go ahead and run:
+→ start_servers.bat
+
+Or manually run the two commands above in separate terminals.
+
+Happy testing! 🚀
+
+═══════════════════════════════════════════════════════════════════════════

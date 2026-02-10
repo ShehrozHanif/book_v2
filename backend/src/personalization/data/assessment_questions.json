@@ -1,0 +1,422 @@
+[
+  {
+    "question_id": 1,
+    "text": "What is the primary purpose of inverse kinematics in robotics?",
+    "options": [
+      {
+        "text": "To calculate joint angles from desired end-effector position",
+        "correct": true,
+        "points": 10
+      },
+      {
+        "text": "To calculate end-effector position from joint angles",
+        "correct": false,
+        "points": 0
+      },
+      {
+        "text": "To optimize robot energy consumption",
+        "correct": false,
+        "points": 0
+      },
+      {
+        "text": "To plan collision-free paths",
+        "correct": false,
+        "points": 0
+      }
+    ],
+    "difficulty": "easy",
+    "chapter_tags": ["1", "2"]
+  },
+  {
+    "question_id": 2,
+    "text": "Which of the following is NOT a common coordinate frame representation in robotics?",
+    "options": [
+      {
+        "text": "Euler angles",
+        "correct": false,
+        "points": 0
+      },
+      {
+        "text": "Quaternions",
+        "correct": false,
+        "points": 0
+      },
+      {
+        "text": "Rotation matrices",
+        "correct": false,
+        "points": 0
+      },
+      {
+        "text": "Fibonacci sequences",
+        "correct": true,
+        "points": 10
+      }
+    ],
+    "difficulty": "easy",
+    "chapter_tags": ["2"]
+  },
+  {
+    "question_id": 3,
+    "text": "What does ZMP (Zero Moment Point) represent in bipedal robotics?",
+    "options": [
+      {
+        "text": "The center of mass of the robot",
+        "correct": false,
+        "points": 0
+      },
+      {
+        "text": "The point where net ground reaction moment is zero",
+        "correct": true,
+        "points": 15
+      },
+      {
+        "text": "The highest point on the robot",
+        "correct": false,
+        "points": 0
+      },
+      {
+        "text": "The midpoint between two feet",
+        "correct": false,
+        "points": 0
+      }
+    ],
+    "difficulty": "medium",
+    "chapter_tags": ["3"]
+  },
+  {
+    "question_id": 4,
+    "text": "In the Denavit-Hartenberg (DH) convention, how many parameters are used to describe each link?",
+    "options": [
+      {
+        "text": "2 parameters",
+        "correct": false,
+        "points": 0
+      },
+      {
+        "text": "3 parameters",
+        "correct": false,
+        "points": 0
+      },
+      {
+        "text": "4 parameters",
+        "correct": true,
+        "points": 15
+      },
+      {
+        "text": "6 parameters",
+        "correct": false,
+        "points": 0
+      }
+    ],
+    "difficulty": "medium",
+    "chapter_tags": ["2"]
+  },
+  {
+    "question_id": 5,
+    "text": "What is the main advantage of using Model Predictive Control (MPC) for robot locomotion?",
+    "options": [
+      {
+        "text": "It requires no computation",
+        "correct": false,
+        "points": 0
+      },
+      {
+        "text": "It can incorporate constraints and optimize over a time horizon",
+        "correct": true,
+        "points": 20
+      },
+      {
+        "text": "It works without sensor feedback",
+        "correct": false,
+        "points": 0
+      },
+      {
+        "text": "It only uses historical data",
+        "correct": false,
+        "points": 0
+      }
+    ],
+    "difficulty": "hard",
+    "chapter_tags": ["3"]
+  },
+  {
+    "question_id": 6,
+    "text": "Which Python library is commonly used for numerical computation in robotics?",
+    "options": [
+      {
+        "text": "pandas",
+        "correct": false,
+        "points": 0
+      },
+      {
+        "text": "NumPy",
+        "correct": true,
+        "points": 10
+      },
+      {
+        "text": "Flask",
+        "correct": false,
+        "points": 0
+      },
+      {
+        "text": "Django",
+        "correct": false,
+        "points": 0
+      }
+    ],
+    "difficulty": "easy",
+    "chapter_tags": ["1"]
+  },
+  {
+    "question_id": 7,
+    "text": "What is the purpose of a Jacobian matrix in robotics?",
+    "options": [
+      {
+        "text": "To store robot configuration",
+        "correct": false,
+        "points": 0
+      },
+      {
+        "text": "To relate joint velocities to end-effector velocities",
+        "correct": true,
+        "points": 15
+      },
+      {
+        "text": "To represent sensor data",
+        "correct": false,
+        "points": 0
+      },
+      {
+        "text": "To calculate robot weight",
+        "correct": false,
+        "points": 0
+      }
+    ],
+    "difficulty": "medium",
+    "chapter_tags": ["2"]
+  },
+  {
+    "question_id": 8,
+    "text": "In humanoid robotics, what is 'gait generation'?",
+    "options": [
+      {
+        "text": "The process of designing robot appearance",
+        "correct": false,
+        "points": 0
+      },
+      {
+        "text": "The creation of walking patterns and trajectories",
+        "correct": true,
+        "points": 10
+      },
+      {
+        "text": "The manufacturing of robot joints",
+        "correct": false,
+        "points": 0
+      },
+      {
+        "text": "The programming of speech synthesis",
+        "correct": false,
+        "points": 0
+      }
+    ],
+    "difficulty": "easy",
+    "chapter_tags": ["1", "3"]
+  },
+  {
+    "question_id": 9,
+    "text": "What challenge does the 'curse of dimensionality' present in robot motion planning?",
+    "options": [
+      {
+        "text": "Robots become physically larger",
+        "correct": false,
+        "points": 0
+      },
+      {
+        "text": "Computational complexity grows exponentially with degrees of freedom",
+        "correct": true,
+        "points": 20
+      },
+      {
+        "text": "Robots move too slowly",
+        "correct": false,
+        "points": 0
+      },
+      {
+        "text": "Sensors become less accurate",
+        "correct": false,
+        "points": 0
+      }
+    ],
+    "difficulty": "hard",
+    "chapter_tags": ["3"]
+  },
+  {
+    "question_id": 10,
+    "text": "Which of the following is a key consideration for stable bipedal walking?",
+    "options": [
+      {
+        "text": "Keeping the center of pressure within the support polygon",
+        "correct": true,
+        "points": 15
+      },
+      {
+        "text": "Maximizing robot height",
+        "correct": false,
+        "points": 0
+      },
+      {
+        "text": "Using only open-loop control",
+        "correct": false,
+        "points": 0
+      },
+      {
+        "text": "Minimizing number of sensors",
+        "correct": false,
+        "points": 0
+      }
+    ],
+    "difficulty": "medium",
+    "chapter_tags": ["3"]
+  },
+  {
+    "question_id": 11,
+    "text": "What type of sensors are commonly used for humanoid robot balance control?",
+    "options": [
+      {
+        "text": "Cameras only",
+        "correct": false,
+        "points": 0
+      },
+      {
+        "text": "IMU (Inertial Measurement Unit) and force/torque sensors",
+        "correct": true,
+        "points": 15
+      },
+      {
+        "text": "GPS sensors",
+        "correct": false,
+        "points": 0
+      },
+      {
+        "text": "Temperature sensors",
+        "correct": false,
+        "points": 0
+      }
+    ],
+    "difficulty": "medium",
+    "chapter_tags": ["4"]
+  },
+  {
+    "question_id": 12,
+    "text": "What is forward kinematics?",
+    "options": [
+      {
+        "text": "Calculating end-effector position from joint angles",
+        "correct": true,
+        "points": 10
+      },
+      {
+        "text": "Calculating joint angles from end-effector position",
+        "correct": false,
+        "points": 0
+      },
+      {
+        "text": "Moving the robot forward in space",
+        "correct": false,
+        "points": 0
+      },
+      {
+        "text": "Planning future robot trajectories",
+        "correct": false,
+        "points": 0
+      }
+    ],
+    "difficulty": "easy",
+    "chapter_tags": ["2"]
+  },
+  {
+    "question_id": 13,
+    "text": "Which actuator type provides the highest torque-to-weight ratio?",
+    "options": [
+      {
+        "text": "DC motors",
+        "correct": false,
+        "points": 0
+      },
+      {
+        "text": "Hydraulic actuators",
+        "correct": true,
+        "points": 20
+      },
+      {
+        "text": "Pneumatic actuators",
+        "correct": false,
+        "points": 0
+      },
+      {
+        "text": "Stepper motors",
+        "correct": false,
+        "points": 0
+      }
+    ],
+    "difficulty": "hard",
+    "chapter_tags": ["5"]
+  },
+  {
+    "question_id": 14,
+    "text": "What is the primary role of a PID controller in robotics?",
+    "options": [
+      {
+        "text": "To plan robot paths",
+        "correct": false,
+        "points": 0
+      },
+      {
+        "text": "To reduce tracking error by adjusting control inputs",
+        "correct": true,
+        "points": 15
+      },
+      {
+        "text": "To detect obstacles",
+        "correct": false,
+        "points": 0
+      },
+      {
+        "text": "To charge the robot battery",
+        "correct": false,
+        "points": 0
+      }
+    ],
+    "difficulty": "medium",
+    "chapter_tags": ["3"]
+  },
+  {
+    "question_id": 15,
+    "text": "What does DOF stand for in robotics?",
+    "options": [
+      {
+        "text": "Degree of Force",
+        "correct": false,
+        "points": 0
+      },
+      {
+        "text": "Degrees of Freedom",
+        "correct": true,
+        "points": 10
+      },
+      {
+        "text": "Direction of Flow",
+        "correct": false,
+        "points": 0
+      },
+      {
+        "text": "Dynamic Object Function",
+        "correct": false,
+        "points": 0
+      }
+    ],
+    "difficulty": "easy",
+    "chapter_tags": ["1"]
+  }
+]

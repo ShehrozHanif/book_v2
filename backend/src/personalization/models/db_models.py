@@ -6,7 +6,8 @@ from sqlalchemy import (
     Column, String, Integer, Text, TIMESTAMP, ForeignKey,
     CheckConstraint, UniqueConstraint, Index, ARRAY
 )
-from sqlalchemy.dialects.postgresql import UUID, JSONB
+from sqlalchemy import JSON
+from sqlalchemy.dialects.postgresql import UUID
 from sqlalchemy.orm import relationship, validates
 from sqlalchemy.ext.declarative import declarative_base
 import uuid
@@ -29,7 +30,7 @@ class User(Base):
     is_admin = Column(Integer, default=0, nullable=False)
     profile_picture_url = Column(Text, nullable=True)
     bio = Column(Text, nullable=True)
-    preferences_json = Column(JSONB, default={
+    preferences_json = Column(JSON, default={
         "explanation_style": "example_first",
         "code_language": "python",
         "learning_pace": "medium",
@@ -50,7 +51,7 @@ class User(Base):
     __table_args__ = (
         CheckConstraint('skill_level >= 0 AND skill_level <= 100', name='check_skill_level_range'),
         CheckConstraint('skill_confidence >= 0 AND skill_confidence <= 100', name='check_skill_confidence_range'),
-        CheckConstraint('char_length(username) >= 3 AND char_length(username) <= 50', name='check_username_length'),
+        CheckConstraint('length(username) >= 3 AND length(username) <= 50', name='check_username_length'),
         Index('idx_users_deleted_at', 'deleted_at'),
     )
 
@@ -95,7 +96,7 @@ class KnowledgeAssessment(Base):
 
     assessment_id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
     user_id = Column(UUID(as_uuid=True), ForeignKey('users.user_id', ondelete='CASCADE'), nullable=False, index=True)
-    questions_json = Column(JSONB, nullable=False)
+    questions_json = Column(JSON, nullable=False)
     calculated_skill_score = Column(Integer, nullable=False)
     created_at = Column(TIMESTAMP(timezone=True), default=datetime.utcnow, nullable=False, index=True)
     updated_at = Column(TIMESTAMP(timezone=True), default=datetime.utcnow, onupdate=datetime.utcnow, nullable=False)
@@ -240,7 +241,7 @@ class Achievement(Base):
     user_id = Column(UUID(as_uuid=True), ForeignKey('users.user_id', ondelete='CASCADE'), nullable=False, index=True)
     achievement_type = Column(String(100), nullable=False)
     earned_date = Column(TIMESTAMP(timezone=True), default=datetime.utcnow, nullable=False, index=True)
-    display_info_json = Column(JSONB, nullable=False)
+    display_info_json = Column(JSON, nullable=False)
 
     # Relationships
     user = relationship("User", back_populates="achievements")
@@ -272,7 +273,7 @@ class PracticeAttempt(Base):
     attempt_id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
     user_id = Column(UUID(as_uuid=True), ForeignKey('users.user_id', ondelete='CASCADE'), nullable=False, index=True)
     chapter_id = Column(Integer, nullable=False, index=True)
-    questions_json = Column(JSONB, nullable=False)
+    questions_json = Column(JSON, nullable=False)
     score = Column(Integer, nullable=False)
     attempted_at = Column(TIMESTAMP(timezone=True), default=datetime.utcnow, nullable=False)
 
@@ -298,3 +299,232 @@ class PracticeAttempt(Base):
 
     def __repr__(self):
         return f"<PracticeAttempt(attempt_id={self.attempt_id}, chapter={self.chapter_id}, score={self.score})>"
+
+
+# =====================================================================
+# CHATBOT TRANSLATION MODELS (For Urdu Translation Feature - 006)
+# =====================================================================
+
+
+class ChatbotResponseTemplate(Base):
+    """Chatbot response template model for translation management."""
+
+    __tablename__ = "chatbot_response_template"
+
+    id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
+    template_key = Column(String(255), nullable=False, unique=True, index=True)
+    english_content = Column(Text, nullable=False)
+    version = Column(Integer, default=1, nullable=False)
+    status = Column(String(50), default='published', nullable=False)  # published, draft, archived
+    created_at = Column(TIMESTAMP(timezone=True), default=datetime.utcnow, nullable=False)
+    updated_at = Column(TIMESTAMP(timezone=True), default=datetime.utcnow, nullable=False)
+
+    # Relationships
+    translations = relationship("ChatbotTranslation", back_populates="template", cascade="all, delete-orphan")
+    translation_status = relationship("ChatbotResponseTranslationStatus", back_populates="template", uselist=False, cascade="all, delete-orphan")
+
+    # Constraints
+    __table_args__ = (
+        Index('idx_chatbot_template_status', 'status'),
+    )
+
+    def to_dict(self) -> Dict[str, Any]:
+        """Convert to dictionary."""
+        return {
+            "id": str(self.id),
+            "template_key": self.template_key,
+            "english_content": self.english_content,
+            "version": self.version,
+            "status": self.status,
+            "created_at": self.created_at.isoformat() if self.created_at else None,
+            "updated_at": self.updated_at.isoformat() if self.updated_at else None,
+        }
+
+    def __repr__(self):
+        return f"<ChatbotResponseTemplate(id={self.id}, key={self.template_key}, status={self.status})>"
+
+
+class ChatbotTranslation(Base):
+    """Chatbot translation model for storing Urdu and other language translations."""
+
+    __tablename__ = "chatbot_translation"
+
+    id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
+    response_template_id = Column(UUID(as_uuid=True), ForeignKey('chatbot_response_template.id', ondelete='CASCADE'), nullable=False, index=True)
+    language = Column(String(50), nullable=False)  # urdu, etc.
+    translated_content = Column(Text, nullable=True)  # nullable until translated
+    translator_id = Column(UUID(as_uuid=True), ForeignKey('users.user_id', ondelete='SET NULL'), nullable=True)
+    version = Column(Integer, default=1, nullable=False)  # tracks English version this translation covers
+    status = Column(String(50), default='draft', nullable=False)  # draft, in_review, published
+    translated_at = Column(TIMESTAMP(timezone=True), nullable=True)
+    reviewed_at = Column(TIMESTAMP(timezone=True), nullable=True)
+    created_at = Column(TIMESTAMP(timezone=True), default=datetime.utcnow, nullable=False)
+    updated_at = Column(TIMESTAMP(timezone=True), default=datetime.utcnow, nullable=False)
+
+    # Relationships
+    template = relationship("ChatbotResponseTemplate", back_populates="translations")
+    translator = relationship("User", foreign_keys=[translator_id])
+
+    # Constraints
+    __table_args__ = (
+        UniqueConstraint('response_template_id', 'language', name='uq_translation_template_language'),
+        Index('idx_translation_template_status', 'response_template_id', 'status'),
+        Index('idx_translation_language_status', 'language', 'status'),
+    )
+
+    def to_dict(self) -> Dict[str, Any]:
+        """Convert to dictionary."""
+        return {
+            "id": str(self.id),
+            "template_id": str(self.response_template_id),
+            "language": self.language,
+            "translated_content": self.translated_content,
+            "translator_id": str(self.translator_id) if self.translator_id else None,
+            "version": self.version,
+            "status": self.status,
+            "translated_at": self.translated_at.isoformat() if self.translated_at else None,
+            "reviewed_at": self.reviewed_at.isoformat() if self.reviewed_at else None,
+        }
+
+    def __repr__(self):
+        return f"<ChatbotTranslation(id={self.id}, language={self.language}, status={self.status})>"
+
+
+class GlossaryTerm(Base):
+    """Glossary term model for technical terminology with translations."""
+
+    __tablename__ = "glossary_term"
+
+    id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
+    english_term = Column(String(255), nullable=False, unique=True, index=True)
+    urdu_translation = Column(String(255), nullable=False)
+    pronunciation_transliterated = Column(String(255), nullable=False)  # Latin characters
+    definition_english = Column(Text, nullable=False)
+    definition_urdu = Column(Text, nullable=False)
+    category = Column(String(100), nullable=True, index=True)  # robotics, control, kinematics, etc.
+    status = Column(String(50), default='published', nullable=False)  # published, under_review
+    created_at = Column(TIMESTAMP(timezone=True), default=datetime.utcnow, nullable=False)
+    updated_at = Column(TIMESTAMP(timezone=True), default=datetime.utcnow, nullable=False)
+
+    # Relationships
+    feedback = relationship("GlossaryFeedback", back_populates="term", cascade="all, delete-orphan")
+
+    def to_dict(self) -> Dict[str, Any]:
+        """Convert to dictionary."""
+        return {
+            "id": str(self.id),
+            "english_term": self.english_term,
+            "urdu_translation": self.urdu_translation,
+            "pronunciation_transliterated": self.pronunciation_transliterated,
+            "definition_english": self.definition_english,
+            "definition_urdu": self.definition_urdu,
+            "category": self.category,
+            "status": self.status,
+        }
+
+    def __repr__(self):
+        return f"<GlossaryTerm(id={self.id}, term={self.english_term})>"
+
+
+class GlossaryFeedback(Base):
+    """Glossary feedback model for user suggestions and corrections."""
+
+    __tablename__ = "glossary_feedback"
+
+    id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
+    user_id = Column(UUID(as_uuid=True), ForeignKey('users.user_id', ondelete='CASCADE'), nullable=False, index=True)
+    glossary_term_id = Column(UUID(as_uuid=True), ForeignKey('glossary_term.id', ondelete='SET NULL'), nullable=True, index=True)
+    suggested_term = Column(String(255), nullable=True)  # for new term suggestions
+    feedback_type = Column(String(50), nullable=False)  # suggestion, correction, new_term
+    content = Column(Text, nullable=False)
+    status = Column(String(50), default='pending', nullable=False)  # pending, accepted, rejected
+    admin_response = Column(Text, nullable=True)
+    created_at = Column(TIMESTAMP(timezone=True), default=datetime.utcnow, nullable=False)
+    reviewed_at = Column(TIMESTAMP(timezone=True), nullable=True)
+
+    # Relationships
+    user = relationship("User", foreign_keys=[user_id])
+    term = relationship("GlossaryTerm", back_populates="feedback")
+
+    # Constraints
+    __table_args__ = (
+        Index('idx_feedback_status', 'status'),
+    )
+
+    def to_dict(self) -> Dict[str, Any]:
+        """Convert to dictionary."""
+        return {
+            "id": str(self.id),
+            "user_id": str(self.user_id),
+            "glossary_term_id": str(self.glossary_term_id) if self.glossary_term_id else None,
+            "suggested_term": self.suggested_term,
+            "feedback_type": self.feedback_type,
+            "content": self.content,
+            "status": self.status,
+            "admin_response": self.admin_response,
+            "created_at": self.created_at.isoformat() if self.created_at else None,
+        }
+
+    def __repr__(self):
+        return f"<GlossaryFeedback(id={self.id}, type={self.feedback_type}, status={self.status})>"
+
+
+class UserLanguagePreference(Base):
+    """User language preference model for chatbot language selection."""
+
+    __tablename__ = "user_language_preference"
+
+    id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
+    user_id = Column(UUID(as_uuid=True), ForeignKey('users.user_id', ondelete='CASCADE'), nullable=False, unique=True, index=True)
+    language = Column(String(50), default='english', nullable=False)  # english, urdu
+    updated_at = Column(TIMESTAMP(timezone=True), default=datetime.utcnow, nullable=False)
+
+    # Relationships
+    user = relationship("User", foreign_keys=[user_id])
+
+    def to_dict(self) -> Dict[str, Any]:
+        """Convert to dictionary."""
+        return {
+            "id": str(self.id),
+            "user_id": str(self.user_id),
+            "language": self.language,
+            "updated_at": self.updated_at.isoformat() if self.updated_at else None,
+        }
+
+    def __repr__(self):
+        return f"<UserLanguagePreference(user_id={self.user_id}, language={self.language})>"
+
+
+class ChatbotResponseTranslationStatus(Base):
+    """Translation status tracker for chatbot response templates."""
+
+    __tablename__ = "chatbot_response_translation_status"
+
+    id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
+    response_template_id = Column(UUID(as_uuid=True), ForeignKey('chatbot_response_template.id', ondelete='CASCADE'), nullable=False, unique=True, index=True)
+    english_version = Column(Integer, default=1, nullable=False)
+    urdu_version = Column(Integer, nullable=True)  # nullable until translated
+    status = Column(String(50), default='needs_translation', nullable=False)  # translated, needs_translation, needs_review, stale
+    last_updated = Column(TIMESTAMP(timezone=True), default=datetime.utcnow, nullable=False)
+
+    # Relationships
+    template = relationship("ChatbotResponseTemplate", back_populates="translation_status")
+
+    # Constraints
+    __table_args__ = (
+        Index('idx_translation_status', 'status'),
+    )
+
+    def to_dict(self) -> Dict[str, Any]:
+        """Convert to dictionary."""
+        return {
+            "id": str(self.id),
+            "template_id": str(self.response_template_id),
+            "english_version": self.english_version,
+            "urdu_version": self.urdu_version,
+            "status": self.status,
+            "last_updated": self.last_updated.isoformat() if self.last_updated else None,
+        }
+
+    def __repr__(self):
+        return f"<ChatbotResponseTranslationStatus(template_id={self.response_template_id}, status={self.status})>"

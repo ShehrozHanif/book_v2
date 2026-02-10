@@ -1,0 +1,263 @@
+.pageContainer {
+  min-height: 100vh;
+  background-color: #f5f7fa;
+  display: flex;
+  flex-direction: column;
+}
+
+.contentWrapper {
+  flex: 1;
+  max-width: 1400px;
+  margin: 0 auto;
+  width: 100%;
+  padding: 40px 20px;
+}
+
+.documentHeader {
+  margin-bottom: 40px;
+  border-bottom: 3px solid #0066cc;
+  padding-bottom: 20px;
+}
+
+.documentHeader h1 {
+  font-size: 2.5rem;
+  color: #1a1a1a;
+  margin: 0 0 10px 0;
+  font-weight: 700;
+  letter-spacing: -0.5px;
+}
+
+.lastUpdated {
+  font-size: 0.95rem;
+  color: #666;
+  margin: 0;
+  font-style: italic;
+}
+
+.documentContent {
+  display: grid;
+  grid-template-columns: 1fr 350px;
+  gap: 40px;
+  margin-bottom: 40px;
+}
+
+.policyText {
+  background-color: white;
+  padding: 30px;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  line-height: 1.8;
+}
+
+.sectionHeading {
+  font-size: 1.4rem;
+  color: #0066cc;
+  margin: 30px 0 15px 0;
+  font-weight: 600;
+  border-left: 4px solid #0066cc;
+  padding-left: 15px;
+}
+
+.sectionHeading:first-child {
+  margin-top: 0;
+}
+
+.paragraph {
+  color: #333;
+  margin: 12px 0;
+  font-size: 1rem;
+}
+
+.bulletPoint {
+  color: #333;
+  margin: 10px 0 10px 20px;
+  font-size: 1rem;
+  list-style-type: disc;
+}
+
+.spacer {
+  height: 12px;
+}
+
+.sideInfo {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.infoBox {
+  background-color: white;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  border-left: 4px solid #0066cc;
+}
+
+.infoBox h3 {
+  font-size: 1.1rem;
+  color: #0066cc;
+  margin: 0 0 12px 0;
+  font-weight: 600;
+}
+
+.infoBox p {
+  color: #555;
+  margin: 0 0 10px 0;
+  font-size: 0.95rem;
+  line-height: 1.6;
+}
+
+.infoBox ul {
+  margin: 8px 0 0 0;
+  padding-left: 20px;
+  list-style-type: disc;
+}
+
+.infoBox li {
+  color: #555;
+  margin: 6px 0;
+  font-size: 0.95rem;
+  line-height: 1.6;
+}
+
+.infoBox a {
+  color: #0066cc;
+  text-decoration: none;
+  font-weight: 500;
+  word-break: break-all;
+}
+
+.infoBox a:hover {
+  text-decoration: underline;
+  color: #0052a3;
+}
+
+.footer {
+  border-top: 1px solid #ddd;
+  padding-top: 20px;
+  text-align: center;
+  color: #666;
+  font-size: 0.9rem;
+}
+
+.footer p {
+  margin: 0;
+}
+
+.footer a {
+  color: #0066cc;
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.footer a:hover {
+  text-decoration: underline;
+  color: #0052a3;
+}
+
+.errorContainer {
+  background-color: #fff3cd;
+  border: 1px solid #ffc107;
+  border-radius: 8px;
+  padding: 20px;
+  margin-bottom: 20px;
+}
+
+.error {
+  color: #856404;
+  margin: 0;
+  font-size: 1rem;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .contentWrapper {
+    padding: 20px 15px;
+  }
+
+  .documentHeader h1 {
+    font-size: 2rem;
+  }
+
+  .documentContent {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+
+  .policyText {
+    padding: 20px;
+  }
+
+  .sectionHeading {
+    font-size: 1.2rem;
+    margin: 20px 0 12px 0;
+  }
+
+  .paragraph {
+    font-size: 0.95rem;
+  }
+
+  .bulletPoint {
+    font-size: 0.95rem;
+  }
+
+  .infoBox {
+    padding: 15px;
+  }
+
+  .infoBox h3 {
+    font-size: 1rem;
+  }
+
+  .infoBox p,
+  .infoBox li {
+    font-size: 0.9rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .contentWrapper {
+    padding: 15px 10px;
+  }
+
+  .documentHeader {
+    margin-bottom: 25px;
+    padding-bottom: 15px;
+  }
+
+  .documentHeader h1 {
+    font-size: 1.5rem;
+  }
+
+  .lastUpdated {
+    font-size: 0.85rem;
+  }
+
+  .documentContent {
+    gap: 15px;
+  }
+
+  .policyText {
+    padding: 15px;
+  }
+
+  .sectionHeading {
+    font-size: 1.1rem;
+    padding-left: 10px;
+    border-left-width: 3px;
+  }
+
+  .paragraph,
+  .bulletPoint {
+    font-size: 0.9rem;
+  }
+
+  .infoBox {
+    padding: 12px;
+  }
+
+  .footer {
+    padding-top: 15px;
+    font-size: 0.85rem;
+  }
+}

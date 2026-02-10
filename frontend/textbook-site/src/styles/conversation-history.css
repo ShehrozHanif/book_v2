@@ -1,0 +1,147 @@
+/* Conversation History Sidebar */
+.conversation-history {
+  width: 200px;
+  border-right: 1px solid #eee;
+  background: #fafafa;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.history-header {
+  padding: 12px;
+  border-bottom: 1px solid #eee;
+  background: white;
+}
+
+.history-header h3 {
+  margin: 0 0 4px 0;
+  font-size: 14px;
+  font-weight: 600;
+  color: #333;
+}
+
+.conversation-id-badge {
+  margin: 0;
+  font-size: 11px;
+  color: #999;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.history-list {
+  flex: 1;
+  overflow-y: auto;
+  padding: 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.history-list::-webkit-scrollbar {
+  width: 4px;
+}
+
+.history-list::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.history-list::-webkit-scrollbar-thumb {
+  background: #ddd;
+  border-radius: 2px;
+}
+
+.history-list::-webkit-scrollbar-thumb:hover {
+  background: #999;
+}
+
+.empty-state {
+  padding: 16px;
+  text-align: center;
+  color: #999;
+}
+
+.empty-state p {
+  margin: 8px 0;
+  font-size: 12px;
+}
+
+.empty-state p:first-child {
+  font-weight: 600;
+  color: #666;
+}
+
+.history-item {
+  padding: 8px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.2s;
+  background: transparent;
+  border: 1px solid transparent;
+}
+
+.history-item:hover {
+  background: white;
+  border-color: #ddd;
+}
+
+.history-item:focus {
+  outline: 2px solid #667eea;
+  outline-offset: -2px;
+}
+
+.history-item.latest {
+  background: white;
+  border-color: #667eea;
+}
+
+.history-item-header {
+  display: flex;
+  justify-content: space-between;
+  gap: 4px;
+  margin-bottom: 4px;
+  font-size: 11px;
+}
+
+.sender-label {
+  font-weight: 600;
+  color: #333;
+}
+
+.sender-label.user {
+  color: #667eea;
+}
+
+.sender-label.bot {
+  color: #666;
+}
+
+.message-time {
+  color: #999;
+  font-size: 11px;
+}
+
+.message-preview {
+  margin: 0;
+  font-size: 12px;
+  color: #666;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  line-height: 1.3;
+}
+
+.latest-badge {
+  margin-top: 4px;
+  font-size: 10px;
+  color: #667eea;
+  font-weight: 600;
+  text-align: center;
+}
+
+@media (max-width: 768px) {
+  .conversation-history {
+    display: none;
+  }
+}

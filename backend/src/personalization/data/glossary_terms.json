@@ -1,0 +1,28 @@
+{
+  "glossary_terms": [
+    {
+      "english_term": "ROS 2 Node",
+      "urdu_translation": "آر او ایس 2 نوڈ",
+      "pronunciation_transliterated": "ROS 2 Node",
+      "definition_english": "A fundamental building block in ROS 2 that executes computation tasks",
+      "definition_urdu": "ROS 2 میں ایک بنیادی اکائی جو حسابات کے کام انجام دیتی ہے",
+      "category": "robotics"
+    },
+    {
+      "english_term": "Kinematics",
+      "urdu_translation": "حرکیات",
+      "pronunciation_transliterated": "Harkayyaat",
+      "definition_english": "The branch of mechanics that describes motion without considering forces",
+      "definition_urdu": "میکانکس کی وہ شاخ جو طاقت کے بغیر حرکت کی تفصیل دیتی ہے",
+      "category": "mechanics"
+    },
+    {
+      "english_term": "End Effector",
+      "urdu_translation": "اختتام کار",
+      "pronunciation_transliterated": "Akhtitaam-e-Kar",
+      "definition_english": "The device at the end of a robotic arm that interacts with the environment",
+      "definition_urdu": "روبوٹک بازو کے آخر میں ایک آلہ جو ماحول کے ساتھ تعامل کرتا ہے",
+      "category": "robotics"
+    }
+  ]
+}

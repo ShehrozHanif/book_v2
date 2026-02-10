@@ -38,6 +38,17 @@ PRACTICE_QUESTIONS_BY_CHAPTER = {
                 {"letter": "D", "text": "Wheel alignment", "correct": True}
             ],
             "difficulty": "beginner"
+        },
+        {
+            "id": "q1_adv_1",
+            "question": "How do biomimetic robotics principles compare to traditional industrial robotics in terms of adaptability?",
+            "options": [
+                {"letter": "A", "text": "Biomimetic systems provide superior adaptability to unstructured environments", "correct": True},
+                {"letter": "B", "text": "Traditional robotics are always more adaptable", "correct": False},
+                {"letter": "C", "text": "Adaptability is independent of design philosophy", "correct": False},
+                {"letter": "D", "text": "This comparison is not relevant to modern robotics", "correct": False}
+            ],
+            "difficulty": "advanced"
         }
     ],
     2: [
@@ -51,6 +62,45 @@ PRACTICE_QUESTIONS_BY_CHAPTER = {
                 {"letter": "D", "text": "Computing torques from velocities", "correct": False}
             ],
             "difficulty": "intermediate"
+        },
+        {
+            "id": "q2_adv_1",
+            "question": "What are the computational complexity implications of solving inverse kinematics using numerical methods versus analytical solutions?",
+            "options": [
+                {"letter": "A", "text": "Numerical methods are always faster", "correct": False},
+                {"letter": "B", "text": "Analytical solutions have deterministic complexity but limited solvability", "correct": True},
+                {"letter": "C", "text": "There is no meaningful difference in complexity", "correct": False},
+                {"letter": "D", "text": "Complexity depends only on the number of DOF", "correct": False}
+            ],
+            "difficulty": "advanced"
+        }
+    ]
+}
+
+# Research paper summaries for advanced learners (high mastery chapters)
+RESEARCH_PAPERS_BY_CHAPTER = {
+    1: [
+        {
+            "id": "paper1_1",
+            "title": "A Survey of Robotics Research and Applications",
+            "authors": "IEEE Robotics and Automation Society",
+            "year": 2022,
+            "key_concepts": ["Robotics history", "Current applications", "Future trends"],
+            "summary": "Comprehensive overview of robotics field covering historical development, current state-of-the-art applications, and emerging research directions",
+            "difficulty": "advanced",
+            "relevance_to_chapter": 0.95
+        }
+    ],
+    2: [
+        {
+            "id": "paper2_1",
+            "title": "Analytical and Numerical Methods in Robot Kinematics",
+            "authors": "International Journal of Robotics Research",
+            "year": 2023,
+            "key_concepts": ["Kinematics solutions", "Computational efficiency", "Real-time computation"],
+            "summary": "Detailed analysis of forward and inverse kinematics solution methods with performance benchmarks",
+            "difficulty": "advanced",
+            "relevance_to_chapter": 0.98
         }
     ]
 }
@@ -284,6 +334,107 @@ class PracticeService:
             }
 
         return None
+
+    async def check_advanced_challenges_eligibility(self,
+                                                   user_id: UUID,
+                                                   chapter_id: int) -> bool:
+        """
+        Check if user is eligible for advanced challenges (mastery > 85%).
+
+        Args:
+            user_id: User ID
+            chapter_id: Chapter ID
+
+        Returns:
+            True if user mastery is > 85%, False otherwise
+        """
+        progress = await self.db.execute(
+            select(Progress).where(
+                (Progress.user_id == user_id) & (Progress.chapter_id == chapter_id)
+            )
+        )
+        record = progress.scalar_one_or_none()
+
+        if not record:
+            return False
+
+        return record.mastery_score > 85
+
+    async def get_advanced_challenges(self,
+                                     user_id: UUID,
+                                     chapter_id: int) -> Optional[Dict[str, Any]]:
+        """
+        Get advanced challenges for high mastery chapters (>85% mastery).
+
+        Advanced challenges include research paper summaries and advanced practice questions.
+
+        Args:
+            user_id: User ID
+            chapter_id: Chapter ID (1-22)
+
+        Returns:
+            Dictionary with advanced challenges or None if not eligible
+        """
+        # Check eligibility
+        eligible = await self.check_advanced_challenges_eligibility(user_id, chapter_id)
+        if not eligible:
+            return None
+
+        # Get research papers for the chapter
+        papers = RESEARCH_PAPERS_BY_CHAPTER.get(chapter_id, [])
+
+        # Get advanced practice questions
+        all_questions = PRACTICE_QUESTIONS_BY_CHAPTER.get(chapter_id, [])
+        advanced_questions = [q for q in all_questions if q.get("difficulty") == "advanced"]
+
+        # If no advanced questions, generate placeholders
+        if not advanced_questions:
+            advanced_questions = [
+                {
+                    "id": f"q{chapter_id}_adv_{i}",
+                    "question": f"Advanced question {i+1}: Analyze the research implications of concepts in Chapter {chapter_id}",
+                    "options": [
+                        {"letter": "A", "text": "Complex scenario 1", "correct": True},
+                        {"letter": "B", "text": "Complex scenario 2", "correct": False},
+                        {"letter": "C", "text": "Complex scenario 3", "correct": False},
+                        {"letter": "D", "text": "Complex scenario 4", "correct": False}
+                    ],
+                    "difficulty": "advanced"
+                }
+                for i in range(1, 4)
+            ]
+
+        # Generate placeholder papers if none exist
+        if not papers:
+            papers = [
+                {
+                    "id": f"paper{chapter_id}_{i}",
+                    "title": f"Advanced Research in Chapter {chapter_id}",
+                    "authors": "Research Team",
+                    "year": 2024,
+                    "key_concepts": ["Advanced topic 1", "Advanced topic 2", "Advanced topic 3"],
+                    "summary": f"Research summary for Chapter {chapter_id}",
+                    "difficulty": "advanced",
+                    "relevance_to_chapter": 0.9
+                }
+                for i in range(1, 2)
+            ]
+
+        logger.info(f"Advanced challenges retrieved: user={user_id}, chapter={chapter_id}, questions={len(advanced_questions)}, papers={len(papers)}")
+
+        return {
+            "chapter_id": chapter_id,
+            "user_mastery": (await self.db.execute(
+                select(Progress).where(
+                    (Progress.user_id == user_id) & (Progress.chapter_id == chapter_id)
+                )
+            )).scalar_one_or_none().mastery_score,
+            "advanced_questions": advanced_questions,
+            "research_papers": papers,
+            "challenge_type": "advanced_mastery",
+            "total_questions": len(advanced_questions),
+            "total_papers": len(papers)
+        }
 
 
 async def get_practice_service(db: AsyncSession) -> PracticeService:

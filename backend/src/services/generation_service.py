@@ -110,7 +110,8 @@ class GenerationService:
         query: str,
         context_passages: List[str],
         conversation_history: Optional[List[Dict]] = None,
-        use_fallback_on_error: bool = True
+        use_fallback_on_error: bool = True,
+        system_prompt: Optional[str] = None
     ) -> str:
         """Generate response using LLM with context.
 
@@ -125,6 +126,7 @@ class GenerationService:
                 ]
             use_fallback_on_error: If True, return fallback message on API error
                                    If False, raise exception (default: True)
+            system_prompt: Optional personalized system prompt for the LLM
 
         Returns:
             str: Generated response from the LLM (or fallback message on error)
@@ -143,7 +145,8 @@ class GenerationService:
                 query=query,
                 context_passages=context_passages,
                 conversation_history=conversation_history,
-                max_tokens=self.max_tokens
+                max_tokens=self.max_tokens,
+                system_prompt=system_prompt
             )
 
             # Validate and enhance response

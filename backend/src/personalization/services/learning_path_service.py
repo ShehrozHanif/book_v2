@@ -1,5 +1,7 @@
 """Learning path service for personalized learning journeys."""
 
+import json
+from pathlib import Path
 from typing import List, Dict, Any, Optional
 from uuid import UUID
 from sqlalchemy import select, and_
@@ -8,49 +10,36 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from src.personalization.models.db_models import LearningPath, Progress
 
 
-# Learning path configurations
-LEARNING_PATH_CONFIGS = {
-    "beginner": {
-        "name": "Beginner Path - Robotics Foundations",
-        "description": "Start with fundamentals and build a strong foundation in robotics concepts",
-        "chapters": [1, 2, 3, 4, 5, 6],
-        "estimated_hours": 30,
-        "prerequisites": [],
-        "focus": "Core concepts, basic kinematics, simple simulations"
-    },
-    "developer": {
-        "name": "Developer Path - Practical Implementation",
-        "description": "Focus on programming, simulation, and practical robot control",
-        "chapters": [1, 2, 6, 7, 8, 9, 12, 14, 15],
-        "estimated_hours": 45,
-        "prerequisites": ["Basic programming knowledge"],
-        "focus": "Python programming, simulation tools, control implementation"
-    },
-    "researcher": {
-        "name": "Researcher Path - Advanced Theory",
-        "description": "Deep dive into mathematical foundations and cutting-edge techniques",
-        "chapters": [1, 2, 3, 4, 5, 10, 11, 13, 16, 17, 18, 19, 20, 21, 22],
-        "estimated_hours": 80,
-        "prerequisites": ["Linear algebra", "Calculus", "Programming"],
-        "focus": "Mathematical rigor, advanced algorithms, research topics"
-    },
-    "hardware": {
-        "name": "Hardware Integration Path",
-        "description": "Learn about physical robot systems and hardware interfaces",
-        "chapters": [1, 2, 3, 4, 6, 7, 14, 15, 19],
-        "estimated_hours": 40,
-        "prerequisites": ["Basic electronics"],
-        "focus": "Actuators, sensors, hardware control, physical systems"
-    },
-    "intermediate": {
-        "name": "Intermediate Path - Balanced Learning",
-        "description": "Balanced approach covering theory and practice",
-        "chapters": [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 12, 14],
-        "estimated_hours": 55,
-        "prerequisites": ["Basic math and programming"],
-        "focus": "Theory foundations with practical applications"
-    }
-}
+# Load learning path configurations from JSON file
+def _load_learning_path_configs() -> Dict[str, Dict[str, Any]]:
+    """Load learning path configurations from JSON file."""
+    current_dir = Path(__file__).parent.parent
+    json_path = current_dir / "data" / "learning_paths.json"
+
+    if not json_path.exists():
+        raise FileNotFoundError(f"Learning paths file not found: {json_path}")
+
+    with open(json_path, 'r', encoding='utf-8') as f:
+        paths_list = json.load(f)
+
+    # Convert list to dict keyed by path_id
+    paths_dict = {}
+    for path in paths_list:
+        path_id = path["path_id"]
+        paths_dict[path_id] = {
+            "name": path["path_name"],
+            "description": path["description"],
+            "chapters": path["chapters"],
+            "estimated_hours": path["estimated_hours"],
+            "prerequisites": path.get("prerequisites", []),
+            "focus": path["focus"]
+        }
+
+    return paths_dict
+
+
+# Load configurations at module initialization
+LEARNING_PATH_CONFIGS = _load_learning_path_configs()
 
 
 def recommend_learning_paths(skill_score: int, skill_tier: str) -> List[Dict[str, Any]]:

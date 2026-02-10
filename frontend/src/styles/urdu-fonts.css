@@ -1,0 +1,275 @@
+/**
+ * Urdu Font Loading and Configuration
+ *
+ * Loads appropriate fonts for rendering Urdu script with proper glyph support
+ * Includes fallback fonts for browsers without Google Fonts access
+ */
+
+/* ===================================================================== */
+/* GOOGLE FONTS - NOTO SANS URDU */
+/* ===================================================================== */
+
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+Urdu:wght@400;500;600;700&display=swap');
+
+/* ===================================================================== */
+/* URDU FONT FAMILY DEFINITIONS */
+/* ===================================================================== */
+
+:root {
+  --font-urdu-primary: 'Noto Sans Urdu', 'Scheherazade', 'Arial Unicode MS', sans-serif;
+  --font-urdu-fallback: 'Scheherazade', 'Arial Unicode MS', 'Segoe UI', sans-serif;
+  --font-english-primary: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+}
+
+/* ===================================================================== */
+/* APPLY URDU FONTS TO RTL ELEMENTS */
+/* ===================================================================== */
+
+.dir-rtl,
+[dir="rtl"],
+[lang="ur"] {
+  font-family: var(--font-urdu-primary);
+  font-size: 16px;
+  line-height: 1.6;
+  letter-spacing: 0.3px;
+}
+
+.dir-ltr,
+[dir="ltr"],
+[lang="en"] {
+  font-family: var(--font-english-primary);
+  font-size: 16px;
+  line-height: 1.6;
+}
+
+/* ===================================================================== */
+/* CHATBOT MESSAGE FONT CONFIGURATION */
+/* ===================================================================== */
+
+.chatbot-message-rtl[lang="ur"] {
+  font-family: var(--font-urdu-primary);
+}
+
+.chatbot-message-rtl[lang="en"] {
+  font-family: var(--font-english-primary);
+}
+
+/* Ensure code blocks use monospace regardless of language */
+.code-block,
+.code-block code,
+.inline-code {
+  font-family: 'Courier New', Courier, monospace;
+  font-size: 14px;
+}
+
+/* ===================================================================== */
+/* FONT WEIGHTS FOR URDU */
+/* ===================================================================== */
+
+.dir-rtl strong,
+.dir-rtl b,
+[dir="rtl"] strong,
+[dir="rtl"] b {
+  font-weight: 600;
+}
+
+.dir-rtl em,
+.dir-rtl i,
+[dir="rtl"] em,
+[dir="rtl"] i {
+  font-style: italic;
+}
+
+/* ===================================================================== */
+/* TEXT RENDERING OPTIMIZATION */
+/* ===================================================================== */
+
+.dir-rtl,
+[dir="rtl"],
+[lang="ur"] {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+}
+
+/* ===================================================================== */
+/* FONT SIZE SCALING FOR READABILITY */
+/* ===================================================================== */
+
+/* Urdu script typically needs slightly larger font size for readability */
+.dir-rtl h1,
+[dir="rtl"] h1,
+[lang="ur"] h1 {
+  font-size: 2rem;
+  font-weight: 700;
+}
+
+.dir-rtl h2,
+[dir="rtl"] h2,
+[lang="ur"] h2 {
+  font-size: 1.5rem;
+  font-weight: 600;
+}
+
+.dir-rtl h3,
+[dir="rtl"] h3,
+[lang="ur"] h3 {
+  font-size: 1.25rem;
+  font-weight: 600;
+}
+
+.dir-rtl p,
+[dir="rtl"] p,
+[lang="ur"] p {
+  font-size: 16px;
+  line-height: 1.8;
+}
+
+.dir-rtl small,
+[dir="rtl"] small,
+[lang="ur"] small {
+  font-size: 14px;
+}
+
+/* ===================================================================== */
+/* DIACRITIC MARKS SUPPORT */
+/* ===================================================================== */
+
+/* Ensure proper spacing for Urdu diacritics */
+.dir-rtl,
+[dir="rtl"],
+[lang="ur"] {
+  word-spacing: 0.15em;
+  letter-spacing: 0.3px;
+}
+
+/* ===================================================================== */
+/* FONT LOADING FALLBACK */
+/* ===================================================================== */
+
+/* Define fallback fonts in case Google Fonts doesn't load */
+@supports not (font-variation-settings: "wght" 400) {
+  .dir-rtl,
+  [dir="rtl"],
+  [lang="ur"] {
+    font-family: var(--font-urdu-fallback);
+  }
+}
+
+/* ===================================================================== */
+/* SYSTEM FONT STACK FOR PERFORMANCE */
+/* ===================================================================== */
+
+/* If Google Fonts is not available, use system fonts */
+.font-system-urdu {
+  font-family: 'Segoe UI', 'Segoe UI Symbol', 'Noto Sans', sans-serif;
+}
+
+.font-system-english {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
+
+/* ===================================================================== */
+/* DARK MODE FONT ADJUSTMENTS */
+/* ===================================================================== */
+
+@media (prefers-color-scheme: dark) {
+  .dir-rtl,
+  [dir="rtl"],
+  [lang="ur"] {
+    letter-spacing: 0.4px;
+  }
+}
+
+/* ===================================================================== */
+/* PRINT STYLES */
+/* ===================================================================== */
+
+@media print {
+  .dir-rtl,
+  [dir="rtl"],
+  [lang="ur"] {
+    font-family: var(--font-urdu-fallback);
+  }
+}
+
+/* ===================================================================== */
+/* SPECIAL CHARACTERS AND SYMBOLS */
+/* ===================================================================== */
+
+/* Ensure proper rendering of Urdu-specific characters */
+.unicode-urdu {
+  font-feature-settings: 'liga' 1, 'calt' 1;
+  -webkit-font-feature-settings: 'liga' 1, 'calt' 1;
+  font-kerning: auto;
+}
+
+/* ===================================================================== */
+/* LOADING STATE */
+/* ===================================================================== */
+
+/* Show message while fonts are loading */
+@font-face {
+  font-family: 'Noto Sans Urdu';
+  src: local('Noto Sans Urdu'),
+       url('https://fonts.googleapis.com/css2?family=Noto+Sans+Urdu:wght@400;500;600;700');
+  font-display: swap; /* Show fallback font while custom font loads */
+}
+
+/* ===================================================================== */
+/* RESPONSIVE FONT SCALING */
+/* ===================================================================== */
+
+@media (max-width: 768px) {
+  .dir-rtl p,
+  [dir="rtl"] p,
+  [lang="ur"] p {
+    font-size: 15px;
+  }
+
+  .dir-rtl h1,
+  [dir="rtl"] h1,
+  [lang="ur"] h1 {
+    font-size: 1.75rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .dir-rtl p,
+  [dir="rtl"] p,
+  [lang="ur"] p {
+    font-size: 14px;
+  }
+
+  .dir-rtl h1,
+  [dir="rtl"] h1,
+  [lang="ur"] h1 {
+    font-size: 1.5rem;
+  }
+}
+
+/* ===================================================================== */
+/* ACCESSIBILITY - HIGH CONTRAST */
+/* ===================================================================== */
+
+@media (prefers-contrast: more) {
+  .dir-rtl,
+  [dir="rtl"],
+  [lang="ur"] {
+    font-weight: 500;
+    letter-spacing: 0.5px;
+  }
+}
+
+/* ===================================================================== */
+/* REDUCED MOTION */
+/* ===================================================================== */
+
+@media (prefers-reduced-motion: reduce) {
+  .dir-rtl,
+  [dir="rtl"],
+  [lang="ur"] {
+    font-feature-settings: 'calt' 0;
+    -webkit-font-feature-settings: 'calt' 0;
+  }
+}

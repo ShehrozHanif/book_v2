@@ -1,0 +1,77 @@
+/**
+ * Any CSS included here will be global. The classic template
+ * bundles Infima by default. Infima is a CSS framework designed to
+ * work well for content-centric websites.
+ */
+
+/* You can override the default Infima variables here. */
+:root {
+  --ifm-color-primary: #2e8555;
+  --ifm-color-primary-dark: #29784c;
+  --ifm-color-primary-darker: #277148;
+  --ifm-color-primary-darkest: #205d3b;
+  --ifm-color-primary-light: #33925d;
+  --ifm-color-primary-lighter: #359962;
+  --ifm-color-primary-lightest: #3cad6e;
+  --ifm-code-font-size: 95%;
+  --docusaurus-highlighted-code-line-bg: rgba(0, 0, 0, 0.1);
+}
+
+/* For readability concerns, you should choose a lighter palette in dark mode. */
+[data-theme='dark'] {
+  --ifm-color-primary: #25c2a0;
+  --ifm-color-primary-dark: #21af90;
+  --ifm-color-primary-darker: #1fa588;
+  --ifm-color-primary-darkest: #1a8870;
+  --ifm-color-primary-light: #29d5b0;
+  --ifm-color-primary-lighter: #32d8b4;
+  --ifm-color-primary-lightest: #4fddbf;
+  --docusaurus-highlighted-code-line-bg: rgba(0, 0, 0, 0.3);
+}
+
+/* Personalization & Authentication Styles */
+
+/* Hide login link when authenticated */
+.navbar-login-link {
+  display: none;
+}
+
+body[data-auth="true"] .navbar-login-link {
+  display: none !important;
+}
+
+body[data-auth="false"] .navbar-login-link {
+  display: block !important;
+}
+
+/* Hide dashboard link when not authenticated */
+.navbar-dashboard-link {
+  display: none;
+}
+
+body[data-auth="true"] .navbar-dashboard-link {
+  display: block !important;
+}
+
+body[data-auth="false"] .navbar-dashboard-link {
+  display: none !important;
+}
+
+/* Chapter Progress Icons in Sidebar */
+.chapter-progress-icon-wrapper {
+  transition: all 0.2s ease;
+}
+
+.chapter-progress-icon-wrapper span {
+  transition: transform 0.2s ease, filter 0.2s ease;
+}
+
+.chapter-progress-icon-wrapper:hover span {
+  transform: scale(1.15);
+  filter: brightness(1.2);
+}
+
+/* Only show progress icons for authenticated users */
+body[data-auth="false"] .chapter-progress-icon-wrapper {
+  display: none !important;
+}

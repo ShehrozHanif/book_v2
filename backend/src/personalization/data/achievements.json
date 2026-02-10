@@ -1,0 +1,343 @@
+{
+  "achievements": [
+    {
+      "id": "ch_1_complete",
+      "type": "chapter_complete",
+      "chapter": 1,
+      "title": "Chapter 1 Master",
+      "description": "Completed Chapter 1: Foundational Concepts",
+      "icon": "📚",
+      "points": 10,
+      "rarity": "common"
+    },
+    {
+      "id": "ch_2_complete",
+      "type": "chapter_complete",
+      "chapter": 2,
+      "title": "Chapter 2 Master",
+      "description": "Completed Chapter 2: Mathematical Foundations",
+      "icon": "🔢",
+      "points": 10,
+      "rarity": "common"
+    },
+    {
+      "id": "ch_3_complete",
+      "type": "chapter_complete",
+      "chapter": 3,
+      "title": "Chapter 3 Master",
+      "description": "Completed Chapter 3: Dynamics",
+      "icon": "⚙️",
+      "points": 10,
+      "rarity": "common"
+    },
+    {
+      "id": "ch_4_complete",
+      "type": "chapter_complete",
+      "chapter": 4,
+      "title": "Chapter 4 Master",
+      "description": "Completed Chapter 4: Sensors & Perception",
+      "icon": "👁️",
+      "points": 10,
+      "rarity": "common"
+    },
+    {
+      "id": "ch_5_complete",
+      "type": "chapter_complete",
+      "chapter": 5,
+      "title": "Chapter 5 Master",
+      "description": "Completed Chapter 5: Hardware & Materials",
+      "icon": "🔧",
+      "points": 10,
+      "rarity": "common"
+    },
+    {
+      "id": "ch_6_complete",
+      "type": "chapter_complete",
+      "chapter": 6,
+      "title": "Chapter 6 Master",
+      "description": "Completed Chapter 6: ROS 2 Architecture",
+      "icon": "🤖",
+      "points": 10,
+      "rarity": "common"
+    },
+    {
+      "id": "ch_7_complete",
+      "type": "chapter_complete",
+      "chapter": 7,
+      "title": "Chapter 7 Master",
+      "description": "Completed Chapter 7: URDF Modeling",
+      "icon": "🧬",
+      "points": 10,
+      "rarity": "common"
+    },
+    {
+      "id": "ch_8_complete",
+      "type": "chapter_complete",
+      "chapter": 8,
+      "title": "Chapter 8 Master",
+      "description": "Completed Chapter 8: Gazebo Physics",
+      "icon": "🌍",
+      "points": 10,
+      "rarity": "common"
+    },
+    {
+      "id": "ch_9_complete",
+      "type": "chapter_complete",
+      "chapter": 9,
+      "title": "Chapter 9 Master",
+      "description": "Completed Chapter 9: Planning & Control",
+      "icon": "📍",
+      "points": 10,
+      "rarity": "common"
+    },
+    {
+      "id": "ch_10_complete",
+      "type": "chapter_complete",
+      "chapter": 10,
+      "title": "Chapter 10 Master",
+      "description": "Completed Chapter 10: Trajectory Planning",
+      "icon": "🛤️",
+      "points": 10,
+      "rarity": "common"
+    },
+    {
+      "id": "ch_11_complete",
+      "type": "chapter_complete",
+      "chapter": 11,
+      "title": "Chapter 11 Master",
+      "description": "Completed Chapter 11: Real-time Systems",
+      "icon": "⏱️",
+      "points": 10,
+      "rarity": "common"
+    },
+    {
+      "id": "ch_12_complete",
+      "type": "chapter_complete",
+      "chapter": 12,
+      "title": "Chapter 12 Master",
+      "description": "Completed Chapter 12: Advanced Kinematics",
+      "icon": "🔀",
+      "points": 10,
+      "rarity": "common"
+    },
+    {
+      "id": "ch_13_complete",
+      "type": "chapter_complete",
+      "chapter": 13,
+      "title": "Chapter 13 Master",
+      "description": "Completed Chapter 13: Balance Control",
+      "icon": "⚖️",
+      "points": 10,
+      "rarity": "common"
+    },
+    {
+      "id": "ch_14_complete",
+      "type": "chapter_complete",
+      "chapter": 14,
+      "title": "Chapter 14 Master",
+      "description": "Completed Chapter 14: Manipulation & Grasping",
+      "icon": "✋",
+      "points": 10,
+      "rarity": "common"
+    },
+    {
+      "id": "ch_15_complete",
+      "type": "chapter_complete",
+      "chapter": 15,
+      "title": "Chapter 15 Master",
+      "description": "Completed Chapter 15: Whole-body Control",
+      "icon": "💪",
+      "points": 10,
+      "rarity": "common"
+    },
+    {
+      "id": "ch_16_complete",
+      "type": "chapter_complete",
+      "chapter": 16,
+      "title": "Chapter 16 Master",
+      "description": "Completed Chapter 16: Learning-based Control",
+      "icon": "🧠",
+      "points": 10,
+      "rarity": "common"
+    },
+    {
+      "id": "ch_17_complete",
+      "type": "chapter_complete",
+      "chapter": 17,
+      "title": "Chapter 17 Master",
+      "description": "Completed Chapter 17: Debugging & Troubleshooting",
+      "icon": "🐛",
+      "points": 10,
+      "rarity": "common"
+    },
+    {
+      "id": "ch_18_complete",
+      "type": "chapter_complete",
+      "chapter": 18,
+      "title": "Chapter 18 Master",
+      "description": "Completed Chapter 18: Real-world Applications",
+      "icon": "🌐",
+      "points": 10,
+      "rarity": "common"
+    },
+    {
+      "id": "ch_19_complete",
+      "type": "chapter_complete",
+      "chapter": 19,
+      "title": "Chapter 19 Master",
+      "description": "Completed Chapter 19: Ethical Considerations",
+      "icon": "⚖️",
+      "points": 10,
+      "rarity": "common"
+    },
+    {
+      "id": "ch_20_complete",
+      "type": "chapter_complete",
+      "chapter": 20,
+      "title": "Chapter 20 Master",
+      "description": "Completed Chapter 20",
+      "icon": "📖",
+      "points": 10,
+      "rarity": "common"
+    },
+    {
+      "id": "ch_21_complete",
+      "type": "chapter_complete",
+      "chapter": 21,
+      "title": "Chapter 21 Master",
+      "description": "Completed Chapter 21: XPRIZE Competition",
+      "icon": "🏆",
+      "points": 10,
+      "rarity": "common"
+    },
+    {
+      "id": "ch_22_complete",
+      "type": "chapter_complete",
+      "chapter": 22,
+      "title": "Chapter 22 Master",
+      "description": "Completed Chapter 22: Getting Started",
+      "icon": "🚀",
+      "points": 10,
+      "rarity": "common"
+    },
+    {
+      "id": "module_1_complete",
+      "type": "module_complete",
+      "module": 1,
+      "title": "Module 1 Champion",
+      "description": "Completed all chapters in Module 1",
+      "icon": "🥇",
+      "points": 50,
+      "rarity": "rare"
+    },
+    {
+      "id": "module_2_complete",
+      "type": "module_complete",
+      "module": 2,
+      "title": "Module 2 Champion",
+      "description": "Completed all chapters in Module 2",
+      "icon": "🥈",
+      "points": 50,
+      "rarity": "rare"
+    },
+    {
+      "id": "module_3_complete",
+      "type": "module_complete",
+      "module": 3,
+      "title": "Module 3 Champion",
+      "description": "Completed all chapters in Module 3",
+      "icon": "🥉",
+      "points": 50,
+      "rarity": "rare"
+    },
+    {
+      "id": "module_4_complete",
+      "type": "module_complete",
+      "module": 4,
+      "title": "Module 4 Champion",
+      "description": "Completed all chapters in Module 4",
+      "icon": "👑",
+      "points": 50,
+      "rarity": "rare"
+    },
+    {
+      "id": "xp_100",
+      "type": "xp_milestone",
+      "threshold": 100,
+      "title": "Getting Started",
+      "description": "Earned 100 XP points",
+      "icon": "⭐",
+      "points": 0,
+      "rarity": "common"
+    },
+    {
+      "id": "xp_500",
+      "type": "xp_milestone",
+      "threshold": 500,
+      "title": "Building Momentum",
+      "description": "Earned 500 XP points",
+      "icon": "✨",
+      "points": 0,
+      "rarity": "uncommon"
+    },
+    {
+      "id": "xp_1000",
+      "type": "xp_milestone",
+      "threshold": 1000,
+      "title": "Dedicated Learner",
+      "description": "Earned 1000 XP points",
+      "icon": "🌟",
+      "points": 0,
+      "rarity": "rare"
+    },
+    {
+      "id": "xp_5000",
+      "type": "xp_milestone",
+      "threshold": 5000,
+      "title": "Master of Robotics",
+      "description": "Earned 5000 XP points",
+      "icon": "💎",
+      "points": 0,
+      "rarity": "epic"
+    },
+    {
+      "id": "streak_7",
+      "type": "streak",
+      "threshold": 7,
+      "title": "Week Warrior",
+      "description": "7-day learning streak",
+      "icon": "🔥",
+      "points": 25,
+      "rarity": "uncommon"
+    },
+    {
+      "id": "streak_30",
+      "type": "streak",
+      "threshold": 30,
+      "title": "Unstoppable",
+      "description": "30-day learning streak",
+      "icon": "💥",
+      "points": 100,
+      "rarity": "epic"
+    },
+    {
+      "id": "first_chapter",
+      "type": "milestone",
+      "title": "First Steps",
+      "description": "Completed your first chapter",
+      "icon": "👣",
+      "points": 5,
+      "rarity": "common"
+    },
+    {
+      "id": "perfect_score",
+      "type": "mastery",
+      "threshold": 100,
+      "title": "Perfect Mastery",
+      "description": "Achieved 100% mastery on a chapter",
+      "icon": "💯",
+      "points": 50,
+      "rarity": "epic"
+    }
+  ]
+}

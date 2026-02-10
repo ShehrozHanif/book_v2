@@ -1,0 +1,81 @@
+/* Chat Input Form */
+.chat-input-form {
+  padding: 12px;
+  border-top: 1px solid #eee;
+  background: white;
+}
+
+.input-wrapper {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.chat-input {
+  flex: 1;
+  padding: 10px 12px;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  font-size: 14px;
+  font-family: inherit;
+  resize: none;
+  transition: border-color 0.2s;
+}
+
+.chat-input:focus {
+  outline: none;
+  border-color: #667eea;
+  box-shadow: 0 0 0 2px rgba(102, 126, 234, 0.1);
+}
+
+.chat-input:disabled {
+  background-color: #f5f5f5;
+  cursor: not-allowed;
+}
+
+.chat-input.invalid {
+  border-color: #ff6b6b;
+}
+
+.chat-submit-btn {
+  padding: 10px 16px;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 600;
+  transition: opacity 0.2s;
+  white-space: nowrap;
+}
+
+.chat-submit-btn:hover:not(:disabled) {
+  opacity: 0.9;
+}
+
+.chat-submit-btn:active:not(:disabled) {
+  opacity: 0.8;
+}
+
+.chat-submit-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.chat-submit-btn:focus {
+  outline: 2px solid #667eea;
+  outline-offset: 2px;
+}
+
+.input-validation-error {
+  margin: 8px 0 0 0;
+  color: #ff6b6b;
+  font-size: 12px;
+}
+
+.input-error-message {
+  margin: 8px 0 0 0;
+  color: #ff6b6b;
+  font-size: 12px;
+}

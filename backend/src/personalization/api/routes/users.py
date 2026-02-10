@@ -9,13 +9,15 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from src.database.connection import get_session as get_db
 from src.personalization.models.schemas import (
     UserCreate, UserLogin, TokenResponse, UserProfile,
-    UserUpdate, UserResponse, UserPreferences
+    UserUpdate, UserResponse, UserPreferences, PasswordResetRequest,
+    PasswordReset, EmailVerification, DeleteAccountRequest, MessageResponse
 )
 from src.personalization.models.db_models import User
 from src.personalization.services import user_service
 from src.personalization.utils.auth import (
     create_access_token, create_refresh_token,
-    verify_refresh_token, validate_password_strength, init_auth_config
+    verify_refresh_token, validate_password_strength, init_auth_config,
+    generate_password_reset_token, verify_password_reset_token, verify_password
 )
 from src.personalization.api.dependencies import (
     get_current_user, login_rate_limiter, registration_rate_limiter
@@ -27,7 +29,7 @@ router = APIRouter(prefix="/api/v1/users", tags=["users"])
 # Initialize auth config
 settings = get_settings()
 init_auth_config(
-    secret_key=settings.SECRET_KEY,
+    secret_key=settings.JWT_SECRET_KEY,
     access_expire=30,
     refresh_expire=7
 )
@@ -421,3 +423,285 @@ async def get_user_by_id(
         created_at=user.created_at,
         last_login_at=user.last_login_at
     )
+
+
+@router.delete("/me", response_model=MessageResponse)
+async def delete_current_user_account(
+    delete_request: DeleteAccountRequest,
+    current_user: User = Depends(get_current_user),
+    db: AsyncSession = Depends(get_db)
+):
+    """
+    Delete current user's account (soft delete).
+
+    Args:
+        delete_request: Contains password for confirmation
+        current_user: Current authenticated user
+        db: Database session
+
+    Returns:
+        Success message
+
+    Raises:
+        HTTPException 401: If password is incorrect
+        HTTPException 404: If user not found
+    """
+    # Verify password
+    if not verify_password(delete_request.password, current_user.password_hash):
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Incorrect password",
+        )
+
+    # Soft delete user
+    success = await user_service.soft_delete_user(db, current_user.user_id)
+    if not success:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="User not found"
+        )
+
+    return MessageResponse(message="Account successfully deleted")
+
+
+@router.post("/forgot-password", response_model=MessageResponse)
+async def forgot_password(
+    request: PasswordResetRequest,
+    db: AsyncSession = Depends(get_db)
+):
+    """
+    Request password reset email.
+
+    Args:
+        request: Contains email address
+        db: Database session
+
+    Returns:
+        Success message (always returns success for security)
+
+    Note:
+        Always returns success message even if email doesn't exist
+        to prevent email enumeration attacks.
+    """
+    # Find user by email
+    user = await user_service.get_user_by_email(db, request.email)
+
+    if user and user.deleted_at is None:
+        # Generate reset token
+        reset_token = generate_password_reset_token(str(user.user_id))
+
+        # TODO: Send email with reset link
+        # In production, integrate with email service (SendGrid, AWS SES, etc.)
+        # For now, we'll just log the token
+        print(f"Password reset token for {user.email}: {reset_token}")
+        print(f"Reset link: http://localhost:3000/reset-password?token={reset_token}")
+
+    # Always return success to prevent email enumeration
+    return MessageResponse(
+        message="If the email exists, a password reset link has been sent"
+    )
+
+
+@router.post("/reset-password", response_model=MessageResponse)
+async def reset_password(
+    reset_request: PasswordReset,
+    db: AsyncSession = Depends(get_db)
+):
+    """
+    Reset password using reset token.
+
+    Args:
+        reset_request: Contains reset token and new password
+        db: Database session
+
+    Returns:
+        Success message
+
+    Raises:
+        HTTPException 400: If token is invalid or expired
+        HTTPException 400: If password doesn't meet requirements
+    """
+    # Validate new password strength
+    is_valid, error_msg = validate_password_strength(reset_request.new_password)
+    if not is_valid:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail=error_msg,
+        )
+
+    # Verify reset token
+    user_id_str = verify_password_reset_token(reset_request.token)
+    if not user_id_str:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Invalid or expired reset token",
+        )
+
+    try:
+        user_id = UUID(user_id_str)
+    except ValueError:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Invalid token format",
+        )
+
+    # Reset password
+    success = await user_service.reset_user_password(
+        db, user_id, reset_request.new_password
+    )
+
+    if not success:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="User not found"
+        )
+
+    return MessageResponse(message="Password successfully reset")
+
+
+@router.post("/verify-email", response_model=MessageResponse)
+async def request_email_verification(
+    current_user: User = Depends(get_current_user)
+):
+    """
+    Request email verification link (optional feature).
+
+    Args:
+        current_user: Current authenticated user
+
+    Returns:
+        Success message
+
+    Note:
+        This is a placeholder for email verification feature.
+        In production, implement with actual email service.
+    """
+    # Generate verification token
+    verification_token = generate_password_reset_token(str(current_user.user_id))
+
+    # TODO: Send verification email
+    # In production, integrate with email service
+    print(f"Verification token for {current_user.email}: {verification_token}")
+    print(f"Verification link: http://localhost:3000/verify-email?token={verification_token}")
+
+    return MessageResponse(
+        message="Verification email sent"
+    )
+
+
+@router.get("/verify-email/{token}", response_model=MessageResponse)
+async def verify_email(
+    token: str,
+    db: AsyncSession = Depends(get_db)
+):
+    """
+    Verify email address using verification token (optional feature).
+
+    Args:
+        token: Email verification token
+        db: Database session
+
+    Returns:
+        Success message
+
+    Raises:
+        HTTPException 400: If token is invalid or expired
+
+    Note:
+        This is a placeholder for email verification feature.
+        In production, add email_verified field to User model.
+    """
+    # Verify token
+    user_id_str = verify_password_reset_token(token)
+    if not user_id_str:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Invalid or expired verification token",
+        )
+
+    try:
+        user_id = UUID(user_id_str)
+    except ValueError:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Invalid token format",
+        )
+
+    # Verify user exists
+    user = await user_service.get_user_by_id(db, user_id)
+    if not user or user.deleted_at is not None:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="User not found"
+        )
+
+    # TODO: Mark email as verified in database
+    # For now, just return success
+    return MessageResponse(message="Email successfully verified")
+
+
+@router.patch("/me/preferences", response_model=UserProfile)
+async def update_preferences(
+    preferences: UserPreferences,
+    current_user: User = Depends(get_current_user),
+    db: AsyncSession = Depends(get_db)
+):
+    """
+    Update user learning preferences.
+
+    Allows users to customize:
+    - explanation_style: theory_first or example_first
+    - code_language: python, cpp, or both
+    - learning_pace: slow, medium, or fast
+    - content_focus: simulation, hardware, or balanced
+
+    Args:
+        preferences: UserPreferences object with updated values
+        current_user: Current authenticated user
+        db: Database session
+
+    Returns:
+        UserProfile with updated preferences
+
+    Raises:
+        HTTPException 400: If preferences validation fails
+        HTTPException 404: If user not found
+        HTTPException 401: If user not authenticated
+    """
+    try:
+        # Update user preferences
+        updated_user = await user_service.update_user_preferences(
+            db=db,
+            user_id=current_user.user_id,
+            preferences=preferences.model_dump()
+        )
+
+        if not updated_user:
+            raise HTTPException(
+                status_code=status.HTTP_404_NOT_FOUND,
+                detail="User not found"
+            )
+
+        return UserProfile(
+            user_id=str(updated_user.user_id),
+            username=updated_user.username,
+            email=updated_user.email,
+            skill_level=updated_user.skill_level,
+            skill_confidence=updated_user.skill_confidence,
+            preferences=updated_user.preferences_json,
+            profile_picture_url=updated_user.profile_picture_url,
+            bio=updated_user.bio,
+            created_at=updated_user.created_at,
+            last_login_at=updated_user.last_login_at
+        )
+
+    except ValueError as e:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail=str(e)
+        )
+    except Exception as e:
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail="Failed to update preferences"
+        )

@@ -113,6 +113,63 @@ class UserUpdate(BaseModel):
     preferences: Optional[UserPreferences] = None
 
 
+class DeleteAccountRequest(BaseModel):
+    """Schema for account deletion request."""
+    password: str = Field(..., description="User password for confirmation")
+
+    model_config = ConfigDict(json_schema_extra={
+        "example": {
+            "password": "SecurePass123!"
+        }
+    })
+
+
+class PasswordResetRequest(BaseModel):
+    """Schema for password reset request."""
+    email: EmailStr = Field(..., description="Email address for password reset")
+
+    model_config = ConfigDict(json_schema_extra={
+        "example": {
+            "email": "user@example.com"
+        }
+    })
+
+
+class PasswordReset(BaseModel):
+    """Schema for password reset with token."""
+    token: str = Field(..., description="Password reset token")
+    new_password: str = Field(..., min_length=8, max_length=100, description="New password")
+
+    model_config = ConfigDict(json_schema_extra={
+        "example": {
+            "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
+            "new_password": "NewSecurePass123!"
+        }
+    })
+
+
+class EmailVerification(BaseModel):
+    """Schema for email verification."""
+    token: str = Field(..., description="Email verification token")
+
+    model_config = ConfigDict(json_schema_extra={
+        "example": {
+            "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+        }
+    })
+
+
+class MessageResponse(BaseModel):
+    """Schema for simple message responses."""
+    message: str
+
+    model_config = ConfigDict(json_schema_extra={
+        "example": {
+            "message": "Operation successful"
+        }
+    })
+
+
 # Assessment schemas
 class AssessmentQuestion(BaseModel):
     """Schema for a single assessment question."""
@@ -377,3 +434,191 @@ class ChatResponse(BaseModel):
     retrieved_chapters: List[int]
     processing_time_ms: int
     user_personalization_applied: bool
+
+
+# =====================================================================
+# CHATBOT TRANSLATION SCHEMAS (For Urdu Translation Feature - 006)
+# =====================================================================
+
+
+class ChatbotResponseTemplateSchema(BaseModel):
+    """Schema for chatbot response template."""
+    id: UUID
+    template_key: str
+    english_content: str
+    version: int
+    status: Literal["published", "draft", "archived"]
+    created_at: datetime
+    updated_at: datetime
+
+    model_config = ConfigDict(from_attributes=True)
+
+
+class ChatbotTranslationSchema(BaseModel):
+    """Schema for chatbot translation."""
+    id: UUID
+    response_template_id: UUID
+    language: str
+    translated_content: Optional[str] = None
+    translator_id: Optional[UUID] = None
+    version: int
+    status: Literal["draft", "in_review", "published"]
+    translated_at: Optional[datetime] = None
+    reviewed_at: Optional[datetime] = None
+
+    model_config = ConfigDict(from_attributes=True)
+
+
+class ChatbotLanguageRequest(BaseModel):
+    """Schema for setting chatbot language."""
+    language: Literal["english", "urdu"] = Field(..., description="Chatbot language preference")
+
+    model_config = ConfigDict(json_schema_extra={
+        "example": {"language": "urdu"}
+    })
+
+
+class ChatbotLanguageResponse(BaseModel):
+    """Schema for chatbot language response."""
+    language: str = Field(..., description="Current chatbot language")
+    user_id: UUID = Field(..., description="User ID")
+
+    model_config = ConfigDict(json_schema_extra={
+        "example": {
+            "language": "urdu",
+            "user_id": "550e8400-e29b-41d4-a716-446655440000"
+        }
+    })
+
+
+class ChatbotResponseRequest(BaseModel):
+    """Schema for retrieving chatbot response in preferred language."""
+    template_key: str = Field(..., description="Template key for response")
+    language: Optional[Literal["english", "urdu"]] = None
+    context_variables: Optional[Dict[str, Any]] = None
+
+    model_config = ConfigDict(json_schema_extra={
+        "example": {
+            "template_key": "greeting",
+            "language": "urdu",
+            "context_variables": {"name": "Ahmed"}
+        }
+    })
+
+
+class ChatbotResponseData(BaseModel):
+    """Schema for chatbot response data."""
+    template_key: str
+    language: str
+    content: str
+    rtl_enabled: bool
+
+    model_config = ConfigDict(json_schema_extra={
+        "example": {
+            "template_key": "greeting",
+            "language": "urdu",
+            "content": "السلام عليكم ورحمة الله وبركاته",
+            "rtl_enabled": True
+        }
+    })
+
+
+class GlossaryTermSchema(BaseModel):
+    """Schema for glossary term."""
+    id: UUID
+    english_term: str
+    urdu_translation: str
+    pronunciation_transliterated: str
+    definition_english: str
+    definition_urdu: str
+    category: Optional[str] = None
+    status: Literal["published", "under_review"]
+
+    model_config = ConfigDict(from_attributes=True)
+
+
+class GlossaryTermResponse(BaseModel):
+    """Schema for glossary term API response."""
+    id: UUID
+    english_term: str
+    urdu_translation: str
+    pronunciation_transliterated: str
+    definition_english: str
+    definition_urdu: str
+    category: Optional[str] = None
+
+    model_config = ConfigDict(json_schema_extra={
+        "example": {
+            "id": "550e8400-e29b-41d4-a716-446655440000",
+            "english_term": "Jacobian Matrix",
+            "urdu_translation": "جیکوبیان میٹرکس",
+            "pronunciation_transliterated": "Jacobian Matrix",
+            "definition_english": "A matrix of partial derivatives",
+            "definition_urdu": "جزوی مشتقات کا ایک میٹرکس",
+            "category": "robotics"
+        }
+    })
+
+
+class GlossarySearchRequest(BaseModel):
+    """Schema for glossary search."""
+    query: str = Field(..., min_length=1, max_length=255, description="Search query")
+    language: Optional[Literal["english", "urdu"]] = None
+    category: Optional[str] = None
+
+    model_config = ConfigDict(json_schema_extra={
+        "example": {
+            "query": "jacobian",
+            "language": "urdu"
+        }
+    })
+
+
+class GlossaryFeedbackRequest(BaseModel):
+    """Schema for glossary feedback submission."""
+    glossary_term_id: Optional[UUID] = None
+    suggested_term: Optional[str] = None
+    feedback_type: Literal["suggestion", "correction", "new_term"]
+    content: str = Field(..., min_length=10, max_length=1000)
+
+    model_config = ConfigDict(json_schema_extra={
+        "example": {
+            "glossary_term_id": "550e8400-e29b-41d4-a716-446655440000",
+            "feedback_type": "correction",
+            "content": "The pronunciation should be different..."
+        }
+    })
+
+
+class UserLanguagePreferenceSchema(BaseModel):
+    """Schema for user language preference."""
+    id: UUID
+    user_id: UUID
+    language: Literal["english", "urdu"]
+    updated_at: datetime
+
+    model_config = ConfigDict(from_attributes=True)
+
+
+class LanguagePreferenceRequest(BaseModel):
+    """Schema for setting language preference."""
+    language: Literal["english", "urdu"] = Field(..., description="Preferred language")
+
+    model_config = ConfigDict(json_schema_extra={
+        "example": {"language": "urdu"}
+    })
+
+
+class LanguagePreferenceResponse(BaseModel):
+    """Schema for language preference API response."""
+    user_id: UUID
+    language: str
+    updated_at: datetime
+
+    model_config = ConfigDict(json_schema_extra={
+        "example": {
+            "user_id": "550e8400-e29b-41d4-a716-446655440000",
+            "language": "urdu",
+            "updated_at": "2026-02-10T10:30:00Z"
+        }
+    })

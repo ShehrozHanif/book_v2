@@ -4,7 +4,7 @@
 
 import React from "react";
 import { useAuth } from "../hooks/useAuth";
-import LoadingSpinner from "./LoadingIndicator";
+import LoadingIndicator from "./LoadingIndicator";
 
 interface ProtectedRouteProps {
   children: React.ReactNode;
@@ -16,7 +16,7 @@ const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ children }) => {
   if (isLoading) {
     return (
       <div style={{ display: "flex", justifyContent: "center", alignItems: "center", minHeight: "100vh" }}>
-        <LoadingSpinner />
+        <LoadingIndicator isVisible={true} />
       </div>
     );
   }

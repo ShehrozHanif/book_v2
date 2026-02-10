@@ -6,20 +6,23 @@
       "description": "Foundational concepts covering what humanoid robots are, basic kinematics, dynamics, sensors, and hardware components",
       "chapters": 5,
       "word_count_target": 12000,
-      "word_count_actual": 0,
-      "code_examples": 15,
-      "status": "not_started",
+      "word_count_actual": 12875,
+      "code_examples": 10,
+      "status": "verification_in_progress",
       "priority": "P1",
       "chapters_list": [
-        {"chapter_id": 1, "title": "What is a Humanoid Robot?", "status": "not_started"},
-        {"chapter_id": 2, "title": "Kinematics Basics", "status": "not_started"},
-        {"chapter_id": 3, "title": "Dynamics & Motion", "status": "not_started"},
-        {"chapter_id": 4, "title": "Sensors & Perception", "status": "not_started"},
-        {"chapter_id": 5, "title": "Hardware Overview", "status": "not_started"}
+        {"chapter_id": 1, "title": "What is a Humanoid Robot?", "status": "completed", "word_count": 2347},
+        {"chapter_id": 2, "title": "Kinematics Basics", "status": "completed", "word_count": 2314},
+        {"chapter_id": 3, "title": "Dynamics & Motion", "status": "completed", "word_count": 2639},
+        {"chapter_id": 4, "title": "Sensors & Perception", "status": "completed", "word_count": 2603},
+        {"chapter_id": 5, "title": "Hardware Overview", "status": "completed", "word_count": 2972}
       ],
       "rag_status": "not_indexed",
       "accuracy_score": null,
-      "review_status": "not_reviewed"
+      "review_status": "not_reviewed",
+      "code_validation_status": "pending",
+      "reference_count": 20,
+      "last_updated": "2026-02-04"
     },
     {
       "module_id": 2,
@@ -105,9 +108,9 @@
     "last_updated": "2026-02-04",
     "pipeline_status": {
       "infrastructure_setup": "completed",
-      "module_1_writing": "not_started",
-      "module_1_review": "not_started",
-      "module_1_indexing": "not_started",
+      "module_1_writing": "completed",
+      "module_1_review": "in_progress",
+      "module_1_indexing": "pending",
       "module_2_writing": "completed",
       "module_2_review": "completed",
       "module_2_indexing": "completed",
