@@ -189,7 +189,7 @@ async def get_glossary_categories(
 
 @router.post(
     "/glossary/feedback",
-    summary="Submit glossary feedback"
+    summary="Submit glossary feedback (authenticated)"
 )
 async def submit_glossary_feedback(
     feedback_type: str = Query(..., regex="^(suggestion|correction|new_term)$"),
@@ -198,7 +198,7 @@ async def submit_glossary_feedback(
     suggested_term: Optional[str] = Query(None),
     request: Request = None,
     db = Depends(get_session)
-):
+) -> dict:
     """
     Submit feedback about glossary terms.
 
@@ -217,12 +217,51 @@ async def submit_glossary_feedback(
         401: Not authenticated
     """
     try:
-        # Get authenticated user
-        user = AuthMiddleware.get_authenticated_user(request)
+        # Authenticate user (required for feedback submission)
+        try:
+            user = AuthMiddleware.get_authenticated_user(request)
+            if not user or not user.get("sub"):
+                raise HTTPException(
+                    status_code=status.HTTP_401_UNAUTHORIZED,
+                    detail="Authentication required to submit feedback"
+                )
+        except Exception as auth_error:
+            logger.warning(f"Authentication failed for glossary feedback: {str(auth_error)}")
+            raise HTTPException(
+                status_code=status.HTTP_401_UNAUTHORIZED,
+                detail="Authentication required - please log in"
+            )
+
         request.state.user = user
         user_id = UUID(user.get("sub"))
 
         glossary_service = get_glossary_service(db)
+
+        # Validate feedback input
+        if not feedback_type or feedback_type not in ["suggestion", "correction", "new_term"]:
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST,
+                detail="Invalid feedback type. Must be: suggestion, correction, or new_term"
+            )
+
+        if not content or len(content) < 10:
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST,
+                detail="Feedback content must be at least 10 characters"
+            )
+
+        if len(content) > 500:
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST,
+                detail="Feedback content must not exceed 500 characters"
+            )
+
+        # For new_term feedback, suggested_term is required
+        if feedback_type == "new_term" and not suggested_term:
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST,
+                detail="Suggested term required for new_term feedback type"
+            )
 
         feedback = await glossary_service.create_feedback(
             user_id=user_id,
@@ -239,22 +278,29 @@ async def submit_glossary_feedback(
             )
 
         logger.info(
-            f"User {user_id} submitted {feedback_type} feedback: {content[:50]}..."
+            f"User {user_id} submitted {feedback_type} feedback on term: {glossary_term_id or suggested_term}"
         )
 
         return {
             "status": "success",
             "message": "Feedback submitted successfully",
-            "feedback_id": str(feedback.get("id"))
+            "feedback_id": str(feedback.get("id")),
+            "timestamp": feedback.get("created_at")
         }
 
     except HTTPException:
         raise
+    except ValueError as ve:
+        logger.warning(f"Invalid value in glossary feedback: {str(ve)}")
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail=f"Invalid input: {str(ve)}"
+        )
     except Exception as e:
-        logger.error(f"Error submitting feedback: {str(e)}")
+        logger.error(f"Error submitting glossary feedback: {str(e)}")
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-            detail="Failed to submit feedback"
+            detail="Failed to submit feedback - please try again later"
         )
 
 
