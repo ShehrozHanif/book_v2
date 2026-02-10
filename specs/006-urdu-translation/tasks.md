@@ -193,19 +193,19 @@
 
 ### Tests for User Story 5
 
-- [ ] T054 [P] [US5] Preference persistence test in `backend/src/personalization/tests/test_language_preference_persistence.py` (save preference, retrieve on login, update preference, cross-session persistence)
-- [ ] T055 [P] [US5] Component test for LanguageSettings in `frontend/src/components/LanguagePreference/LanguageSettings.test.tsx` (display current preference, submit change, handle loading/error states)
-- [ ] T056 [P] [US5] End-to-end test for preference flow in `frontend/src/tests/integration/language-preference.test.tsx` (change preference, logout/login, verify persistence)
+- [x] T054 [P] [US5] Preference persistence test in `backend/src/personalization/tests/test_language_preference_persistence_t054.py` (save preference, retrieve on login, update preference, cross-session persistence) ✅
+- [x] T055 [P] [US5] Component test for LanguageSettings in `frontend/src/components/LanguagePreference/LanguageSettings.test.tsx` (display current preference, submit change, handle loading/error states) ✅
+- [x] T056 [P] [US5] End-to-end test for preference flow in `frontend/src/tests/integration/language-preference.test.tsx` (change preference, logout/login, verify persistence) ✅
 
 ### Implementation for User Story 5
 
-- [ ] T057 [P] [US5] Create Language Preference API endpoints in `backend/src/personalization/api/routes/language_preferences.py`: GET /api/v1/users/{user_id}/language-preference, PUT /api/v1/users/{user_id}/language-preference
-- [ ] T058 [P] [US5] Create LanguageSettings component in `frontend/src/components/LanguagePreference/LanguageSettings.tsx` with radio buttons for English/Urdu, save button, success/error feedback
-- [ ] T059 [P] [US5] Implement preference loading on user login: fetch user's language preference from API, apply to chatbot UI, restore to previous state
-- [ ] T060 [P] [US5] Create languagePreferenceAPI service in `frontend/src/services/languagePreferenceAPI.ts` with methods: getPreference(), setPreference()
-- [ ] T061 [US5] Integrate LanguageSettings into user profile page (add language section to settings)
-- [ ] T062 [US5] Add preference restoration logic in main app component: on page load/login, check localStorage first (for guest), then API for authenticated users, apply preference immediately
-- [ ] T063 [US5] Add analytics tracking for language preference changes (track how many users choose Urdu vs English, adoption metrics)
+- [x] T057 [P] [US5] Create Language Preference API endpoints in `backend/src/personalization/api/routes/language_preferences.py`: GET /api/v1/users/{user_id}/language-preference, PUT /api/v1/users/{user_id}/language-preference ✅
+- [x] T058 [P] [US5] Create LanguageSettings component in `frontend/src/components/LanguagePreference/LanguageSettings.tsx` with radio buttons for English/Urdu, save button, success/error feedback ✅
+- [x] T059 [P] [US5] Implement preference loading on user login: fetch user's language preference from API, apply to chatbot UI, restore to previous state ✅ (via useLanguagePreferenceRestoration hook)
+- [x] T060 [P] [US5] Create languagePreferenceAPI service in `frontend/src/services/languagePreferenceAPI.ts` with methods: getPreference(), setPreference() ✅
+- [x] T061 [US5] Integrate LanguageSettings into user profile page (add language section to settings) ✅ (in UserProfile.tsx)
+- [x] T062 [US5] Add preference restoration logic in main app component: on page load/login, check localStorage first (for guest), then API for authenticated users, apply preference immediately ✅ (useLanguagePreferenceRestoration hook)
+- [x] T063 [US5] Add analytics tracking for language preference changes (track how many users choose Urdu vs English, adoption metrics) ✅ (LanguageAnalyticsService + 4 API endpoints)
 
 **Checkpoint**: Language preference saved and restored across sessions and devices
 
