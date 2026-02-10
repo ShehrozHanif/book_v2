@@ -339,3 +339,57 @@ def log_translation_fallback(
     language_logger.log_translation_fallback(
         user_id, template_key, requested_language
     )
+
+
+# Additional logging for T065 - Comprehensive Operations Logging
+
+def log_admin_operation(admin_id: str, operation: str, resource: str, resource_id: int, success: bool = True):
+    """Log admin operations."""
+    logger = logging.getLogger("admin_operations")
+    level = logging.INFO if success else logging.WARNING
+    logger.log(
+        level,
+        f"Admin {operation}: {resource} #{resource_id}",
+        extra={
+            "event_type": "admin_operation",
+            "admin_id": admin_id,
+            "operation": operation,
+            "resource": resource,
+            "resource_id": resource_id,
+            "status": "success" if success else "failed",
+            "timestamp": datetime.utcnow().isoformat(),
+        }
+    )
+
+
+def log_performance_metric(operation: str, duration_ms: float, user_id: Optional[str] = None):
+    """Log performance metrics."""
+    logger = logging.getLogger("performance")
+    logger.debug(
+        f"{operation} completed in {duration_ms:.2f}ms",
+        extra={
+            "event_type": "performance_metric",
+            "operation": operation,
+            "duration_ms": duration_ms,
+            "user_id": user_id,
+            "timestamp": datetime.utcnow().isoformat(),
+        }
+    )
+
+
+def log_database_operation(operation: str, table: str, success: bool = True, error: Optional[str] = None):
+    """Log database operations."""
+    logger = logging.getLogger("database")
+    level = logging.DEBUG if success else logging.ERROR
+    logger.log(
+        level,
+        f"Database {operation} on {table}",
+        extra={
+            "event_type": "database_operation",
+            "operation": operation,
+            "table": table,
+            "status": "success" if success else "failed",
+            "error": error,
+            "timestamp": datetime.utcnow().isoformat(),
+        }
+    )
