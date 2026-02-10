@@ -6,13 +6,15 @@ Handles:
 2. Getting Urdu translations for responses
 3. Template management with versioning
 4. Translation status tracking
+5. Glossary term detection and embedding (T041)
 """
 
-from typing import Optional, List, Dict, Any
+from typing import Optional, List, Dict, Any, Set, Tuple
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select, update, delete
 from uuid import UUID
 import logging
+import re
 
 from src.personalization.models.db_models import (
     ChatbotResponseTemplate,
@@ -309,6 +311,120 @@ class ChatbotTranslationService:
         except Exception as e:
             logger.error(f"Error getting translation status: {str(e)}")
             return None
+
+    def _detect_glossary_terms(
+        self,
+        content: str,
+        glossary_terms: List[str]
+    ) -> Set[str]:
+        """
+        Detect glossary terms present in content.
+
+        Args:
+            content: Text content to search
+            glossary_terms: List of glossary terms to detect
+
+        Returns:
+            set: Terms found in content (case-insensitive)
+        """
+        found_terms = set()
+        content_lower = content.lower()
+
+        for term in glossary_terms:
+            # Use word boundaries for accurate matching
+            pattern = r'\b' + re.escape(term.lower()) + r'\b'
+            if re.search(pattern, content_lower):
+                # Find original case version in content
+                for original_term in glossary_terms:
+                    if original_term.lower() == term.lower():
+                        found_terms.add(original_term)
+                        break
+
+        return found_terms
+
+    async def get_glossary_terms_for_response(
+        self,
+        template_key: str,
+        language: str = "english"
+    ) -> Dict[str, Any]:
+        """
+        Get response with embedded glossary term metadata.
+
+        Args:
+            template_key: Template identifier
+            language: Target language (english, urdu)
+
+        Returns:
+            dict: Response with glossary metadata
+                  Format: {content, glossary_terms, template_key, language}
+        """
+        try:
+            # Get base response
+            response = await self.get_translated_response(template_key, language)
+
+            if "error" in response:
+                return response
+
+            # Hardcoded common glossary terms for robotics context
+            # In production, these would be fetched from glossary database
+            glossary_terms = [
+                "ROS", "Node", "Topic", "Service", "Action",
+                "Publisher", "Subscriber", "Message", "Frame",
+                "Transform", "Joint", "Link", "Sensor", "Actuator",
+                "Kinematics", "Dynamics", "Control", "Algorithm"
+            ]
+
+            content = response.get("content", "")
+            found_terms = self._detect_glossary_terms(content, glossary_terms)
+
+            response["glossary_terms"] = list(found_terms)
+            response["glossary_enabled"] = len(found_terms) > 0
+
+            logger.info(
+                f"Found {len(found_terms)} glossary terms in response {template_key}"
+            )
+
+            return response
+
+        except Exception as e:
+            logger.error(f"Error embedding glossary terms: {str(e)}")
+            return {
+                "error": "Internal server error",
+                "status": 500
+            }
+
+    async def get_enhanced_response(
+        self,
+        template_key: str,
+        language: str = "english",
+        include_glossary: bool = True
+    ) -> Dict[str, Any]:
+        """
+        Get fully enhanced response with translations and glossary metadata.
+
+        Args:
+            template_key: Template identifier
+            language: Target language (english, urdu)
+            include_glossary: Whether to embed glossary terms
+
+        Returns:
+            dict: Enhanced response with all metadata
+        """
+        try:
+            if include_glossary:
+                return await self.get_glossary_terms_for_response(
+                    template_key,
+                    language
+                )
+            else:
+                return await self.get_translated_response(template_key, language)
+
+        except Exception as e:
+            logger.error(f"Error getting enhanced response: {str(e)}")
+            return {
+                "error": "Internal server error",
+                "status": 500
+            }
 
 
 def get_chatbot_translation_service(db: AsyncSession) -> ChatbotTranslationService:
