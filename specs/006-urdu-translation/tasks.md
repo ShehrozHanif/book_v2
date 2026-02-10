@@ -162,19 +162,19 @@
 
 ### Tests for User Story 4
 
-- [ ] T044 [P] [US4] Admin translation dashboard test in `backend/src/personalization/tests/test_translation_dashboard.py` (list templates, filter by status, show completion metrics)
-- [ ] T045 [P] [US4] Translation update test in `backend/src/personalization/tests/test_translation_update.py` (update template, mark reviewed, verify new responses use it, verify old history unchanged)
-- [ ] T046 [P] [US4] Stale translation detection test in `backend/src/personalization/tests/test_stale_translations.py` (detect when English template updated, flag Urdu translation as stale, notify admin)
+- [x] T044 [P] [US4] Admin translation dashboard test in `backend/src/personalization/tests/test_translation_dashboard_t044.py` (list templates, filter by status, show completion metrics) ✅
+- [x] T045 [P] [US4] Translation update test in `backend/src/personalization/tests/test_translation_update_t045.py` (update template, mark reviewed, verify new responses use it, verify old history unchanged) ✅
+- [x] T046 [P] [US4] Stale translation detection test in `backend/src/personalization/tests/test_stale_translations_t046.py` (detect when English template updated, flag Urdu translation as stale, notify admin) ✅
 
 ### Implementation for User Story 4
 
-- [ ] T047 [P] [US4] Create admin translation management API in `backend/src/personalization/api/routes/admin_translation.py` with endpoints: GET /api/v1/admin/translations (list), PUT /api/v1/admin/translations/{template_id} (update), POST /api/v1/admin/translations/{template_id}/review (mark reviewed/published), GET /api/v1/admin/translations/stale (list stale)
-- [ ] T048 [P] [US4] Implement translation status tracking: update ChatbotResponseTranslationStatus table on template changes, version tracking for English content
-- [ ] T049 [P] [US4] Create admin dashboard component in `frontend/src/components/Admin/TranslationDashboard.tsx` showing: templates list, translation status (draft/reviewed/published), completion percentage, stale indicator
-- [ ] T050 [P] [US4] Add admin role check to translation endpoints (verify user has instructor/admin role)
+- [x] T047 [P] [US4] Create admin translation management API in `backend/src/personalization/api/routes/admin_translation.py` with endpoints: GET /api/v1/admin/translations (list), PUT /api/v1/admin/translations/{template_id} (update), POST /api/v1/admin/translations/{template_id}/review (mark reviewed/published), GET /api/v1/admin/translations/stale (list stale) ✅ (Admin role check included via verify_admin_role function)
+- [x] T048 [P] [US4] Implement translation status tracking: update ChatbotResponseTranslationStatus table on template changes, version tracking for English content ✅
+- [x] T049 [P] [US4] Create admin dashboard component in `frontend/src/components/Admin/TranslationDashboard.tsx` showing: templates list, translation status (draft/reviewed/published), completion percentage, stale indicator ✅
+- [x] T050 [P] [US4] Add admin role check to translation endpoints (verify user has instructor/admin role) ✅ (verify_admin_role function in admin_translation.py routes)
 - [ ] T051 [US4] Implement update notification system: when English template updated, set ChatbotResponseTranslationStatus.status = 'stale', notify admins of outdated translations
-- [ ] T052 [US4] Create translation audit report in `backend/scripts/translation_report.py`: generates report of which templates need translation/refresh, completion percentage, translator activity
-- [ ] T053 [US4] Add cache invalidation on translation update in ChatbotTranslationService: when template updated, invalidate cached version so new responses use updated translation
+- [x] T052 [US4] Create translation audit report in `backend/scripts/translation_report.py`: generates report of which templates need translation/refresh, completion percentage, translator activity ✅
+- [x] T053 [US4] Add cache invalidation on translation update in ChatbotTranslationService: when template updated, invalidate cached version so new responses use updated translation ✅
 
 **Checkpoint**: Admins can manage translations, old chat history preserved, stale translations detected and flagged
 
