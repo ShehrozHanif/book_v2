@@ -1,4 +1,5 @@
 import React from "react";
+import { ChatbotMessageRTL } from "./ChatBot/ChatbotMessageRTL";
 import "./ChatMessage.module.css";
 
 interface ChatMessageProps {
@@ -9,6 +10,7 @@ interface ChatMessageProps {
   relevanceScores?: number[];
   isHighlighted?: boolean;
   messageId?: string;
+  language?: "english" | "urdu";
 }
 
 export const ChatMessage: React.FC<ChatMessageProps> = ({
@@ -19,6 +21,7 @@ export const ChatMessage: React.FC<ChatMessageProps> = ({
   relevanceScores = [],
   isHighlighted = false,
   messageId,
+  language = "english",
 }) => {
   const formatCitations = (citations: string[]) => {
     return citations.map((citation, idx) => {
@@ -51,11 +54,11 @@ export const ChatMessage: React.FC<ChatMessageProps> = ({
   };
 
   return (
-    <div
+    <ChatbotMessageRTL
+      language={language}
+      isUserMessage={sender === "user"}
+      messageId={messageId}
       className={`message message-${sender} ${isHighlighted ? 'message-highlighted' : ''}`}
-      data-message-id={messageId}
-      role="article"
-      aria-label={`${sender === "user" ? "Your message" : "Assistant message"}`}
     >
       <div className="message-content">
         <p className="message-text">{content}</p>
@@ -86,7 +89,7 @@ export const ChatMessage: React.FC<ChatMessageProps> = ({
           {formatTimestamp(timestamp)}
         </div>
       )}
-    </div>
+    </ChatbotMessageRTL>
   );
 };
 

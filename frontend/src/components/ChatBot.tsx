@@ -6,6 +6,7 @@ import { ConversationHistory } from "./ConversationHistory";
 import { ErrorMessage } from "./ErrorMessage";
 import { useChat } from "../hooks/useChat";
 import { useTextSelection } from "../hooks/useTextSelection";
+import { useLanguagePreference } from "../hooks/useLanguagePreference";
 import "../styles/chatbot.css";
 
 interface ChatBotProps {
@@ -27,6 +28,7 @@ export const ChatBot: React.FC<ChatBotProps> = ({ onMessage }) => {
     retryLastMessage
   } = useChat();
   const { selectedText, clearSelection, hasSelection } = useTextSelection();
+  const { language } = useLanguagePreference();
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const messagesContainerRef = useRef<HTMLDivElement>(null);
   const [elapsedTime, setElapsedTime] = useState(0);
@@ -160,6 +162,7 @@ export const ChatBot: React.FC<ChatBotProps> = ({ onMessage }) => {
                     relevanceScores={msg.relevanceScores}
                     isHighlighted={highlightedMessageId === msg.id}
                     messageId={msg.id}
+                    language={language as "english" | "urdu"}
                   />
                 ))}
 
