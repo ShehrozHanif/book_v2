@@ -21,6 +21,7 @@ from src.personalization.models.db_models import (
     User
 )
 from src.personalization.services.translation_cache import invalidate_translation_cache
+from src.personalization.services.notification_service import notify_translation_stale
 
 logger = logging.getLogger(__name__)
 
@@ -309,6 +310,9 @@ async def mark_translation_stale(
     """
     Mark translation as stale (English content was updated).
 
+    When a template's English content changes, its Urdu translation is marked
+    as stale and admins are notified.
+
     Args:
         db: Database session
         template_id: Template ID
@@ -317,18 +321,41 @@ async def mark_translation_stale(
         True if marked stale, False otherwise
     """
     try:
-        result = await db.execute(
+        # Get the template for notification details
+        template_result = await db.execute(
+            select(ChatbotResponseTemplate).where(
+                ChatbotResponseTemplate.id == template_id
+            )
+        )
+        template = template_result.scalar_one_or_none()
+
+        if not template:
+            logger.warning(f"Template {template_id} not found for stale marking")
+            return False
+
+        # Get the translation
+        trans_result = await db.execute(
             select(ChatbotResponseTranslationStatus).where(
                 ChatbotResponseTranslationStatus.template_id == template_id
             )
         )
-        translation = result.scalar_one_or_none()
+        translation = trans_result.scalar_one_or_none()
 
         if translation:
             translation.is_stale = True
             translation.stale_since = datetime.utcnow()
             await db.commit()
             logger.info(f"Marked translation {template_id} as stale")
+
+            # Notify admins of stale translation
+            await notify_translation_stale(
+                db=db,
+                template_id=template_id,
+                template_key=template.key,
+                english_content=template.content,
+                changed_at=datetime.utcnow()
+            )
+
             return True
 
         return False

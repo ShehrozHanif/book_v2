@@ -172,7 +172,7 @@
 - [x] T048 [P] [US4] Implement translation status tracking: update ChatbotResponseTranslationStatus table on template changes, version tracking for English content ✅
 - [x] T049 [P] [US4] Create admin dashboard component in `frontend/src/components/Admin/TranslationDashboard.tsx` showing: templates list, translation status (draft/reviewed/published), completion percentage, stale indicator ✅
 - [x] T050 [P] [US4] Add admin role check to translation endpoints (verify user has instructor/admin role) ✅ (verify_admin_role function in admin_translation.py routes)
-- [ ] T051 [US4] Implement update notification system: when English template updated, set ChatbotResponseTranslationStatus.status = 'stale', notify admins of outdated translations
+- [x] T051 [US4] Implement update notification system: when English template updated, set ChatbotResponseTranslationStatus.status = 'stale', notify admins of outdated translations ✅
 - [x] T052 [US4] Create translation audit report in `backend/scripts/translation_report.py`: generates report of which templates need translation/refresh, completion percentage, translator activity ✅
 - [x] T053 [US4] Add cache invalidation on translation update in ChatbotTranslationService: when template updated, invalidate cached version so new responses use updated translation ✅
 

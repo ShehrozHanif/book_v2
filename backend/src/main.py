@@ -113,6 +113,7 @@ from src.personalization.api.routes.dashboard import router as dashboard_router
 from src.personalization.api.routes.chatbot_translation import router as chatbot_translation_router
 from src.personalization.api.routes.glossary import router as glossary_router
 from src.personalization.api.routes.admin_translation import router as admin_translation_router
+from src.personalization.api.routes.notifications import router as notifications_router
 
 app.include_router(chat_router)
 app.include_router(users_router)
@@ -126,3 +127,4 @@ app.include_router(dashboard_router)
 app.include_router(chatbot_translation_router)
 app.include_router(glossary_router)
 app.include_router(admin_translation_router)
+app.include_router(notifications_router)
