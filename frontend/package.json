@@ -2,7 +2,7 @@
   "name": "rag-chatbot-frontend",
   "version": "0.1.0",
   "private": true,
-  "homepage": "/",
+  "homepage": "/book/",
   "dependencies": {
     "ajv": "^8.17.1",
     "axios": "^1.13.5",

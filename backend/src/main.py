@@ -132,3 +132,13 @@ app.include_router(admin_translation_router)
 app.include_router(notifications_router)
 app.include_router(language_preferences_router)
 app.include_router(language_analytics_router)
+
+# Serve React static files at /book/
+from pathlib import Path
+from fastapi.staticfiles import StaticFiles
+import os
+
+react_build_path = Path(__file__).parent.parent.parent / "frontend" / "build"
+if react_build_path.exists():
+    app.mount("/book", StaticFiles(directory=str(react_build_path), html=True), name="book")
+    logger.info(f"React app mounted at /book from {react_build_path}")
