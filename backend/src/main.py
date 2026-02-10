@@ -68,7 +68,7 @@ app.add_middleware(
 # Add trusted host middleware
 app.add_middleware(
     TrustedHostMiddleware,
-    allowed_hosts=["localhost", "127.0.0.1", "*.localhost"],
+    allowed_hosts=["localhost", "127.0.0.1", "*.localhost", "testserver"],
 )
 
 # Make rate limiter available to app
@@ -110,6 +110,7 @@ from src.personalization.api.routes.preferences import router as preferences_rou
 from src.personalization.api.routes.gamification import router as gamification_router
 from src.personalization.api.routes.privacy import router as privacy_router
 from src.personalization.api.routes.dashboard import router as dashboard_router
+from src.personalization.api.routes.chatbot_translation import router as chatbot_translation_router
 
 app.include_router(chat_router)
 app.include_router(users_router)
@@ -120,3 +121,4 @@ app.include_router(preferences_router)
 app.include_router(gamification_router)
 app.include_router(privacy_router)
 app.include_router(dashboard_router)
+app.include_router(chatbot_translation_router)
