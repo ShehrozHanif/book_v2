@@ -1,9 +1,10 @@
 # Specification 006: Urdu Language Translation & Bilingual Support
 
-**Status**: ✅ Complete - Awaiting Stakeholder Input
+**Status**: ✅ Complete - Scope Clarified (2026-02-10)
 **Created**: 2026-02-10
+**Updated**: 2026-02-10 (Scope: RAG Chatbot ONLY, Authentication Required)
 **Branch**: release/003-personalization-complete
-**Commits**: abe4a39 (spec), ce7e1ba (summary)
+**Commits**: abe4a39 (spec), ce7e1ba (summary), [pending scope clarification update]
 
 ---
 

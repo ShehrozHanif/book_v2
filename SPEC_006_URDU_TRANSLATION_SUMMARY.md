@@ -1,9 +1,10 @@
 # Specification Summary: 006-Urdu Translation
 
 **Created**: 2026-02-10
+**Updated**: 2026-02-10 (Scope clarified: RAG Chatbot ONLY, Authentication Required)
 **Branch**: `release/003-personalization-complete`
-**Commit**: `abe4a39`
-**Status**: ✅ COMPLETE - Awaiting Clarification Responses
+**Commit**: `abe4a39` (pending scope clarification update)
+**Status**: ✅ COMPLETE - Scope Clarified, Ready for /sp.plan
 
 ---
 
@@ -20,38 +21,42 @@ A comprehensive feature specification for adding Urdu language translation and b
 
 ## 🎯 Feature Scope
 
+### Clarified Scope (2026-02-10):
+**RAG CHATBOT ONLY** - Urdu translation applies EXCLUSIVELY to chatbot responses, NOT textbook chapters
+**AUTHENTICATION REQUIRED** - Only logged-in users can access Urdu language in chatbot
+
 ### Core Features (P1 - Critical)
 
-1. **Bilingual Chapter Reading**
-   - Language toggle on every page
-   - Seamless switching without losing position
-   - Both English and Urdu available simultaneously
-   - Maintains progress tracking across languages
+1. **Bilingual Chatbot Conversations**
+   - Language toggle in chatbot interface
+   - Seamless switching between English/Urdu without losing chat history
+   - Both languages available to authenticated users
+   - Maintains chat history across language switches
 
-2. **RTL Layout & Typography**
-   - Automatic Right-to-Left direction for Urdu
-   - Proper text alignment and spacing
+2. **RTL Layout & Typography in Chatbot**
+   - Automatic Right-to-Left direction for Urdu responses
+   - Proper text alignment and spacing in chat
    - Correct word breaking for Urdu script
    - Mobile-optimized RTL rendering
 
-3. **Technical Terminology Consistency**
+3. **Technical Terminology Consistency in Chatbot**
    - 150+ robotics terms with Urdu translations
-   - English terms preserved in all translations
+   - English terms preserved in all chatbot responses
    - Pronunciation guides (transliteration)
-   - Glossary with definitions in both languages
+   - Glossary accessible to authenticated users in both languages
 
 ### Enhancement Features (P2)
 
-4. **Translation Management**
-   - Admin dashboard showing translation status
-   - Notifications when English content changes
-   - Version tracking for translations
-   - Update workflow without breaking user progress
+4. **Chatbot Response Template Translation Management**
+   - Admin dashboard showing translation status of response templates
+   - Notifications when English templates change
+   - Version tracking for response translations
+   - Update workflow without breaking chat history
 
-5. **Language Preference**
-   - Remember user's language choice
-   - Persist across logout/login
-   - Apply to all features (chapters, dashboard, practice, achievements)
+5. **Authenticated User Language Preference**
+   - Remember user's chatbot language choice
+   - Persist across logout/login and devices
+   - Apply to all chatbot interactions (conversations, glossary, help)
 
 ---
 
@@ -142,34 +147,33 @@ The specification identifies **3 strategic questions** that require stakeholder 
 
 ---
 
-## 📈 Content Translation Scope
+## 📈 Chatbot Response Translation Scope
 
-### Chapters to Translate (17 total)
+### Chatbot Response Templates to Translate (Initial Phase)
 
-**Module 2: ROS 2 & Software Architecture**
-- Chapter 6: ROS 2 Fundamentals
-- Chapter 7: Robot Description & URDF
-- Chapter 8: Simulation Environments
-- Chapter 9: Motion Planning
-- Chapter 10: Control Systems
-- Chapter 11: Real-time Considerations
+**Phase 1 (MVP): 50-100 Core Response Templates**
+- General chatbot responses (greetings, help, navigation)
+- ROS 2 fundamentals questions
+- Robotics concepts explanations
+- Code example explanations
+- Terminology clarifications
+- Error handling and troubleshooting
+- Learning recommendations
 
-**Module 3: Control & Kinematics (Advanced)**
-- Chapter 12: Advanced Kinematics
-- Chapter 13: Walking & Locomotion
-- Chapter 14: Manipulation & Grasping
-- Chapter 15: Whole-Body Control
-- Chapter 16: Learning-Based Control
-- Chapter 17: Debugging & Troubleshooting
+**Phase 2: Additional 100+ Response Templates**
+- Advanced robotics topics
+- Application-specific responses
+- Research and reference responses
+- Extended terminology coverage
+- Multi-turn conversation handling
 
-**Module 4: Applications & Advanced Topics**
-- Chapter 18: Real-World Applications
-- Chapter 19: Ethical Considerations
-- Chapter 20: Emerging Technologies
-- Chapter 21: Competition & Benchmarks
-- Chapter 22: Getting Started: Your First Project
+**Total Phase 1**: ~10,000-20,000 words to translate
+**Total Phase 2**: ~20,000-40,000 additional words to translate
 
-**Total**: ~100,000+ words to translate
+### Glossary Terms (Shared across chatbot responses)
+- 150+ robotics technical terms
+- Accessible to authenticated users
+- Available in English and Urdu
 
 ---
 

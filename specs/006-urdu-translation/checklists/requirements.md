@@ -1,7 +1,8 @@
-# Specification Quality Checklist: Urdu Language Translation & Bilingual Support
+# Specification Quality Checklist: Urdu Language Translation for RAG Chatbot
 
 **Purpose**: Validate specification completeness and quality before proceeding to planning
 **Created**: 2026-02-10
+**Updated**: 2026-02-10 (Scope clarified: RAG Chatbot ONLY, Authentication Required)
 **Feature**: [Link to spec.md](/specs/006-urdu-translation/spec.md)
 
 ---
