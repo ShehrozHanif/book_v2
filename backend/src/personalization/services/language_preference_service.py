@@ -182,3 +182,124 @@ def get_language_preference_service(db: AsyncSession) -> LanguagePreferenceServi
         LanguagePreferenceService: Service instance
     """
     return LanguagePreferenceService(db)
+
+
+# Module-level functions for API routes (T057-T062)
+from datetime import datetime as dt
+
+
+def validate_language(language: str) -> bool:
+    """
+    Validate language value.
+
+    Args:
+        language: Language to validate
+
+    Returns:
+        True if valid, False otherwise
+    """
+    if not language:
+        return False
+    return language.lower() in SUPPORTED_LANGUAGES
+
+
+async def get_user_preference(
+    db: AsyncSession,
+    user_id: int
+) -> Dict[str, Any]:
+    """
+    Get user's language preference.
+
+    Args:
+        db: Database session
+        user_id: User ID
+
+    Returns:
+        Preference dictionary with language and updated_at
+    """
+    try:
+        # Query for user's preference
+        result = await db.execute(
+            select(UserLanguagePreference).where(
+                UserLanguagePreference.user_id == user_id
+            )
+        )
+        preference = result.scalar_one_or_none()
+
+        if preference:
+            return {
+                "language": preference.language,
+                "updated_at": preference.updated_at.isoformat() if hasattr(preference, 'updated_at') and preference.updated_at else None,
+            }
+
+        # Return default preference if not set
+        return {
+            "language": DEFAULT_LANGUAGE,
+            "updated_at": None,
+        }
+    except Exception as e:
+        logger.error(f"Error getting preference for user {user_id}: {e}")
+        return {
+            "language": DEFAULT_LANGUAGE,
+            "updated_at": None,
+        }
+
+
+async def set_user_preference(
+    db: AsyncSession,
+    user_id: int,
+    language: str
+) -> Dict[str, Any]:
+    """
+    Set user's language preference.
+
+    Args:
+        db: Database session
+        user_id: User ID
+        language: Language to set (english, urdu)
+
+    Returns:
+        Updated preference dictionary
+
+    Raises:
+        ValueError: If language is invalid
+    """
+    # Validate language
+    if not validate_language(language):
+        raise ValueError(f"Invalid language: {language}")
+
+    try:
+        # Check if preference exists
+        result = await db.execute(
+            select(UserLanguagePreference).where(
+                UserLanguagePreference.user_id == user_id
+            )
+        )
+        preference = result.scalar_one_or_none()
+
+        if preference:
+            # Update existing preference
+            preference.language = language.lower()
+            if hasattr(preference, 'updated_at'):
+                preference.updated_at = dt.utcnow()
+        else:
+            # Create new preference
+            preference = UserLanguagePreference(
+                user_id=user_id,
+                language=language.lower()
+            )
+            db.add(preference)
+
+        await db.commit()
+        logger.info(f"Set language preference for user {user_id} to {language}")
+
+        return {
+            "language": preference.language,
+            "updated_at": getattr(preference, 'updated_at', None).isoformat() if getattr(preference, 'updated_at', None) else None,
+        }
+    except ValueError as e:
+        raise e
+    except Exception as e:
+        logger.error(f"Error setting preference for user {user_id}: {e}")
+        await db.rollback()
+        raise
