@@ -217,7 +217,6 @@ class ChatService:
                 difficulty_override = None
                 if user_id:
                     try:
-                        from uuid import UUID
                         user_uuid = UUID(user_id)
                     except (ValueError, TypeError):
                         logger.warning(f"Invalid user_id format: {user_id}")

@@ -91,6 +91,21 @@ class RetrievalService:
 
         return None
 
+    def _chapter_matches(self, chapter_field: str, target_chapter_num: int) -> bool:
+        """Check if a chapter field exactly matches the target chapter number.
+
+        Uses regex to avoid substring issues (e.g., "Chapter 2" matching "Chapter 22").
+
+        Args:
+            chapter_field: Chapter string from payload (e.g., "Chapter 2", "Chapter 22")
+            target_chapter_num: Target chapter number to match
+
+        Returns:
+            True if the chapter field matches the exact chapter number
+        """
+        pattern = rf'\bChapter\s+{target_chapter_num}\b'
+        return bool(re.search(pattern, chapter_field, re.IGNORECASE))
+
     async def rank_passages(
         self,
         passages: List[Dict],
@@ -127,16 +142,14 @@ class RetrievalService:
 
         # If a specific chapter was detected, prioritize passages from that chapter
         if target_chapter:
-            target_chapter_str = f"Chapter {target_chapter}"
-
-            # Separate passages: from target chapter vs others
+            # Separate passages: from target chapter vs others using exact match
             target_passages = [
                 p for p in filtered
-                if target_chapter_str in p.get("payload", {}).get("chapter", "")
+                if self._chapter_matches(p.get("payload", {}).get("chapter", ""), target_chapter)
             ]
             other_passages = [
                 p for p in filtered
-                if target_chapter_str not in p.get("payload", {}).get("chapter", "")
+                if not self._chapter_matches(p.get("payload", {}).get("chapter", ""), target_chapter)
             ]
 
             # Sort both groups by score descending
@@ -219,10 +232,11 @@ class RetrievalService:
         target_chapter = self.extract_chapter_number(query)
         if target_chapter:
             target_chapter_str = f"Chapter {target_chapter}"
-            chapters_in_results = [
-                r['payload'].get('chapter', '') for r in results
-            ]
-            if not any(target_chapter_str in ch for ch in chapters_in_results):
+            has_target_in_results = any(
+                self._chapter_matches(r['payload'].get('chapter', ''), target_chapter)
+                for r in results
+            )
+            if not has_target_in_results:
                 logger.info(f"[RETRIEVAL] Target Chapter {target_chapter} not in top {search_top_k} results, adding targeted search")
                 try:
                     # Get top results specifically for this chapter

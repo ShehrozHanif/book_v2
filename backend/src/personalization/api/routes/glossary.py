@@ -79,48 +79,6 @@ async def list_glossary_terms(
 
 
 @router.get(
-    "/glossary/{term_id}",
-    response_model=GlossaryTermSchema,
-    summary="Get glossary term by ID"
-)
-async def get_glossary_term(
-    term_id: str,
-    db = Depends(get_session)
-):
-    """
-    Get a specific glossary term by English term name.
-
-    Args:
-        term_id: English term name (e.g., "ROS 2 Node")
-
-    Returns:
-        GlossaryTermSchema: Term with full details
-
-    Raises:
-        404: If term not found
-    """
-    try:
-        glossary_service = get_glossary_service(db)
-        term = await glossary_service.get_term(term_id)
-
-        if not term:
-            raise HTTPException(
-                status_code=status.HTTP_404_NOT_FOUND,
-                detail=f"Glossary term '{term_id}' not found"
-            )
-
-        return term
-    except HTTPException:
-        raise
-    except Exception as e:
-        logger.error(f"Error getting glossary term: {str(e)}")
-        raise HTTPException(
-            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-            detail="Failed to fetch term"
-        )
-
-
-@router.get(
     "/glossary/search",
     response_model=List[GlossaryTermSchema],
     summary="Search glossary terms"
@@ -335,4 +293,46 @@ async def get_glossary_stats(
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
             detail="Failed to fetch statistics"
+        )
+
+
+@router.get(
+    "/glossary/{term_id}",
+    response_model=GlossaryTermSchema,
+    summary="Get glossary term by ID"
+)
+async def get_glossary_term(
+    term_id: str,
+    db = Depends(get_session)
+):
+    """
+    Get a specific glossary term by English term name.
+
+    Args:
+        term_id: English term name (e.g., "ROS 2 Node")
+
+    Returns:
+        GlossaryTermSchema: Term with full details
+
+    Raises:
+        404: If term not found
+    """
+    try:
+        glossary_service = get_glossary_service(db)
+        term = await glossary_service.get_term(term_id)
+
+        if not term:
+            raise HTTPException(
+                status_code=status.HTTP_404_NOT_FOUND,
+                detail=f"Glossary term '{term_id}' not found"
+            )
+
+        return term
+    except HTTPException:
+        raise
+    except Exception as e:
+        logger.error(f"Error getting glossary term: {str(e)}")
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail="Failed to fetch term"
         )

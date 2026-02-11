@@ -73,10 +73,48 @@ async def get_session():
 async def init_db():
     """Initialize database tables."""
     from src.personalization.models.db_models import Base as PersonalizationBase
+    from sqlalchemy import text
 
     async with engine.begin() as conn:
-        # Create personalization tables only (uses PostgreSQL-specific types)
+        # Create personalization tables (uses PostgreSQL-specific types)
         await conn.run_sync(PersonalizationBase.metadata.create_all)
+
+        # Create conversations table if it doesn't exist
+        # (uses UUID to match personalization users table)
+        await conn.execute(text("""
+            CREATE TABLE IF NOT EXISTS conversations (
+                conversation_id VARCHAR(36) PRIMARY KEY,
+                user_id UUID REFERENCES users(user_id) ON DELETE SET NULL,
+                created_at TIMESTAMP NOT NULL DEFAULT NOW(),
+                expires_at TIMESTAMP,
+                updated_at TIMESTAMP NOT NULL DEFAULT NOW()
+            )
+        """))
+
+        # Create messages table if it doesn't exist
+        await conn.execute(text("""
+            CREATE TABLE IF NOT EXISTS messages (
+                message_id VARCHAR(36) PRIMARY KEY,
+                conversation_id VARCHAR(36) REFERENCES conversations(conversation_id) ON DELETE CASCADE,
+                role VARCHAR(20) NOT NULL,
+                content TEXT NOT NULL,
+                created_at TIMESTAMP NOT NULL DEFAULT NOW()
+            )
+        """))
+
+        # Create audit_logs table if it doesn't exist
+        await conn.execute(text("""
+            CREATE TABLE IF NOT EXISTS audit_logs (
+                log_id VARCHAR(36) PRIMARY KEY DEFAULT gen_random_uuid()::text,
+                query TEXT,
+                response TEXT,
+                relevance_scores JSON,
+                user_id VARCHAR(36),
+                conversation_id VARCHAR(36),
+                processing_time_ms FLOAT,
+                timestamp TIMESTAMP DEFAULT NOW()
+            )
+        """))
 
 
 async def close_db():

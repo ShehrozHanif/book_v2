@@ -4,9 +4,9 @@
  */
 
 import React, { useEffect, useRef } from 'react';
-import { usePersonalization } from './PersonalizationProvider';
+import { PersonalizationProvider } from './PersonalizationProvider';
 import PracticeQuestionsWidget from './PracticeQuestionsWidget';
-import ReactDOM from 'react-dom';
+import { createRoot, Root } from 'react-dom/client';
 
 /**
  * Extract chapter ID from current page URL
@@ -46,9 +46,9 @@ function getInsertionPoint(): HTMLElement | null {
 }
 
 export const PracticeWidgetInjector: React.FC = () => {
-  const { isAuthenticated } = usePersonalization();
   const injectionPointRef = useRef<HTMLElement | null>(null);
   const containerRef = useRef<HTMLDivElement | null>(null);
+  const rootRef = useRef<Root | null>(null);
 
   useEffect(() => {
     const chapterId = extractChapterIdFromUrl();
@@ -84,11 +84,14 @@ export const PracticeWidgetInjector: React.FC = () => {
       article.appendChild(container);
       containerRef.current = container;
 
-      // Render the widget into the container
-      ReactDOM.render(
-        <PracticeQuestionsWidget chapterId={chapterId} />,
-        container
+      // Render the widget into the container, wrapped with PersonalizationProvider
+      const root = createRoot(container);
+      root.render(
+        <PersonalizationProvider>
+          <PracticeQuestionsWidget chapterId={chapterId} />
+        </PersonalizationProvider>
       );
+      rootRef.current = root;
     };
 
     // Use requestIdleCallback if available, otherwise setTimeout
@@ -100,15 +103,16 @@ export const PracticeWidgetInjector: React.FC = () => {
 
     // Cleanup on unmount
     return () => {
-      if (containerRef.current) {
+      if (rootRef.current) {
         try {
-          ReactDOM.unmountComponentAtNode(containerRef.current);
+          rootRef.current.unmount();
         } catch (e) {
           console.error('Error unmounting practice widget:', e);
         }
+        rootRef.current = null;
       }
     };
-  }, [isAuthenticated]);
+  }, []);
 
   return null;
 };
