@@ -10,7 +10,8 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from src.database.connection import get_session
 from src.personalization.api.dependencies import get_current_user
-from src.personalization.models.db_models import User
+from sqlalchemy import select
+from src.personalization.models.db_models import User, Progress
 from src.personalization.services.achievement_service import get_achievement_service
 from src.personalization.services.practice_service import get_practice_service
 from src.personalization.services.statistics_service import get_statistics_service
@@ -256,6 +257,38 @@ async def submit_practice_answers(
     )
 
     logger.info(f"Practice submitted: user={user_id}, chapter={chapter_id}, score={attempt.score}")
+
+    # Update Progress record with practice results so dashboard reflects quiz scores
+    try:
+        result = await session.execute(
+            select(Progress).where(
+                Progress.user_id == user_id,
+                Progress.chapter_id == chapter_id
+            )
+        )
+        progress = result.scalar_one_or_none()
+        if progress:
+            progress.practice_attempts = (progress.practice_attempts or 0) + 1
+            if attempt.score > (progress.highest_practice_score or 0):
+                progress.highest_practice_score = attempt.score
+            # Update mastery_score to reflect best practice score
+            if attempt.score > (progress.mastery_score or 0):
+                progress.mastery_score = attempt.score
+            await session.commit()
+        else:
+            # Create a new Progress record if one doesn't exist
+            new_progress = Progress(
+                user_id=user_id,
+                chapter_id=chapter_id,
+                completion_status='in_progress',
+                mastery_score=attempt.score,
+                practice_attempts=1,
+                highest_practice_score=attempt.score,
+            )
+            session.add(new_progress)
+            await session.commit()
+    except Exception as e:
+        logger.warning(f"Failed to update progress after practice: {e}")
 
     return PracticeResponse(
         score=attempt.score,

@@ -95,6 +95,10 @@ const config = {
             position: 'right',
             items: [
               {
+                label: '🚀 Get Started',
+                to: '/onboarding',
+              },
+              {
                 to: '/dashboard',
                 label: '📊 Dashboard',
                 className: 'navbar-dashboard-link',

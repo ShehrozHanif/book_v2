@@ -1,0 +1,559 @@
+.container {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 40px 20px;
+  min-height: 100vh;
+  background: #f5f7fa;
+}
+
+/* Step Indicator */
+.stepIndicator {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 0;
+  margin-bottom: 40px;
+}
+
+.step {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.stepDot {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  font-weight: 700;
+  background: #e0e0e0;
+  color: #999;
+  transition: all 0.3s ease;
+}
+
+.stepDot.active {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  box-shadow: 0 2px 8px rgba(102, 126, 234, 0.4);
+}
+
+.stepDot.completed {
+  background: #4caf50;
+  color: white;
+}
+
+.stepLabel {
+  font-size: 13px;
+  color: #999;
+  font-weight: 500;
+  transition: color 0.3s ease;
+}
+
+.stepLabel.active {
+  color: #333;
+  font-weight: 600;
+}
+
+.stepLine {
+  width: 60px;
+  height: 2px;
+  background: #e0e0e0;
+  margin: 0 12px;
+  transition: background 0.3s ease;
+}
+
+.stepLine.completed {
+  background: #4caf50;
+}
+
+/* Header */
+.header {
+  text-align: center;
+  margin-bottom: 32px;
+  padding: 30px;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  border-radius: 12px;
+  color: white;
+}
+
+.title {
+  margin: 0 0 8px 0;
+  font-size: 28px;
+  font-weight: 700;
+  color: white;
+}
+
+.subtitle {
+  margin: 0;
+  font-size: 16px;
+  color: rgba(255, 255, 255, 0.9);
+  line-height: 1.5;
+}
+
+/* Loading & Error */
+.loadingState {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 20px;
+  padding: 80px 20px;
+  text-align: center;
+  background: white;
+  border-radius: 12px;
+}
+
+.spinner {
+  width: 40px;
+  height: 40px;
+  border: 4px solid #e0e0e0;
+  border-top: 4px solid #667eea;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.loadingState p {
+  margin: 0;
+  color: #666;
+  font-size: 16px;
+}
+
+.errorState {
+  padding: 40px;
+  background: white;
+  border-radius: 12px;
+  text-align: center;
+  border: 2px solid #fee;
+  border-left: 4px solid #c33;
+}
+
+.errorState h2 {
+  margin: 0 0 12px 0;
+  color: #c33;
+  font-size: 20px;
+}
+
+.errorState p {
+  margin: 0 0 24px 0;
+  color: #666;
+  font-size: 14px;
+}
+
+.retryButton {
+  padding: 10px 24px;
+  background: #c33;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.retryButton:hover {
+  background: #b22;
+  transform: translateY(-2px);
+}
+
+/* Quiz Section */
+.quizContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.questionCard {
+  background: white;
+  border-radius: 12px;
+  padding: 24px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+.questionNumber {
+  font-size: 12px;
+  font-weight: 600;
+  color: #667eea;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin: 0 0 8px 0;
+}
+
+.questionText {
+  font-size: 16px;
+  color: #333;
+  margin: 0 0 16px 0;
+  line-height: 1.5;
+}
+
+.optionsList {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.optionLabel {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 16px;
+  border: 2px solid #e8e8e8;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-size: 14px;
+  color: #555;
+}
+
+.optionLabel:hover {
+  border-color: #667eea;
+  background: #f8f9ff;
+}
+
+.optionLabel.selected {
+  border-color: #667eea;
+  background: #f0f4ff;
+  color: #333;
+  font-weight: 500;
+}
+
+.optionLabel input[type="radio"] {
+  accent-color: #667eea;
+  width: 18px;
+  height: 18px;
+  flex-shrink: 0;
+}
+
+.difficultyBadge {
+  display: inline-block;
+  padding: 2px 8px;
+  border-radius: 4px;
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  margin-left: 8px;
+}
+
+.difficultyBadge.beginner {
+  background: #e8f5e9;
+  color: #2e7d32;
+}
+
+.difficultyBadge.intermediate {
+  background: #fff3e0;
+  color: #ef6c00;
+}
+
+.difficultyBadge.advanced {
+  background: #fce4ec;
+  color: #c62828;
+}
+
+/* Submit / Action Buttons */
+.actions {
+  display: flex;
+  justify-content: center;
+  gap: 16px;
+  margin-top: 16px;
+}
+
+.primaryButton {
+  padding: 14px 40px;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.primaryButton:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+}
+
+.primaryButton:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.secondaryButton {
+  padding: 14px 40px;
+  background: white;
+  color: #667eea;
+  border: 2px solid #667eea;
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+.secondaryButton:hover {
+  background: #f0f4ff;
+}
+
+/* Results Section */
+.resultsContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.scoreCard {
+  background: white;
+  border-radius: 12px;
+  padding: 32px;
+  text-align: center;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+.scoreValue {
+  font-size: 64px;
+  font-weight: 700;
+  color: #667eea;
+  margin: 0;
+  line-height: 1;
+}
+
+.scoreLabel {
+  font-size: 14px;
+  color: #999;
+  margin: 8px 0 16px 0;
+}
+
+.tierBadge {
+  display: inline-block;
+  padding: 6px 20px;
+  border-radius: 20px;
+  font-size: 14px;
+  font-weight: 600;
+  text-transform: capitalize;
+}
+
+.tierBadge.beginner {
+  background: #e8f5e9;
+  color: #2e7d32;
+}
+
+.tierBadge.intermediate {
+  background: #fff3e0;
+  color: #ef6c00;
+}
+
+.tierBadge.advanced {
+  background: #fce4ec;
+  color: #c62828;
+}
+
+.pathsTitle {
+  font-size: 20px;
+  font-weight: 600;
+  color: #333;
+  margin: 0 0 16px 0;
+  text-align: center;
+}
+
+.pathsGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 16px;
+}
+
+.pathCard {
+  background: white;
+  border-radius: 12px;
+  padding: 24px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  border: 2px solid transparent;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  position: relative;
+}
+
+.pathCard:hover {
+  border-color: #667eea;
+  box-shadow: 0 4px 16px rgba(102, 126, 234, 0.15);
+  transform: translateY(-2px);
+}
+
+.pathCard.selectedPath {
+  border-color: #667eea;
+  background: #f8f9ff;
+}
+
+.matchBadge {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  padding: 4px 10px;
+  border-radius: 12px;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.pathName {
+  font-size: 18px;
+  font-weight: 600;
+  color: #333;
+  margin: 0 0 8px 0;
+  padding-right: 60px;
+}
+
+.pathDescription {
+  font-size: 14px;
+  color: #666;
+  margin: 0 0 16px 0;
+  line-height: 1.5;
+}
+
+.pathMeta {
+  display: flex;
+  gap: 16px;
+  font-size: 13px;
+  color: #999;
+  border-top: 1px solid #eee;
+  padding-top: 12px;
+}
+
+/* Ready Section */
+.readyContainer {
+  text-align: center;
+}
+
+.successCard {
+  background: white;
+  border-radius: 12px;
+  padding: 48px 32px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+.successIcon {
+  font-size: 64px;
+  margin-bottom: 16px;
+}
+
+.successTitle {
+  font-size: 28px;
+  font-weight: 700;
+  color: #333;
+  margin: 0 0 8px 0;
+}
+
+.successSubtitle {
+  font-size: 16px;
+  color: #666;
+  margin: 0 0 32px 0;
+  line-height: 1.5;
+}
+
+.selectedPathInfo {
+  background: #f8f9ff;
+  border-radius: 8px;
+  padding: 20px;
+  margin-bottom: 32px;
+  border-left: 4px solid #667eea;
+  text-align: left;
+}
+
+.selectedPathInfo h3 {
+  margin: 0 0 4px 0;
+  color: #333;
+  font-size: 16px;
+}
+
+.selectedPathInfo p {
+  margin: 0;
+  color: #666;
+  font-size: 14px;
+}
+
+.dashboardLink {
+  display: inline-block;
+  margin-top: 16px;
+  color: #667eea;
+  font-size: 14px;
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.dashboardLink:hover {
+  text-decoration: underline;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .container {
+    padding: 20px 16px;
+  }
+
+  .header {
+    padding: 20px;
+  }
+
+  .title {
+    font-size: 22px;
+  }
+
+  .stepLabel {
+    display: none;
+  }
+
+  .stepLine {
+    width: 40px;
+  }
+
+  .pathsGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .scoreValue {
+    font-size: 48px;
+  }
+
+  .actions {
+    flex-direction: column;
+  }
+
+  .primaryButton,
+  .secondaryButton {
+    width: 100%;
+  }
+}
+
+@media (max-width: 480px) {
+  .container {
+    padding: 16px 12px;
+  }
+
+  .header {
+    padding: 16px;
+    margin-bottom: 24px;
+  }
+
+  .title {
+    font-size: 20px;
+  }
+
+  .questionCard {
+    padding: 16px;
+  }
+
+  .successCard {
+    padding: 32px 16px;
+  }
+}

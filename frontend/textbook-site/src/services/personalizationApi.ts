@@ -48,8 +48,9 @@ class PersonalizationApi {
       "Content-Type": "application/json",
     };
 
-    if (this.token) {
-      headers["Authorization"] = `Bearer ${this.token}`;
+    const token = this.token || (typeof localStorage !== "undefined" ? localStorage.getItem("access_token") : null);
+    if (token) {
+      headers["Authorization"] = `Bearer ${token}`;
     }
 
     return headers;
@@ -59,6 +60,15 @@ class PersonalizationApi {
     const contentType = response.headers.get("content-type");
 
     if (!response.ok) {
+      // Handle expired/invalid token - redirect to login
+      if (response.status === 401 && typeof window !== "undefined") {
+        this.clearToken();
+        localStorage.removeItem("user");
+        const currentPath = window.location.pathname + window.location.search;
+        window.location.href = `/login?redirect=${encodeURIComponent(currentPath)}`;
+        throw new Error("Session expired. Redirecting to login...");
+      }
+
       let errorData: ApiError;
 
       if (contentType?.includes("application/json")) {
@@ -231,15 +241,26 @@ class PersonalizationApi {
   }
 
   // Assessment endpoints
-  async submitAssessment(userId: string, answers: Record<string, string>): Promise<any> {
-    const response = await fetch(`${API_BASE_URL}/assessments`, {
-      method: "POST",
-      headers: this.getHeaders(),
-      body: JSON.stringify({
-        user_id: userId,
-        answers,
-      }),
-    });
+  async getAssessmentQuestions(userId: string): Promise<any[]> {
+    const response = await fetch(
+      `${API_BASE_URL}/users/${userId}/assessment/questions`,
+      {
+        headers: this.getHeaders(),
+      }
+    );
+
+    return this.handleResponse(response);
+  }
+
+  async submitAssessment(userId: string, answers: Array<{question_id: number; answer: string}>): Promise<any> {
+    const response = await fetch(
+      `${API_BASE_URL}/users/${userId}/assessment`,
+      {
+        method: "POST",
+        headers: this.getHeaders(),
+        body: JSON.stringify({ answers }),
+      }
+    );
 
     return this.handleResponse(response);
   }
@@ -247,24 +268,22 @@ class PersonalizationApi {
   // Learning path endpoints
   async recommendLearningPath(userId: string): Promise<any> {
     const response = await fetch(
-      `${API_BASE_URL}/learning-paths/recommend`,
+      `${API_BASE_URL}/users/${userId}/paths`,
       {
         method: "POST",
         headers: this.getHeaders(),
-        body: JSON.stringify({ user_id: userId }),
       }
     );
 
     return this.handleResponse(response);
   }
 
-  async selectLearningPath(userId: string, pathName: string): Promise<any> {
+  async selectLearningPath(userId: string, pathKey: string): Promise<any> {
     const response = await fetch(
-      `${API_BASE_URL}/users/${userId}/learning-paths`,
+      `${API_BASE_URL}/users/${userId}/paths/${pathKey}/select`,
       {
         method: "POST",
         headers: this.getHeaders(),
-        body: JSON.stringify({ path_name: pathName }),
       }
     );
 

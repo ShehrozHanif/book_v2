@@ -179,7 +179,7 @@ class AssessmentQuestion(BaseModel):
     user_answer: Optional[str] = None
     correct_answer: Optional[str] = None
     correct: Optional[bool] = None
-    difficulty: Literal["beginner", "intermediate", "advanced"] = "intermediate"
+    difficulty: Literal["easy", "medium", "hard", "beginner", "intermediate", "advanced"] = "medium"
 
 
 class AssessmentRequest(BaseModel):

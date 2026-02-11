@@ -37,13 +37,13 @@ const ProgressCard: React.FC<ProgressCardProps> = ({ progress }) => {
       <div className={styles.progressItem}>
         <div className={styles.progressLabel}>
           <span>Average Mastery</span>
-          <span className={styles.value}>{progress.avg_mastery.toFixed(1)}%</span>
+          <span className={styles.value}>{(progress.avg_mastery || 0).toFixed(1)}%</span>
         </div>
         <div className={styles.progressBar}>
           <div
             className={styles.progressFill}
             style={{
-              width: `${progress.avg_mastery}%`,
+              width: `${progress.avg_mastery || 0}%`,
               backgroundColor: "#2196F3",
             }}
           />
@@ -53,7 +53,7 @@ const ProgressCard: React.FC<ProgressCardProps> = ({ progress }) => {
       <div className={styles.statsGrid}>
         <div className={styles.stat}>
           <span className={styles.statIcon}>⏱️</span>
-          <span className={styles.statValue}>{progress.total_time_hours.toFixed(1)}</span>
+          <span className={styles.statValue}>{(progress.total_time_hours || 0).toFixed(1)}</span>
           <span className={styles.statLabel}>Hours</span>
         </div>
         <div className={styles.stat}>
@@ -63,7 +63,7 @@ const ProgressCard: React.FC<ProgressCardProps> = ({ progress }) => {
         </div>
         <div className={styles.stat}>
           <span className={styles.statIcon}>📈</span>
-          <span className={styles.statValue}>{progress.avg_practice_score.toFixed(0)}%</span>
+          <span className={styles.statValue}>{(progress.avg_practice_score || 0).toFixed(0)}%</span>
           <span className={styles.statLabel}>Avg Score</span>
         </div>
       </div>

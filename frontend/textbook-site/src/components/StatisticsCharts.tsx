@@ -108,7 +108,7 @@ const StatisticsCharts: React.FC<StatisticsChartsProps> = ({ statistics }) => {
                       backgroundColor: "#ff9800",
                     }}
                   />
-                  <span className={styles.curveDate}>{entry.date.split("-").slice(1).join("-")}</span>
+                  <span className={styles.curveDate}>{(entry.date || '').split("-").slice(1).join("-")}</span>
                 </div>
               ))}
             </div>
@@ -130,12 +130,12 @@ const StatisticsCharts: React.FC<StatisticsChartsProps> = ({ statistics }) => {
           </div>
           <div className={styles.summaryCard}>
             <span className={styles.summaryIcon}>📈</span>
-            <span className={styles.summaryValue}>{statistics.overall_progress.avg_mastery.toFixed(1)}%</span>
+            <span className={styles.summaryValue}>{(statistics.overall_progress.avg_mastery || 0).toFixed(1)}%</span>
             <span className={styles.summaryLabel}>Avg Mastery</span>
           </div>
           <div className={styles.summaryCard}>
             <span className={styles.summaryIcon}>⏱️</span>
-            <span className={styles.summaryValue}>{statistics.overall_progress.total_time_hours.toFixed(1)}h</span>
+            <span className={styles.summaryValue}>{(statistics.overall_progress.total_time_hours || 0).toFixed(1)}h</span>
             <span className={styles.summaryLabel}>Hours Spent</span>
           </div>
           <div className={styles.summaryCard}>

@@ -262,18 +262,28 @@ async def get_learning_statistics(
             if progress.mastery_score < 70
         ]
 
+        total_practice_attempts = sum(p.practice_attempts or 0 for p in progress_data)
+        practice_scores = [p.highest_practice_score for p in progress_data if (p.highest_practice_score or 0) > 0]
+        avg_practice_score = round(sum(practice_scores) / len(practice_scores), 1) if practice_scores else 0
+        chapters_started = sum(1 for p in progress_data if p.completion_status in ('in_progress', 'completed'))
+        chapters_in_progress = sum(1 for p in progress_data if p.completion_status == 'in_progress')
+
         return {
             "time_per_chapter": time_per_chapter,
             "total_time_hours": round(total_time_seconds / 3600, 1),
             "mastery_per_chapter": mastery_per_chapter,
             "learning_curve": learning_curve,
-            "recommended_focus_areas": recommended_focus_areas[:5],  # Top 5 recommendations
+            "recommended_focus_areas": recommended_focus_areas[:5],
             "overall_mastery": round(
                 sum(mastery_per_chapter.values()) / len(mastery_per_chapter),
                 1
             ) if mastery_per_chapter else 0,
             "chapters_completed": sum(1 for p in progress_data if p.completion_status == "completed"),
-            "total_chapters": len(progress_data)
+            "chapters_started": chapters_started,
+            "chapters_in_progress": chapters_in_progress,
+            "total_chapters": 22,
+            "total_practice_attempts": total_practice_attempts,
+            "avg_practice_score": avg_practice_score,
         }
 
     except Exception as e:

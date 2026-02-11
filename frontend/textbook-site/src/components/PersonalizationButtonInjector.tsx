@@ -1,11 +1,11 @@
 /**
- * PracticeWidgetInjector - Injects practice questions widget into chapter pages
- * Runs after hydration to add interactive practice section at bottom of chapters
+ * PersonalizationButtonInjector - Injects personalization button after Learning Objectives
+ * Runs after hydration to add interactive personalization section to chapter pages
  */
 
 import React, { useEffect, useRef, useState } from 'react';
 import { PersonalizationProvider } from './PersonalizationProvider';
-import PracticeQuestionsWidget from './PracticeQuestionsWidget';
+import PersonalizationButton from './PersonalizationButton';
 import { createRoot, Root } from 'react-dom/client';
 
 /**
@@ -21,22 +21,25 @@ function extractChapterIdFromUrl(): number | null {
 }
 
 /**
- * Find the main content area and inject the widget
+ * Find the Learning Objectives H2 element
  */
-function getInsertionPoint(): HTMLElement | null {
-  const article = document.querySelector('article');
-  if (article) return article;
+function getLearningObjectivesHeading(): HTMLHeadingElement | null {
+  const headingById = document.querySelector('h2#learning-objectives') as HTMLHeadingElement;
+  if (headingById) {
+    return headingById;
+  }
 
-  const main = document.querySelector('main');
-  if (main) return main;
-
-  const docsContent = document.querySelector('.docs-content');
-  if (docsContent) return docsContent as HTMLElement;
+  const allH2s = document.querySelectorAll('h2');
+  for (const h2 of allH2s) {
+    if (h2.textContent?.includes('Learning Objectives')) {
+      return h2;
+    }
+  }
 
   return null;
 }
 
-export const PracticeWidgetInjector: React.FC = () => {
+export const PersonalizationButtonInjector: React.FC = () => {
   const containerRef = useRef<HTMLDivElement | null>(null);
   const rootRef = useRef<Root | null>(null);
   const [pathname, setPathname] = useState(typeof window !== 'undefined' ? window.location.pathname : '');
@@ -55,6 +58,7 @@ export const PracticeWidgetInjector: React.FC = () => {
       characterData: true,
     });
 
+    // Also listen for popstate (back/forward navigation)
     const handlePopState = () => setPathname(window.location.pathname);
     window.addEventListener('popstate', handlePopState);
 
@@ -64,15 +68,23 @@ export const PracticeWidgetInjector: React.FC = () => {
     };
   }, [pathname]);
 
-  // Inject widget when pathname changes
+  // Inject button when pathname changes
   useEffect(() => {
     // Cleanup previous injection
     if (rootRef.current) {
-      try { rootRef.current.unmount(); } catch (e) { /* ignore */ }
+      try {
+        rootRef.current.unmount();
+      } catch (e) {
+        // ignore
+      }
       rootRef.current = null;
     }
     if (containerRef.current && containerRef.current.parentElement) {
-      try { containerRef.current.parentElement.removeChild(containerRef.current); } catch (e) { /* ignore */ }
+      try {
+        containerRef.current.parentElement.removeChild(containerRef.current);
+      } catch (e) {
+        // ignore
+      }
       containerRef.current = null;
     }
 
@@ -81,44 +93,60 @@ export const PracticeWidgetInjector: React.FC = () => {
       return;
     }
 
-    const injectWidget = () => {
-      const article = getInsertionPoint();
-      if (!article) {
-        setTimeout(injectWidget, 500);
+    const injectButton = () => {
+      const heading = getLearningObjectivesHeading();
+      if (!heading) {
+        setTimeout(injectButton, 500);
         return;
       }
 
-      // Skip if widget already injected
-      if (article.querySelector('[data-practice-widget]')) {
+      const parent = heading.parentElement;
+      if (!parent) return;
+
+      // Skip if already injected
+      if (parent.querySelector('[data-personalization-button]')) {
         return;
       }
 
       const container = document.createElement('div');
-      container.setAttribute('data-practice-widget', String(chapterId));
-      container.className = 'practice-widget-container';
+      container.setAttribute('data-personalization-button', String(chapterId));
+      container.className = 'personalization-button-container';
 
-      article.appendChild(container);
+      if (heading.nextSibling) {
+        parent.insertBefore(container, heading.nextSibling);
+      } else {
+        parent.appendChild(container);
+      }
+
       containerRef.current = container;
 
       const root = createRoot(container);
       root.render(
         <PersonalizationProvider>
-          <PracticeQuestionsWidget chapterId={chapterId} />
+          <PersonalizationButton chapterId={chapterId} />
         </PersonalizationProvider>
       );
       rootRef.current = root;
     };
 
     // Wait for DOM to be ready after navigation
-    setTimeout(injectWidget, 300);
+    setTimeout(injectButton, 300);
 
     return () => {
       if (rootRef.current) {
-        try { rootRef.current.unmount(); } catch (e) { /* ignore */ }
+        try {
+          rootRef.current.unmount();
+        } catch (e) {
+          // ignore
+        }
         rootRef.current = null;
       }
       if (containerRef.current && containerRef.current.parentElement) {
-        try { containerRef.current.parentElement.removeChild(containerRef.current); } catch (e) { /* ignore */ }
+        try {
+          containerRef.current.parentElement.removeChild(containerRef.current);
+        } catch (e) {
+          // ignore
+        }
         containerRef.current = null;
       }
     };
@@ -127,4 +155,4 @@ export const PracticeWidgetInjector: React.FC = () => {
   return null;
 };
 
-export default PracticeWidgetInjector;
+export default PersonalizationButtonInjector;

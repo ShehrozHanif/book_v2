@@ -2,6 +2,7 @@ import React, { Suspense, useEffect } from 'react';
 import { PersonalizationProvider } from '../components/PersonalizationProvider';
 import SidebarProgressInjector from '../components/SidebarProgressInjector';
 import PracticeWidgetInjector from '../components/PracticeWidgetInjector';
+import PersonalizationButtonInjector from '../components/PersonalizationButtonInjector';
 
 interface RootProps {
   children: React.ReactNode;
@@ -42,6 +43,7 @@ export default function Root({ children }: RootProps): JSX.Element {
   return (
     <PersonalizationProvider>
       <SidebarProgressInjector />
+      <PersonalizationButtonInjector />
       <PracticeWidgetInjector />
       {children}
       <Suspense fallback={null}>
