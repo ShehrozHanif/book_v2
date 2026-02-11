@@ -631,6 +631,84 @@ async def advanced_response(
         )
 
 
+class TranslateRequest(BaseModel):
+    """Schema for translation request."""
+    text: str = Field(..., description="English text to translate to Urdu", min_length=1, max_length=10000)
+    conversation_id: Optional[str] = Field(None, description="Optional conversation ID for context")
+
+
+class TranslateResponse(BaseModel):
+    """Schema for translation response."""
+    translated_text: str = Field(..., description="Urdu translation of the input text")
+    original_text: str = Field(..., description="Original English text")
+
+
+@router.post(
+    "/translate",
+    response_model=TranslateResponse,
+    summary="Translate response to Urdu",
+    description="Translate an English chatbot response to Urdu using OpenAI.",
+    responses={
+        400: {"model": ErrorResponse, "description": "Invalid request"},
+        500: {"model": ErrorResponse, "description": "Translation failed"},
+    },
+)
+async def translate_to_urdu(
+    request: TranslateRequest,
+    http_request: Request,
+) -> TranslateResponse:
+    """
+    Translate English text to Urdu using OpenAI.
+
+    Args:
+        request: TranslateRequest with text to translate
+        http_request: FastAPI request object
+
+    Returns:
+        TranslateResponse with original and translated text
+    """
+    try:
+        from src.services.openai_client import get_openai_service
+        openai_service = get_openai_service()
+
+        response = await openai_service.client.chat.completions.create(
+            model=openai_service.chat_model,
+            messages=[
+                {
+                    "role": "system",
+                    "content": (
+                        "You are a professional English to Urdu translator. "
+                        "Translate the following text accurately into Urdu. "
+                        "Preserve technical terms in English within parentheses where appropriate. "
+                        "Use proper Urdu script (نستعلیق). "
+                        "Only output the Urdu translation, nothing else."
+                    )
+                },
+                {
+                    "role": "user",
+                    "content": request.text
+                }
+            ],
+            max_tokens=2000,
+            temperature=0.3,
+        )
+
+        translated_text = response.choices[0].message.content.strip()
+        logger.info(f"Translation completed: {len(request.text)} chars EN -> {len(translated_text)} chars UR")
+
+        return TranslateResponse(
+            translated_text=translated_text,
+            original_text=request.text,
+        )
+
+    except Exception as e:
+        logger.error(f"Translation failed: {str(e)}", exc_info=True)
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail="Failed to translate text",
+        )
+
+
 @router.get(
     "/health",
     summary="Health check",

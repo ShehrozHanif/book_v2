@@ -4,7 +4,9 @@
 
 import React from "react";
 import ReactDOM from "react-dom/client";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { ChatBot } from "./components";
+import LoginPage from "./pages/LoginPage";
 import { AuthContextProvider } from "./contexts/AuthContext";
 import "./index.css";
 
@@ -20,8 +22,13 @@ const reactRoot = ReactDOM.createRoot(root);
 
 reactRoot.render(
   <React.StrictMode>
-    <AuthContextProvider>
-      <ChatBot />
-    </AuthContextProvider>
+    <BrowserRouter basename="/book">
+      <AuthContextProvider>
+        <Routes>
+          <Route path="/login" element={<LoginPage />} />
+          <Route path="/*" element={<ChatBot />} />
+        </Routes>
+      </AuthContextProvider>
+    </BrowserRouter>
   </React.StrictMode>
 );

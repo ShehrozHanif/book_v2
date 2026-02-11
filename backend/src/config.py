@@ -27,7 +27,7 @@ class Settings(BaseSettings):
     ENVIRONMENT: str = "development"
 
     # CORS Configuration
-    ALLOWED_ORIGINS: list = ["http://localhost:3000", "http://localhost:3001"]
+    ALLOWED_ORIGINS: list = ["http://localhost:3000", "http://localhost:3001", "http://localhost:8000"]
 
     # Rate Limiting
     RATE_LIMIT_REQUESTS: int = 10

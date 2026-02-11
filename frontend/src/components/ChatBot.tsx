@@ -4,10 +4,10 @@ import { ChatMessage } from "./ChatMessage";
 import { LoadingIndicator } from "./LoadingIndicator";
 import { ConversationHistory } from "./ConversationHistory";
 import { ErrorMessage } from "./ErrorMessage";
-import { ChatbotGlossary } from "./ChatBot/ChatbotGlossary";
 import { useChat } from "../hooks/useChat";
 import { useTextSelection } from "../hooks/useTextSelection";
 import { useLanguagePreference } from "../hooks/useLanguagePreference";
+import { useAuth } from "../hooks/useAuth";
 import "../styles/chatbot.css";
 
 interface ChatBotProps {
@@ -17,8 +17,8 @@ interface ChatBotProps {
 export const ChatBot: React.FC<ChatBotProps> = ({ onMessage }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [showHistory, setShowHistory] = useState(window.innerWidth > 768);
-  const [showGlossary, setShowGlossary] = useState(false);
   const [highlightedMessageId, setHighlightedMessageId] = useState<string | null>(null);
+  const { isAuthenticated } = useAuth();
   const {
     messages,
     isLoading,
@@ -118,15 +118,6 @@ export const ChatBot: React.FC<ChatBotProps> = ({ onMessage }) => {
             </div>
             <div className="header-actions">
               <button
-                onClick={() => setShowGlossary(!showGlossary)}
-                className={`glossary-toggle-btn ${showGlossary ? 'active' : ''}`}
-                aria-label={language === 'urdu' ? 'اصطلاحات کی فہرست' : 'Toggle glossary'}
-                title={language === 'urdu' ? 'اصطلاحات کی فہرست' : 'Toggle glossary'}
-                aria-pressed={showGlossary}
-              >
-                📚
-              </button>
-              <button
                 onClick={() => setIsOpen(false)}
                 className="close-btn"
                 aria-label="Close chatbot"
@@ -138,81 +129,92 @@ export const ChatBot: React.FC<ChatBotProps> = ({ onMessage }) => {
           </div>
 
           {/* Main Content Area */}
-          <div className={`chatbot-main ${showGlossary ? 'with-glossary' : ''}`}>
-            {/* Conversation History Sidebar (Desktop Only) */}
-            {showHistory && window.innerWidth > 768 && (
-              <ConversationHistory
-                messages={messages}
-                currentConversationId={conversationId}
-                onSelectMessage={handleSelectMessage}
-              />
-            )}
-
-            {/* Glossary Panel */}
-            {showGlossary && (
-              <div className="glossary-panel">
-                <ChatbotGlossary
-                  isOpen={showGlossary}
-                  onClose={() => setShowGlossary(false)}
-                />
+          <div className="chatbot-main">
+            {!isAuthenticated ? (
+              /* Auth Gate - Login Required */
+              <div className="chatbot-auth-gate">
+                <div className="auth-gate-content">
+                  <div className="auth-gate-icon">🔒</div>
+                  <h4 className="auth-gate-title">Sign in to start chatting</h4>
+                  <p className="auth-gate-subtitle">
+                    Log in to access the AI-powered textbook assistant
+                  </p>
+                  <button
+                    className="auth-gate-login-btn"
+                    onClick={() => { window.location.href = "/book/login"; }}
+                  >
+                    Login
+                  </button>
+                </div>
               </div>
-            )}
+            ) : (
+              <>
+                {/* Conversation History Sidebar (Desktop Only) */}
+                {showHistory && window.innerWidth > 768 && (
+                  <ConversationHistory
+                    messages={messages}
+                    currentConversationId={conversationId}
+                    onSelectMessage={handleSelectMessage}
+                  />
+                )}
 
-            {/* Messages Panel */}
-            <div className={`messages-panel ${showGlossary ? 'with-glossary' : ''}`}>
-              {/* Messages Container */}
-              <div className="messages-container" ref={messagesContainerRef}>
-                {messages.length === 0 && (
-                  <div className="welcome-message">
-                    <p>👋 Hello! I'm here to help you understand the textbook.</p>
-                    <p>
-                      {selectedText
-                        ? `I noticed you selected: "${selectedText.text.substring(0, 40)}..."`
-                        : "Select any text and ask me a question about it!"}
-                    </p>
+                {/* Messages Panel */}
+                <div className="messages-panel">
+                  {/* Messages Container */}
+                  <div className="messages-container" ref={messagesContainerRef}>
+                    {messages.length === 0 && (
+                      <div className="welcome-message">
+                        <p>👋 Hello! I'm here to help you understand the textbook.</p>
+                        <p>
+                          {selectedText
+                            ? `I noticed you selected: "${selectedText.text.substring(0, 40)}..."`
+                            : "Select any text and ask me a question about it!"}
+                        </p>
+                      </div>
+                    )}
+
+                    {messages.map((msg, idx) => (
+                      <ChatMessage
+                        key={msg.id || idx}
+                        sender={msg.sender}
+                        content={msg.content}
+                        timestamp={msg.timestamp}
+                        citations={msg.citations}
+                        relevanceScores={msg.relevanceScores}
+                        isHighlighted={highlightedMessageId === msg.id}
+                        messageId={msg.id}
+                        language={language as "english" | "urdu"}
+                      />
+                    ))}
+
+                    <LoadingIndicator isVisible={isLoading} elapsedTime={elapsedTime} />
+
+                    {error && (
+                      <ErrorMessage
+                        error={error}
+                        errorType={errorType}
+                        onRetry={errorType !== "user" ? retryLastMessage : undefined}
+                        onDismiss={clearError}
+                      />
+                    )}
+
+                    <div
+                      ref={messagesEndRef}
+                      aria-label="Messages end"
+                      style={{ height: 0 }}
+                    />
                   </div>
-                )}
 
-                {messages.map((msg, idx) => (
-                  <ChatMessage
-                    key={msg.id || idx}
-                    sender={msg.sender}
-                    content={msg.content}
-                    timestamp={msg.timestamp}
-                    citations={msg.citations}
-                    relevanceScores={msg.relevanceScores}
-                    isHighlighted={highlightedMessageId === msg.id}
-                    messageId={msg.id}
-                    language={language as "english" | "urdu"}
-                  />
-                ))}
-
-                <LoadingIndicator isVisible={isLoading} elapsedTime={elapsedTime} />
-
-                {error && (
-                  <ErrorMessage
+                  {/* Input Form */}
+                  <ChatInput
+                    onSendMessage={handleSendMessage}
+                    isLoading={isLoading}
+                    selectedText={selectedText}
                     error={error}
-                    errorType={errorType}
-                    onRetry={errorType !== "user" ? retryLastMessage : undefined}
-                    onDismiss={clearError}
                   />
-                )}
-
-                <div
-                  ref={messagesEndRef}
-                  aria-label="Messages end"
-                  style={{ height: 0 }}
-                />
-              </div>
-
-              {/* Input Form */}
-              <ChatInput
-                onSendMessage={handleSendMessage}
-                isLoading={isLoading}
-                selectedText={selectedText}
-                error={error}
-              />
-            </div>
+                </div>
+              </>
+            )}
           </div>
         </div>
       )}

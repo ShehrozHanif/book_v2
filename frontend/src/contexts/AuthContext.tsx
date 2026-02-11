@@ -1,5 +1,9 @@
 /**
  * Authentication context for user state management
+ *
+ * Handles both response formats from the backend:
+ * - TokenResponse: { access_token, refresh_token, token_type, user_id, username }
+ * - AuthResponse: { access_token, refresh_token, user: User }
  */
 
 import React, { createContext, useState, useEffect, ReactNode } from "react";
@@ -12,6 +16,34 @@ interface AuthContextProviderProps {
   children: ReactNode;
 }
 
+/**
+ * Extract user data from backend response.
+ * Backend returns flat { user_id, username } fields (TokenResponse),
+ * not a nested { user: User } object.
+ */
+function extractUser(response: any, email?: string): User {
+  // If response has a proper user object, use it
+  if (response.user && response.user.user_id) {
+    return response.user;
+  }
+
+  // Otherwise build user from flat TokenResponse fields
+  return {
+    user_id: response.user_id || "",
+    username: response.username || "",
+    email: email || "",
+    skill_level: 1,
+    skill_confidence: 0,
+    preferences: {
+      explanation_style: "theory_first",
+      code_language: "python",
+      learning_pace: "medium",
+      content_focus: "balanced",
+    },
+    created_at: new Date().toISOString(),
+  };
+}
+
 export const AuthContextProvider: React.FC<AuthContextProviderProps> = ({ children }) => {
   const [user, setUser] = useState<User | null>(null);
   const [isLoading, setIsLoading] = useState(true);
@@ -22,16 +54,21 @@ export const AuthContextProvider: React.FC<AuthContextProviderProps> = ({ childr
     const token = localStorage.getItem("access_token");
     const storedUser = localStorage.getItem("user");
 
-    if (token && storedUser) {
-      try {
-        const userData = JSON.parse(storedUser);
-        setUser(userData);
+    if (token) {
+      personalizationApi.setToken(token);
+
+      if (storedUser && storedUser !== "undefined") {
+        try {
+          const userData = JSON.parse(storedUser);
+          setUser(userData);
+          setIsAuthenticated(true);
+        } catch (error) {
+          console.error("Failed to restore user from storage:", error);
+          localStorage.removeItem("user");
+        }
+      } else {
+        // Have token but no user data - still authenticated
         setIsAuthenticated(true);
-        personalizationApi.setToken(token);
-      } catch (error) {
-        console.error("Failed to restore user from storage:", error);
-        localStorage.removeItem("access_token");
-        localStorage.removeItem("user");
       }
     }
 
@@ -42,10 +79,11 @@ export const AuthContextProvider: React.FC<AuthContextProviderProps> = ({ childr
     setIsLoading(true);
     try {
       const response = await personalizationApi.login({ email, password });
+      const userData = extractUser(response, email);
 
-      setUser(response.user);
+      setUser(userData);
       setIsAuthenticated(true);
-      localStorage.setItem("user", JSON.stringify(response.user));
+      localStorage.setItem("user", JSON.stringify(userData));
       localStorage.setItem("refresh_token", response.refresh_token);
     } catch (error) {
       setIsAuthenticated(false);
@@ -68,10 +106,11 @@ export const AuthContextProvider: React.FC<AuthContextProviderProps> = ({ childr
         email,
         password,
       });
+      const userData = extractUser(response, email);
 
-      setUser(response.user);
+      setUser(userData);
       setIsAuthenticated(true);
-      localStorage.setItem("user", JSON.stringify(response.user));
+      localStorage.setItem("user", JSON.stringify(userData));
       localStorage.setItem("refresh_token", response.refresh_token);
     } catch (error) {
       setIsAuthenticated(false);

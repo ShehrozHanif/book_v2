@@ -678,4 +678,74 @@
   .messages-container {
     background-color: #1a1a1a;
   }
+
+  .chatbot-auth-gate {
+    background: #1a1a1a;
+  }
+
+  .auth-gate-title {
+    color: #f0f0f0 !important;
+  }
+
+  .auth-gate-subtitle {
+    color: #999 !important;
+  }
+}
+
+/* Auth Gate Styles */
+.chatbot-auth-gate {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #f8f9fc;
+  padding: 32px;
+}
+
+.auth-gate-content {
+  text-align: center;
+  max-width: 280px;
+}
+
+.auth-gate-icon {
+  font-size: 48px;
+  margin-bottom: 16px;
+  opacity: 0.9;
+}
+
+.auth-gate-title {
+  margin: 0 0 8px 0;
+  font-size: 18px;
+  font-weight: 700;
+  color: #1e293b;
+}
+
+.auth-gate-subtitle {
+  margin: 0 0 24px 0;
+  font-size: 14px;
+  color: #64748b;
+  line-height: 1.5;
+}
+
+.auth-gate-login-btn {
+  display: inline-block;
+  padding: 12px 40px;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  border: none;
+  border-radius: 10px;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+}
+
+.auth-gate-login-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(102, 126, 234, 0.4);
+}
+
+.auth-gate-login-btn:active {
+  transform: translateY(0);
 }

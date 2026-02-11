@@ -15,6 +15,16 @@ export interface ChatResponse {
   processing_time_ms: number;
 }
 
+export interface TranslateRequest {
+  text: string;
+  conversation_id?: string;
+}
+
+export interface TranslateResponse {
+  translated_text: string;
+  original_text: string;
+}
+
 export interface EmbedRequest {
   content: string;
   metadata?: Record<string, unknown>;
@@ -165,6 +175,55 @@ export const chatApi = {
       throw new ChatApiError(
         500,
         `Network error: ${error instanceof Error ? error.message : "Unknown error"}`
+      );
+    }
+  },
+
+  /**
+   * Translate text to Urdu
+   * @param request Translation request with text
+   * @returns Translation response with Urdu text
+   */
+  async translate(request: TranslateRequest): Promise<TranslateResponse> {
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), 30000);
+
+    try {
+      const response = await fetch(`${API_BASE_URL}/api/v1/chat/translate`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(request),
+        signal: controller.signal,
+      });
+
+      clearTimeout(timeoutId);
+
+      if (!response.ok) {
+        const errorBody = await response.text();
+        throw new ChatApiError(
+          response.status,
+          `Translation error: ${response.statusText} - ${errorBody}`
+        );
+      }
+
+      const data = await response.json();
+      return data as TranslateResponse;
+    } catch (error) {
+      clearTimeout(timeoutId);
+
+      if (error instanceof ChatApiError) {
+        throw error;
+      }
+
+      if (error instanceof Error && error.name === "AbortError") {
+        throw new TimeoutError("Translation timed out");
+      }
+
+      throw new ChatApiError(
+        500,
+        `Translation failed: ${error instanceof Error ? error.message : "Unknown error"}`
       );
     }
   },

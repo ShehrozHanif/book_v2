@@ -12,7 +12,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from src.database.connection import get_session
 from src.personalization.models.db_models import User
-from src.personalization.utils.auth import get_current_user
+from src.personalization.api.dependencies import get_current_user
 from src.personalization.services.language_preference_service import (
     get_user_preference,
     set_user_preference,

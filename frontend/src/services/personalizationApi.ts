@@ -15,7 +15,8 @@ import {
   StatisticsData,
 } from "../types/personalization";
 
-const API_BASE_URL = process.env.REACT_APP_API_URL || "http://localhost:8000/api/v1";
+const RAW_BASE = process.env.REACT_APP_API_URL || "http://localhost:8000";
+const API_BASE_URL = RAW_BASE.endsWith("/api/v1") ? RAW_BASE : `${RAW_BASE}/api/v1`;
 
 interface ApiError {
   detail: string;

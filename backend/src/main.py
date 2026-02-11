@@ -133,12 +133,33 @@ app.include_router(notifications_router)
 app.include_router(language_preferences_router)
 app.include_router(language_analytics_router)
 
-# Serve React static files at /book/
+# Serve React SPA at /book/ with client-side routing support
 from pathlib import Path
 from fastapi.staticfiles import StaticFiles
+from fastapi.responses import FileResponse
 import os
 
 react_build_path = Path(__file__).parent.parent.parent / "frontend" / "build"
 if react_build_path.exists():
-    app.mount("/book", StaticFiles(directory=str(react_build_path), html=True), name="book")
-    logger.info(f"React app mounted at /book from {react_build_path}")
+    # Serve static assets (JS, CSS, images) from /book/static/
+    static_path = react_build_path / "static"
+    if static_path.exists():
+        app.mount("/book/static", StaticFiles(directory=str(static_path)), name="book-static")
+
+    # Catch-all route for SPA client-side routing (must be after API routes)
+    @app.get("/book/{full_path:path}", tags=["spa"])
+    async def serve_react_app(full_path: str):
+        """Serve React SPA - returns index.html for all client-side routes."""
+        # Check if the requested path is an actual file (favicon, manifest, etc.)
+        file_path = react_build_path / full_path
+        if file_path.is_file():
+            return FileResponse(str(file_path))
+        # Otherwise serve index.html for client-side routing
+        return FileResponse(str(react_build_path / "index.html"))
+
+    @app.get("/book", tags=["spa"])
+    async def serve_react_root():
+        """Serve React SPA root."""
+        return FileResponse(str(react_build_path / "index.html"))
+
+    logger.info(f"React SPA mounted at /book from {react_build_path}")

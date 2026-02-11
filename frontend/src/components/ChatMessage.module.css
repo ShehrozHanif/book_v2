@@ -185,6 +185,81 @@
   }
 }
 
+/* Urdu Translation Styles */
+.urdu-translation {
+  margin-top: 12px;
+  padding: 12px 14px;
+  background: linear-gradient(135deg, rgba(16, 185, 129, 0.06) 0%, rgba(59, 130, 246, 0.06) 100%);
+  border: 1px solid rgba(16, 185, 129, 0.15);
+  border-radius: 8px;
+  direction: rtl;
+  text-align: right;
+}
+
+.urdu-text {
+  margin: 0;
+  font-family: 'Noto Nastaliq Urdu', 'Jameel Noori Nastaleeq', 'Urdu Typesetting', serif;
+  font-size: 15px;
+  line-height: 2;
+  color: #1e293b;
+}
+
+.translate-actions {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 8px;
+  margin-top: 10px;
+}
+
+.translate-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 16px;
+  font-size: 13px;
+  font-weight: 600;
+  color: #64748b;
+  background: rgba(100, 116, 139, 0.06);
+  border: 1.5px solid #e2e8f0;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-family: 'Noto Nastaliq Urdu', -apple-system, sans-serif;
+}
+
+.translate-btn:hover:not(:disabled) {
+  color: #667eea;
+  border-color: #667eea;
+  background: rgba(102, 126, 234, 0.05);
+}
+
+.translate-btn.active {
+  color: #10b981;
+  border-color: #10b981;
+  background: rgba(16, 185, 129, 0.05);
+}
+
+.translate-btn:disabled {
+  opacity: 0.6;
+  cursor: wait;
+}
+
+.translate-spinner {
+  display: inline-block;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+.translate-error {
+  font-size: 11px;
+  color: #ef4444;
+}
+
 /* Dark mode support */
 @media (prefers-color-scheme: dark) {
   .message-bot .message-content {
@@ -198,5 +273,31 @@
 
   .message-time {
     color: #64748b;
+  }
+
+  .urdu-translation {
+    background: linear-gradient(135deg, rgba(16, 185, 129, 0.1) 0%, rgba(59, 130, 246, 0.1) 100%);
+    border-color: rgba(16, 185, 129, 0.2);
+  }
+
+  .urdu-text {
+    color: #e2e8f0;
+  }
+
+  .translate-btn {
+    color: #94a3b8;
+    border-color: #475569;
+  }
+
+  .translate-btn:hover:not(:disabled) {
+    color: #818cf8;
+    border-color: #818cf8;
+    background: rgba(129, 140, 248, 0.1);
+  }
+
+  .translate-btn.active {
+    color: #34d399;
+    border-color: #34d399;
+    background: rgba(52, 211, 153, 0.1);
   }
 }

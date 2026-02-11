@@ -15,7 +15,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from src.database.connection import get_session
 from src.personalization.models.db_models import User, ChatbotResponseTemplate, ChatbotResponseTranslationStatus
-from src.personalization.utils.auth import get_current_user
+from src.personalization.api.dependencies import get_current_user
 from src.personalization.services import translation_service
 
 router = APIRouter(prefix="/api/v1/admin", tags=["admin-translation"])
