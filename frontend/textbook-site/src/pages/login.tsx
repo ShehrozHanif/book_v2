@@ -4,6 +4,7 @@
  */
 
 import React, { useState, useEffect } from 'react';
+import Layout from '@theme/Layout';
 import { usePersonalization } from '../components/PersonalizationProvider';
 import styles from './login.module.css';
 
@@ -94,6 +95,7 @@ export default function LoginPage(): JSX.Element {
   }
 
   return (
+    <Layout title={mode === 'login' ? 'Login' : 'Create Account'}>
     <div className={styles.container}>
       <div className={styles.card}>
         <h1 className={styles.title}>
@@ -180,5 +182,6 @@ export default function LoginPage(): JSX.Element {
         </p>
       </div>
     </div>
+    </Layout>
   );
 }

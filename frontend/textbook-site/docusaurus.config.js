@@ -85,8 +85,7 @@ const config = {
         },
         items: [
           {
-            type: 'docSidebar',
-            sidebarId: 'tutorialSidebar',
+            to: '/docs/module-01/',
             position: 'left',
             label: 'Chapters',
           },
@@ -114,7 +113,7 @@ const config = {
             ],
           },
           {
-            href: 'https://github.com/username/book',
+            href: 'https://github.com/ShehrozHanif/book_v2',
             label: 'GitHub',
             position: 'right',
           },
@@ -147,7 +146,7 @@ const config = {
             items: [
               {
                 label: 'GitHub Repository',
-                href: 'https://github.com/username/book',
+                href: 'https://github.com/ShehrozHanif/book_v2',
               },
             ],
           },
