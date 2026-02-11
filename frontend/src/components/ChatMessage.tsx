@@ -79,27 +79,7 @@ export const ChatMessage: React.FC<ChatMessageProps> = ({
           </div>
         )}
 
-        {citations.length > 0 && (
-          <div className="citations-section" aria-label="Citations">
-            <div className="citations-label">Sources:</div>
-            <ul className="citations-list">
-              {citations.map((citation, idx) => (
-                <li key={idx} className="citation-item">
-                  <span className="citation-badge">[{idx + 1}]</span>
-                  <span className="citation-text" title={citation}>
-                    {citation.substring(0, 60)}
-                    {citation.length > 60 ? "..." : ""}
-                  </span>
-                  <span className="relevance-score">
-                    {((relevanceScores[idx] || 0) * 100).toFixed(0)}%
-                  </span>
-                </li>
-              ))}
-            </ul>
-          </div>
-        )}
-
-        {/* Translate Button - after citations, right-aligned */}
+        {/* Translate Button - before citations, right-aligned */}
         {sender === "bot" && (
           <div className="translate-actions">
             <button
@@ -119,6 +99,26 @@ export const ChatMessage: React.FC<ChatMessageProps> = ({
             {translateError && (
               <span className="translate-error">{translateError}</span>
             )}
+          </div>
+        )}
+
+        {citations.length > 0 && (
+          <div className="citations-section" aria-label="Citations">
+            <div className="citations-label">Sources:</div>
+            <ul className="citations-list">
+              {citations.map((citation, idx) => (
+                <li key={idx} className="citation-item">
+                  <span className="citation-badge">[{idx + 1}]</span>
+                  <span className="citation-text" title={citation}>
+                    {citation.substring(0, 60)}
+                    {citation.length > 60 ? "..." : ""}
+                  </span>
+                  <span className="relevance-score">
+                    {((relevanceScores[idx] || 0) * 100).toFixed(0)}%
+                  </span>
+                </li>
+              ))}
+            </ul>
           </div>
         )}
       </div>

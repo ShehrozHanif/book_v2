@@ -562,6 +562,64 @@
   }
 }
 
+/* ===== Auth Gate Styles (new - does not modify existing) ===== */
+
+.chatbot-auth-gate {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 40px 24px;
+  background: #f8f9fc;
+}
+
+.auth-gate-content {
+  text-align: center;
+  max-width: 280px;
+}
+
+.auth-gate-icon {
+  font-size: 48px;
+  margin-bottom: 16px;
+}
+
+.auth-gate-title {
+  font-size: 18px;
+  font-weight: 700;
+  color: #1e293b;
+  margin: 0 0 8px 0;
+}
+
+.auth-gate-subtitle {
+  font-size: 14px;
+  color: #64748b;
+  margin: 0 0 24px 0;
+  line-height: 1.5;
+}
+
+.auth-gate-login-btn {
+  display: inline-block;
+  padding: 12px 36px;
+  font-size: 15px;
+  font-weight: 600;
+  color: white;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+}
+
+.auth-gate-login-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(102, 126, 234, 0.4);
+}
+
+.auth-gate-login-btn:active {
+  transform: translateY(0);
+}
+
 /* Conversation History Dark Mode */
 @media (prefers-color-scheme: dark) {
   .conversation-history {

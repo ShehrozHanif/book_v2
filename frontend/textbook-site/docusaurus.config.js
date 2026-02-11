@@ -32,6 +32,11 @@ const config = {
 
   onBrokenLinks: 'warn',
 
+  // Load Noto Nastaliq Urdu font for Urdu translation feature
+  stylesheets: [
+    'https://fonts.googleapis.com/css2?family=Noto+Nastaliq+Urdu:wght@400;700&display=swap',
+  ],
+
   // Even if you don't use internationalization, you can use this field to set
   // useful metadata like html lang. For example, if your site is Chinese, you
   // may want to replace "en" with "zh-Hans".

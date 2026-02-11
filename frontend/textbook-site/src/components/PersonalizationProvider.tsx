@@ -29,6 +29,31 @@ interface PersonalizationProviderProps {
 }
 
 /**
+ * Extract user data from backend response.
+ * Backend returns flat { user_id, username } fields (TokenResponse),
+ * not a nested { user: User } object.
+ */
+function extractUser(response: any, email?: string): User {
+  if (response.user && response.user.user_id) {
+    return response.user;
+  }
+  return {
+    user_id: response.user_id || "",
+    username: response.username || "",
+    email: email || "",
+    skill_level: 1,
+    skill_confidence: 0,
+    preferences: {
+      explanation_style: "theory_first",
+      code_language: "python",
+      learning_pace: "medium",
+      content_focus: "balanced",
+    },
+    created_at: new Date().toISOString(),
+  };
+}
+
+/**
  * PersonalizationProvider component that manages authentication state
  * and provides personalization context to the entire app
  */
@@ -47,7 +72,7 @@ export const PersonalizationProvider: React.FC<PersonalizationProviderProps> = (
         const token = localStorage.getItem('access_token');
         const savedUser = localStorage.getItem('user');
 
-        if (token && savedUser) {
+        if (token && savedUser && savedUser !== "undefined") {
           try {
             const parsedUser = JSON.parse(savedUser);
             setUser(parsedUser);
@@ -74,6 +99,10 @@ export const PersonalizationProvider: React.FC<PersonalizationProviderProps> = (
             localStorage.removeItem('user');
             localStorage.removeItem('access_token');
           }
+        } else if (token) {
+          // Have token but no valid user data - still authenticated
+          personalizationApi.setToken(token);
+          setIsAuthenticated(true);
         }
       } catch (error) {
         console.error('Error initializing authentication:', error);
@@ -89,15 +118,16 @@ export const PersonalizationProvider: React.FC<PersonalizationProviderProps> = (
     setIsLoading(true);
     try {
       const response = await personalizationApi.login({ email, password });
-      setUser(response.user);
+      const userData = extractUser(response, email);
+      setUser(userData);
       setIsAuthenticated(true);
-      localStorage.setItem('user', JSON.stringify(response.user));
+      localStorage.setItem('user', JSON.stringify(userData));
       localStorage.setItem('access_token', response.access_token);
       localStorage.setItem('refresh_token', response.refresh_token);
 
       // Fetch initial progress data
       try {
-        const progressData = await personalizationApi.getProgress(response.user.user_id);
+        const progressData = await personalizationApi.getProgress(userData.user_id);
         if (progressData && Array.isArray(progressData.progress)) {
           setProgress(progressData.progress);
         }
@@ -121,15 +151,16 @@ export const PersonalizationProvider: React.FC<PersonalizationProviderProps> = (
         email,
         password,
       });
-      setUser(response.user);
+      const userData = extractUser(response, email);
+      setUser(userData);
       setIsAuthenticated(true);
-      localStorage.setItem('user', JSON.stringify(response.user));
+      localStorage.setItem('user', JSON.stringify(userData));
       localStorage.setItem('access_token', response.access_token);
       localStorage.setItem('refresh_token', response.refresh_token);
 
       // Fetch initial progress data
       try {
-        const progressData = await personalizationApi.getProgress(response.user.user_id);
+        const progressData = await personalizationApi.getProgress(userData.user_id);
         if (progressData && Array.isArray(progressData.progress)) {
           setProgress(progressData.progress);
         }

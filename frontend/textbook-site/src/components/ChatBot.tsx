@@ -6,6 +6,7 @@ import { ConversationHistory } from "./ConversationHistory";
 import { ErrorMessage } from "./ErrorMessage";
 import { useChat } from "../hooks/useChat";
 import { useTextSelection } from "../hooks/useTextSelection";
+import { usePersonalization } from "./PersonalizationProvider";
 import "../styles/chatbot.css";
 
 interface ChatBotProps {
@@ -13,6 +14,7 @@ interface ChatBotProps {
 }
 
 export const ChatBot: React.FC<ChatBotProps> = ({ onMessage }) => {
+  const { isAuthenticated } = usePersonalization();
   const [isOpen, setIsOpen] = useState(false);
   const [showHistory, setShowHistory] = useState(typeof window !== "undefined" && window.innerWidth > 768);
   const [highlightedMessageId, setHighlightedMessageId] = useState<string | null>(null);
@@ -125,6 +127,21 @@ export const ChatBot: React.FC<ChatBotProps> = ({ onMessage }) => {
           </div>
 
           {/* Main Content Area */}
+          {!isAuthenticated ? (
+            <div className="chatbot-auth-gate">
+              <div className="auth-gate-content">
+                <div className="auth-gate-icon">🔒</div>
+                <h4 className="auth-gate-title">Sign in to start chatting</h4>
+                <p className="auth-gate-subtitle">Log in to access the AI-powered textbook assistant</p>
+                <button
+                  className="auth-gate-login-btn"
+                  onClick={() => { window.location.href = "/login?redirect=" + encodeURIComponent(window.location.pathname); }}
+                >
+                  Login
+                </button>
+              </div>
+            </div>
+          ) : (
           <div className="chatbot-main">
             {/* Conversation History Sidebar (Desktop Only) */}
             {showHistory && typeof window !== "undefined" && window.innerWidth > 768 && (
@@ -190,6 +207,7 @@ export const ChatBot: React.FC<ChatBotProps> = ({ onMessage }) => {
               />
             </div>
           </div>
+          )}
         </div>
       )}
     </div>

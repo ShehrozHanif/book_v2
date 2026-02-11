@@ -1,4 +1,5 @@
-import React from "react";
+import React, { useState } from "react";
+import { chatApi } from "../services/chatApi";
 import "../styles/chat-message.css";
 
 interface ChatMessageProps {
@@ -20,22 +21,29 @@ export const ChatMessage: React.FC<ChatMessageProps> = ({
   isHighlighted = false,
   messageId,
 }) => {
-  const formatCitations = (citations: string[]) => {
-    return citations.map((citation, idx) => {
-      const relevancePercent = (
-        (relevanceScores[idx] || 0) * 100
-      ).toFixed(1);
-      return (
-        <span
-          key={idx}
-          className="citation"
-          title={`Relevance: ${relevancePercent}%`}
-          role="doc-note"
-        >
-          [{idx + 1}]
-        </span>
-      );
-    });
+  const [urduText, setUrduText] = useState<string | null>(null);
+  const [isTranslating, setIsTranslating] = useState(false);
+  const [showUrdu, setShowUrdu] = useState(false);
+  const [translateError, setTranslateError] = useState<string | null>(null);
+
+  const handleTranslate = async () => {
+    if (urduText) {
+      setShowUrdu(!showUrdu);
+      return;
+    }
+
+    setIsTranslating(true);
+    setTranslateError(null);
+    try {
+      const response = await chatApi.translate({ text: content });
+      setUrduText(response.translated_text);
+      setShowUrdu(true);
+    } catch (err) {
+      setTranslateError("Translation failed. Please try again.");
+      console.error("Translation error:", err);
+    } finally {
+      setIsTranslating(false);
+    }
   };
 
   const formatTimestamp = (timestamp: string) => {
@@ -59,6 +67,36 @@ export const ChatMessage: React.FC<ChatMessageProps> = ({
     >
       <div className="message-content">
         <p className="message-text">{content}</p>
+
+        {/* Urdu Translation - directly under English text */}
+        {sender === "bot" && showUrdu && urduText && (
+          <div className="urdu-translation" dir="rtl" lang="ur">
+            <p className="urdu-text">{urduText}</p>
+          </div>
+        )}
+
+        {/* Translate Button - before citations, right-aligned */}
+        {sender === "bot" && (
+          <div className="translate-actions">
+            <button
+              className={`translate-btn ${showUrdu ? 'translate-btn-active' : ''} ${isTranslating ? 'translate-btn-loading' : ''}`}
+              onClick={handleTranslate}
+              disabled={isTranslating}
+              title={showUrdu ? "Hide Urdu translation" : "Translate to Urdu"}
+            >
+              {isTranslating ? (
+                <span className="translate-spinner">⟳</span>
+              ) : showUrdu ? (
+                '✓ اردو'
+              ) : (
+                '🌐 اردو'
+              )}
+            </button>
+            {translateError && (
+              <span className="translate-error">{translateError}</span>
+            )}
+          </div>
+        )}
 
         {citations.length > 0 && (
           <div className="citations-section" aria-label="Citations">
