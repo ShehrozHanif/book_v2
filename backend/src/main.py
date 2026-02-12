@@ -85,10 +85,17 @@ async def health_check():
 @app.get("/ready", tags=["health"])
 async def readiness_check():
     """Readiness check endpoint - verifies all services are ready."""
+    import os
+    openai_key = os.getenv("OPENAI_API_KEY", "")
+    qdrant_url = os.getenv("QDRANT_URL", "")
     return {
         "status": "ready",
         "database": "connected",
         "environment": settings.ENVIRONMENT,
+        "openai_key_set": bool(openai_key),
+        "openai_key_length": len(openai_key),
+        "openai_key_prefix": openai_key[:10] + "..." if openai_key else "MISSING",
+        "qdrant_url_set": bool(qdrant_url),
     }
 
 
