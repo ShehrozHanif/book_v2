@@ -10,6 +10,7 @@
 import React, { useEffect, useState } from 'react';
 import { usePersonalization } from '../components/PersonalizationProvider';
 import { personalizationApi } from '../services/personalizationApi';
+import { siteUrl } from '../utils/paths';
 import styles from './onboarding.module.css';
 
 type WizardStep = 'quiz' | 'results' | 'ready';
@@ -56,7 +57,7 @@ export default function OnboardingPage(): JSX.Element {
   // Redirect to login if not authenticated
   useEffect(() => {
     if (!authLoading && !isAuthenticated) {
-      window.location.href = `/login?redirect=${encodeURIComponent('/onboarding')}`;
+      window.location.href = siteUrl(`/login?redirect=${encodeURIComponent('/onboarding')}`);
     }
   }, [isAuthenticated, authLoading]);
 
@@ -347,7 +348,7 @@ export default function OnboardingPage(): JSX.Element {
               </a>
             </div>
 
-            <a href="/dashboard" className={styles.dashboardLink}>
+            <a href={siteUrl('/dashboard')} className={styles.dashboardLink}>
               Go to Dashboard
             </a>
           </div>

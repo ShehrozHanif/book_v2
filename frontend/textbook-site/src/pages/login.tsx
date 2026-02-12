@@ -6,6 +6,7 @@
 import React, { useState, useEffect } from 'react';
 import Layout from '@theme/Layout';
 import { usePersonalization } from '../components/PersonalizationProvider';
+import { siteUrl } from '../utils/paths';
 import styles from './login.module.css';
 
 type FormMode = 'login' | 'register';
@@ -16,7 +17,7 @@ export default function LoginPage(): JSX.Element {
   // Get redirect URL from query parameters
   const getRedirectUrl = () => {
     const params = new URLSearchParams(window.location.search);
-    return params.get('redirect') || '/book/';
+    return params.get('redirect') || siteUrl('/');
   };
 
   const [mode, setMode] = useState<FormMode>('login');

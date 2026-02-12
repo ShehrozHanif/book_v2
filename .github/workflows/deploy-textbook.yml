@@ -2,7 +2,7 @@ name: Deploy Textbook to GitHub Pages
 
 on:
   push:
-    branches: [main, release/003-personalization-complete]
+    branches: [main, 001-rag-chatbot, release/003-personalization-complete]
     paths:
       - 'frontend/textbook-site/**'
       - 'textbook/chapters/**'

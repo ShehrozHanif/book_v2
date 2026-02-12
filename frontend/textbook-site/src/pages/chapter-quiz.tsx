@@ -7,6 +7,7 @@ import React, { useEffect, useState } from 'react';
 import { usePersonalization } from '../components/PersonalizationProvider';
 import { personalizationApi } from '../services/personalizationApi';
 import { PracticeQuestion } from '../types/personalization';
+import { siteUrl } from '../utils/paths';
 import styles from './chapter-quiz.module.css';
 
 type QuizState = 'loading' | 'questions' | 'results' | 'error';
@@ -55,7 +56,7 @@ export default function ChapterQuizPage(): JSX.Element {
   // Redirect to login if not authenticated
   useEffect(() => {
     if (!authLoading && !isAuthenticated && typeof window !== 'undefined') {
-      window.location.href = `/login?redirect=${encodeURIComponent(window.location.pathname + window.location.search)}`;
+      window.location.href = siteUrl(`/login?redirect=${encodeURIComponent(window.location.pathname + window.location.search)}`);
     }
   }, [isAuthenticated, authLoading]);
 

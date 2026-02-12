@@ -7,6 +7,7 @@ import { ErrorMessage } from "./ErrorMessage";
 import { useChat } from "../hooks/useChat";
 import { useTextSelection } from "../hooks/useTextSelection";
 import { usePersonalization } from "./PersonalizationProvider";
+import { siteUrl } from "../utils/paths";
 import "../styles/chatbot.css";
 
 interface ChatBotProps {
@@ -135,7 +136,7 @@ export const ChatBot: React.FC<ChatBotProps> = ({ onMessage }) => {
                 <p className="auth-gate-subtitle">Log in to access the AI-powered textbook assistant</p>
                 <button
                   className="auth-gate-login-btn"
-                  onClick={() => { window.location.href = "/login?redirect=" + encodeURIComponent(window.location.pathname); }}
+                  onClick={() => { window.location.href = siteUrl("/login?redirect=" + encodeURIComponent(window.location.pathname)); }}
                 >
                   Login
                 </button>

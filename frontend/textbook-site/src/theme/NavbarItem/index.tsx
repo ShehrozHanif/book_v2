@@ -3,6 +3,7 @@
  */
 
 import React, { useEffect, useState, useRef } from 'react';
+import { siteUrl } from '../../utils/paths';
 
 interface NavbarItemProps {
   className?: string;
@@ -94,7 +95,7 @@ export default function NavbarItem(props: NavbarItemProps): JSX.Element | null {
         localStorage.removeItem('access_token');
         localStorage.removeItem('refresh_token');
         localStorage.removeItem('user');
-        window.location.href = '/login';
+        window.location.href = siteUrl('/login');
       };
 
       return (
@@ -166,7 +167,7 @@ export default function NavbarItem(props: NavbarItemProps): JSX.Element | null {
               }}
             >
               <a
-                href="/dashboard"
+                href={siteUrl('/dashboard')}
                 style={{
                   display: 'flex',
                   alignItems: 'center',

@@ -7,6 +7,7 @@ import Layout from '@theme/Layout';
 import { usePersonalization } from '../components/PersonalizationProvider';
 import { personalizationApi } from '../services/personalizationApi';
 import { StatisticsData } from '../types/personalization';
+import { siteUrl } from '../utils/paths';
 import ProgressCard from '../components/ProgressCard';
 import StatisticsCharts from '../components/StatisticsCharts';
 import styles from './dashboard.module.css';
@@ -23,7 +24,7 @@ export default function DashboardPage(): JSX.Element {
   // Redirect to login if not authenticated
   useEffect(() => {
     if (!authLoading && !isAuthenticated) {
-      window.location.href = `/book/login?redirect=${encodeURIComponent(window.location.pathname)}`;
+      window.location.href = siteUrl(`/login?redirect=${encodeURIComponent(window.location.pathname)}`);
     }
   }, [isAuthenticated, authLoading]);
 

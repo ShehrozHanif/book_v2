@@ -5,6 +5,7 @@
 
 import React, { useState } from 'react';
 import { usePersonalization } from './PersonalizationProvider';
+import { siteUrl } from '../utils/paths';
 import styles from './PersonalizationButton.module.css';
 
 interface PersonalizationButtonProps {
@@ -26,7 +27,7 @@ const PersonalizationButton: React.FC<PersonalizationButtonProps> = ({ chapterId
   };
 
   const handleOpenQuiz = () => {
-    window.open(`/chapter-quiz?chapter=${chapterId}`, '_blank', 'noopener,noreferrer');
+    window.open(siteUrl(`/chapter-quiz?chapter=${chapterId}`), '_blank', 'noopener,noreferrer');
     setIsModalOpen(false);
   };
 
@@ -44,7 +45,7 @@ const PersonalizationButton: React.FC<PersonalizationButtonProps> = ({ chapterId
   if (!isAuthenticated) {
     // Show login link for unauthenticated users
     const currentPath = typeof window !== 'undefined' ? window.location.pathname : '';
-    const loginUrl = `/login?redirect=${encodeURIComponent(currentPath)}`;
+    const loginUrl = siteUrl(`/login?redirect=${encodeURIComponent(currentPath)}`);
 
     return (
       <div className={styles.buttonContainer}>

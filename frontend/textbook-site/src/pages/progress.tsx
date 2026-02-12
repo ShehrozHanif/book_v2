@@ -5,6 +5,7 @@
 import React, { useEffect, useState } from 'react';
 import { usePersonalization } from '../components/PersonalizationProvider';
 import { personalizationApi } from '../services/personalizationApi';
+import { siteUrl } from '../utils/paths';
 import styles from './progress.module.css';
 
 interface ChapterProgress {
@@ -32,7 +33,7 @@ export default function ProgressPage(): JSX.Element {
   // Redirect to login if not authenticated
   useEffect(() => {
     if (!authLoading && !isAuthenticated) {
-      window.location.href = `/book/login?redirect=${encodeURIComponent(window.location.pathname)}`;
+      window.location.href = siteUrl(`/login?redirect=${encodeURIComponent(window.location.pathname)}`);
     }
   }, [isAuthenticated, authLoading]);
 

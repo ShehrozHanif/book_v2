@@ -14,6 +14,7 @@ import {
   PracticeHistory,
   StatisticsData,
 } from "../types/personalization";
+import { siteUrl } from "../utils/paths";
 
 // Use window location to determine API URL, fallback to localhost:8000
 const API_BASE_URL = typeof window !== "undefined" && window.location.hostname !== "localhost"
@@ -29,7 +30,7 @@ class PersonalizationApi {
   private token: string | null = null;
 
   constructor() {
-    this.token = localStorage.getItem("access_token");
+    this.token = typeof localStorage !== "undefined" ? localStorage.getItem("access_token") : null;
   }
 
   setToken(token: string) {
@@ -65,7 +66,7 @@ class PersonalizationApi {
         this.clearToken();
         localStorage.removeItem("user");
         const currentPath = window.location.pathname + window.location.search;
-        window.location.href = `/login?redirect=${encodeURIComponent(currentPath)}`;
+        window.location.href = siteUrl(`/login?redirect=${encodeURIComponent(currentPath)}`);
         throw new Error("Session expired. Redirecting to login...");
       }
 
