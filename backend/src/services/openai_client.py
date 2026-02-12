@@ -13,7 +13,7 @@ class OpenAIService:
 
     def __init__(self):
         """Initialize OpenAI client with environment variables."""
-        api_key = os.getenv("OPENAI_API_KEY")
+        api_key = os.getenv("OPENAI_API_KEY", "").strip()
 
         if not api_key:
             raise ValueError("OPENAI_API_KEY environment variable must be set")

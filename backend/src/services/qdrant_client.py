@@ -14,8 +14,8 @@ class QdrantService:
 
     def __init__(self):
         """Initialize Qdrant client with environment variables."""
-        qdrant_url = os.getenv("QDRANT_URL")
-        qdrant_api_key = os.getenv("QDRANT_API_KEY")
+        qdrant_url = os.getenv("QDRANT_URL", "").strip()
+        qdrant_api_key = os.getenv("QDRANT_API_KEY", "").strip()
 
         if not qdrant_url or not qdrant_api_key:
             raise ValueError("QDRANT_URL and QDRANT_API_KEY environment variables must be set")
