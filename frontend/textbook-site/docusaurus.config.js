@@ -82,7 +82,7 @@ const config = {
         },
         items: [
           {
-            to: '/docs/module-01/',
+            to: '/docs/module-01',
             position: 'left',
             label: 'Chapters',
           },
