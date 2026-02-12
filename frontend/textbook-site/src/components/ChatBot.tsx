@@ -17,7 +17,7 @@ interface ChatBotProps {
 export const ChatBot: React.FC<ChatBotProps> = ({ onMessage }) => {
   const { isAuthenticated } = usePersonalization();
   const [isOpen, setIsOpen] = useState(false);
-  const [showHistory, setShowHistory] = useState(typeof window !== "undefined" && window.innerWidth > 768);
+  const [showHistory, setShowHistory] = useState(false);
   const [highlightedMessageId, setHighlightedMessageId] = useState<string | null>(null);
   const {
     messages,
@@ -33,6 +33,11 @@ export const ChatBot: React.FC<ChatBotProps> = ({ onMessage }) => {
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const messagesContainerRef = useRef<HTMLDivElement>(null);
   const [elapsedTime, setElapsedTime] = useState(0);
+
+  // Set initial showHistory on mount (SSR-safe)
+  useEffect(() => {
+    setShowHistory(window.innerWidth > 768);
+  }, []);
 
   // Auto-scroll to bottom when new messages arrive
   useEffect(() => {

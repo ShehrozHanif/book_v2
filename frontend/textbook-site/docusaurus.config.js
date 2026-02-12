@@ -46,10 +46,6 @@ const config = {
     locales: ['en'],
   },
 
-  plugins: [
-    './plugins/chatbot-plugin',
-  ],
-
   presets: [
     [
       'classic',

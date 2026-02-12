@@ -39,10 +39,12 @@ function getInsertionPoint(): HTMLElement | null {
 export const PracticeWidgetInjector: React.FC = () => {
   const containerRef = useRef<HTMLDivElement | null>(null);
   const rootRef = useRef<Root | null>(null);
-  const [pathname, setPathname] = useState(typeof window !== 'undefined' ? window.location.pathname : '');
+  const [pathname, setPathname] = useState('');
 
-  // Listen for URL changes (Docusaurus SPA navigation)
+  // Set initial pathname on mount and listen for URL changes (Docusaurus SPA navigation)
   useEffect(() => {
+    setPathname(window.location.pathname);
+
     const observer = new MutationObserver(() => {
       if (window.location.pathname !== pathname) {
         setPathname(window.location.pathname);
