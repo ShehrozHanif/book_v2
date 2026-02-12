@@ -79,7 +79,7 @@ app.state.rate_limiter = rate_limiter
 @app.get("/health", tags=["health"])
 async def health_check():
     """Health check endpoint for load balancers."""
-    return {"status": "ok", "environment": settings.ENVIRONMENT}
+    return {"status": "ok", "environment": settings.ENVIRONMENT, "version": "debug-v2"}
 
 
 @app.get("/ready", tags=["health"])
