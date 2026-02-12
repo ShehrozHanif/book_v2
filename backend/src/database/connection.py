@@ -1,6 +1,7 @@
 """Database connection and session management with production connection pooling."""
 
 import os
+import ssl as ssl_module
 from dotenv import load_dotenv
 from sqlalchemy.ext.asyncio import create_async_engine, AsyncSession
 from sqlalchemy.pool import NullPool, AsyncAdaptedQueuePool
@@ -10,7 +11,7 @@ from sqlalchemy.orm import sessionmaker
 load_dotenv()
 
 # Get database URL from environment
-DATABASE_URL = os.getenv("DATABASE_URL")
+DATABASE_URL = os.getenv("DATABASE_URL", "").strip()
 DATABASE_POOL_MODE = os.getenv("DATABASE_POOL_MODE", "queuepool")  # queuepool or nullpool
 
 if not DATABASE_URL:
@@ -19,6 +20,14 @@ if not DATABASE_URL:
 # Ensure the URL uses asyncio driver for PostgreSQL
 if DATABASE_URL.startswith("postgresql://"):
     DATABASE_URL = DATABASE_URL.replace("postgresql://", "postgresql+asyncpg://")
+
+# Detect if SSL is needed (Neon, Render, etc.) and strip unsupported params
+NEEDS_SSL = "sslmode=" in DATABASE_URL or "ssl=" in DATABASE_URL or "neon.tech" in DATABASE_URL
+# Remove query params not supported by asyncpg
+for param in ["sslmode=require", "channel_binding=require", "ssl=require"]:
+    DATABASE_URL = DATABASE_URL.replace("&" + param, "").replace("?" + param + "&", "?").replace("?" + param, "")
+# Clean up trailing ? or &
+DATABASE_URL = DATABASE_URL.rstrip("&").rstrip("?")
 
 
 def _get_pool_config():
@@ -47,12 +56,21 @@ def _get_pool_config():
 # Determine pool configuration
 poolclass, pool_config = _get_pool_config()
 
+# Build connect_args for SSL if needed (Neon requires SSL)
+connect_args = {}
+if NEEDS_SSL:
+    ssl_context = ssl_module.create_default_context()
+    ssl_context.check_hostname = False
+    ssl_context.verify_mode = ssl_module.CERT_NONE
+    connect_args["ssl"] = ssl_context
+
 # Create async engine with production-grade connection pooling
 engine = create_async_engine(
     DATABASE_URL,
     echo=False,
     poolclass=poolclass,
     future=True,
+    connect_args=connect_args,
     **pool_config  # Unpack pool configuration parameters
 )
 
