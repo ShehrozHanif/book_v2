@@ -370,9 +370,10 @@ class ChatService:
                 success=False
             )
 
-            # Return graceful error response instead of raising
+            # Return error response with debug info in production temporarily
+            error_detail = f"An error occurred while processing your query. Please try again. [DEBUG: {type(e).__name__}: {str(e)[:200]}]"
             return ChatResponse(
-                response="An error occurred while processing your query. Please try again.",
+                response=error_detail,
                 conversation_id=final_conversation_id if 'final_conversation_id' in locals() else str(uuid4()),
                 retrieved_passages=[],
                 relevance_scores=[],
