@@ -1,8 +1,8 @@
-// Get API URL from environment or fallback to localhost
+// Use Render backend in production, fallback to localhost:8000 for dev
 const API_BASE_URL =
-  (typeof process !== 'undefined' && process.env.REACT_APP_API_URL) ||
-  (typeof window !== 'undefined' && (window as any).REACT_APP_API_URL) ||
-  "http://localhost:8000";
+  typeof window !== "undefined" && window.location.hostname !== "localhost"
+    ? "https://book-backend-yart.onrender.com"
+    : "http://localhost:8000";
 
 export interface ChatRequest {
   query: string;

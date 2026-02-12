@@ -16,9 +16,9 @@ import {
 } from "../types/personalization";
 import { siteUrl } from "../utils/paths";
 
-// Use window location to determine API URL, fallback to localhost:8000
+// Use Render backend in production, fallback to localhost:8000 for dev
 const API_BASE_URL = typeof window !== "undefined" && window.location.hostname !== "localhost"
-  ? `${window.location.protocol}//${window.location.hostname}:8000/api/v1`
+  ? "https://book-backend-yart.onrender.com/api/v1"
   : "http://localhost:8000/api/v1";
 
 interface ApiError {
