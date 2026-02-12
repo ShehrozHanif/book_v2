@@ -13,17 +13,12 @@ RUN pip install --no-cache-dir -r requirements.txt
 
 # Copy application code
 COPY src/ ./src/
-COPY .env.example .env
 
 # Create logs directory
 RUN mkdir -p logs
 
-# Expose port
-EXPOSE 8000
+# Expose port (Render sets PORT dynamically)
+EXPOSE ${PORT:-8000}
 
-# Health check
-HEALTHCHECK --interval=30s --timeout=10s --start-period=5s --retries=3 \
-  CMD python -c "import requests; requests.get('http://localhost:8000/health')" || exit 1
-
-# Run application
-CMD ["uvicorn", "src.main:app", "--host", "0.0.0.0", "--port", "8000", "--workers", "4"]
+# Run application (use shell form so $PORT is expanded at runtime)
+CMD uvicorn src.main:app --host 0.0.0.0 --port ${PORT:-8000}

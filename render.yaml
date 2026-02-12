@@ -1,0 +1,40 @@
+databases:
+  - name: book-db
+    plan: free
+    databaseName: rag_chatbot
+    user: rag_user
+
+services:
+  - type: web
+    name: book-backend
+    runtime: docker
+    plan: free
+    dockerfilePath: ./backend/Dockerfile
+    dockerContext: ./backend
+    region: oregon
+    healthCheckPath: /health
+    envVars:
+      - key: DATABASE_URL
+        fromDatabase:
+          name: book-db
+          property: connectionURI
+      - key: OPENAI_API_KEY
+        sync: false
+      - key: QDRANT_URL
+        sync: false
+      - key: QDRANT_API_KEY
+        sync: false
+      - key: JWT_SECRET_KEY
+        sync: false
+      - key: ENVIRONMENT
+        value: production
+      - key: DEBUG
+        value: "false"
+      - key: ALLOWED_ORIGINS
+        value: '["https://shehrozhanif.github.io", "http://localhost:3000"]'
+      - key: DATABASE_POOL_MODE
+        value: nullpool
+      - key: OPENAI_MODEL
+        value: gpt-3.5-turbo
+      - key: QDRANT_COLLECTION_NAME
+        value: textbook_chunks
