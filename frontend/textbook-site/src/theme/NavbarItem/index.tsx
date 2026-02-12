@@ -228,7 +228,8 @@ export default function NavbarItem(props: NavbarItemProps): JSX.Element | null {
     return null;
   }
 
-  const hrefUrl = to || href;
+  // For `to` paths (internal links), prefix with baseUrl. For `href` (external links), use as-is.
+  const hrefUrl = to ? siteUrl(to) : href;
 
   return (
     <a
