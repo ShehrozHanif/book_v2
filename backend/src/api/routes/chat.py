@@ -721,28 +721,3 @@ async def health() -> dict:
         "service": "chat",
         "version": "1.0.0"
     }
-
-
-@router.get(
-    "/debug-qdrant",
-    summary="Debug Qdrant connection",
-    response_model=dict,
-)
-async def debug_qdrant() -> dict:
-    """Test Qdrant connectivity and return diagnostics."""
-    import os
-    from src.services.qdrant_client import QdrantService
-    result = {
-        "qdrant_url": os.getenv("QDRANT_URL", "NOT SET")[:60],
-        "api_key_set": bool(os.getenv("QDRANT_API_KEY", "")),
-        "collection": os.getenv("QDRANT_COLLECTION_NAME", "textbook_chunks"),
-    }
-    try:
-        svc = QdrantService()
-        info = svc.client.get_collection(result["collection"])
-        result["status"] = "ok"
-        result["points_count"] = info.points_count
-    except Exception as e:
-        result["status"] = "error"
-        result["error"] = str(e)
-    return result
