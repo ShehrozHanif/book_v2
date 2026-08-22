@@ -117,3 +117,8 @@ frontend/.env.local
 
 # Textbook artifacts (optional - keep if tracking generated content)
 # textbook/.coverage/
+
+# Env files holding live credentials - values live in Render / your local machine only
+backend/.env.production
+.env.docker
+backend/.env.bak.*

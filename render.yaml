@@ -6,6 +6,8 @@ databases:
 
 services:
   - type: web
+    # Live URL: https://book-backend-yart.onrender.com (srv-d66tso14tr6s73aj1v1g).
+    # Not to be confused with the separate 'n_book' service at n-book.onrender.com.
     name: book-backend
     runtime: docker
     plan: free
